@@ -13,7 +13,7 @@
 <br>
 
 ## 프로젝트 소개
-![image](https://github.com/njy622/HipData/assets/139431528/a036f66d-2562-4240-903b-7085e96e2e39)
+<img src="https://github.com/njy622/HipData/assets/139431528/a036f66d-2562-4240-903b-7085e96e2e39" height=400>
 
 
 - 녹색금융 챗봇은 고객의 소비 패따른 녹색금융 상품을 추천해 주는 서비스 입니다.
