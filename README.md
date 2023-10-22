@@ -1,6 +1,11 @@
 
-
-# 소비 패턴에 따른 녹색금융 추천 ChatBot 서비스
+@font-face {
+    font-family: 'PartialSansKR-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/PartialSansKR-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+font-face {# 소비 패턴에 따른 녹색금융 추천 ChatBot 서비스}
 ### 기간: 2023.10.18 ~ 2023.11.01
 ### 팀명: HipData
 #### 팀 리더: 오경환 팀장
