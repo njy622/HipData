@@ -1,4 +1,4 @@
-![image](https://github.com/njy622/HipData/assets/139431528/267dff15-07d8-4be1-8a1a-5cbcbcbe222a)
+
 
 
 
@@ -11,7 +11,7 @@
 
 
 <br>
-<img src="https://github.com/njy622/HipData/assets/139431528/c39ec745-90b4-48a9-97d9-15221f9f906f">
+![image](https://github.com/njy622/HipData/assets/139431528/267dff15-07d8-4be1-8a1a-5cbcbcbe222a)
 
 ## 프로젝트 소개
 
