@@ -1,4 +1,4 @@
-
+![image](https://github.com/njy622/HipData/assets/139431528/8c3cca41-8877-477e-b8a2-a09518cc9393)
 ![image](https://github.com/njy622/HipData/assets/139431528/ebce671c-57ec-43cf-aa44-5e433e877189)
 
 
@@ -11,15 +11,17 @@
 
 
 <br>
+![image](https://github.com/njy622/HipData/assets/139431528/c39ec745-90b4-48a9-97d9-15221f9f906f)
 
 ## 프로젝트 소개
-<img src="https://github.com/njy622/HipData/assets/139431528/a036f66d-2562-4240-903b-7085e96e2e39" height=400>
+
+![image](https://github.com/njy622/HipData/assets/139431528/f4f0a874-3cdc-45d6-ab58-4930b8ce4f89)
 
 - 녹색금융 챗봇은 고객의 소비 패턴따른 녹색금융 상품을 추천해 주는 서비스 입니다.
 - 녹색금융소개 버튼을 통해 친환경제도 및 누릴 수 있는 혜택에 대하여 소개합니다.
 - 녹색금융 상품에 대해 원하는 금융사의 카테고리별로 상품을 소개 받을 수 있습니다.
 - 영수증 및 품목으로 친환경 제품 안내 및 가까운 매장을 안내하고 있습니다.
-
+<img src="https://github.com/njy622/HipData/assets/139431528/a036f66d-2562-4240-903b-7085e96e2e39" height=400>
 <br>
 
 ![image](https://github.com/njy622/HipData/assets/139431528/46fef65b-4e33-494f-a4c7-4d00f0877d47)
