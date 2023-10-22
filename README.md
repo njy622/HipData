@@ -1,5 +1,6 @@
 
 
+![image](https://github.com/njy622/HipData/assets/139431528/f93cb33c-d0ee-44f2-83e6-c91c406f16a3)
 
 
 ## 기  간 : 2023년 10월 18일(수) ~ 2023년 11월 01일(수) (2주간)
