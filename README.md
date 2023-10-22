@@ -2,9 +2,9 @@
 ![image](https://github.com/njy622/HipData/assets/139431528/ebce671c-57ec-43cf-aa44-5e433e877189)
 
 
-## 기  간: 2023년 10월 18일(수) ~ 2023년 11월 01일(수) (2주간)
-## 팀  명: Hip Data
-
+## 기  간 : 2023년 10월 18일(수) ~ 2023년 11월 01일(수) (2주간)
+## 팀  명 : Hip Data
+## 팀원 구성 :
 | **Leader 오경환** | **남지영** | **박하민** | **신영화** | **정종문** |
 | :---------: |  :------: | :------: | :------: | :------: |
 | [<img src="https://github.com/njy622/HipData/assets/139431528/6fd0ef7d-2932-4c43-a963-5d0de1c1c93f" height=150 width=150> <br/> @lione78](https://github.com/lione78) | [<img src="https://github.com/njy622/HipData/assets/139431528/17fd72d5-11f1-45cb-9f58-f6b27477590f" height=150 width=150> <br/> @njy622](https://github.com/njy622) | [<img src="https://github.com/njy622/HipData/assets/139431528/eba6caf0-bc51-4652-83de-85c90e9f8e7b" height=150 width=150> <br/> @haeeema](https://github.com/haeeema) | [<img src="https://github.com/njy622/HipData/assets/139431528/944fffa1-37e3-4aef-bd1a-8275becbd563" height=150 width=150> <br/> @forever-young86](https://github.com/forever-young86) | [<img src= "https://github.com/njy622/HipData/assets/139431528/e3af687e-68d3-4266-8c80-cf33854fc906" height=150 width=150> <br/> @JM-world](https://github.com/JM-world) |
@@ -23,3 +23,17 @@
 <br>
 
 ![image](https://github.com/njy622/HipData/assets/139431528/46fef65b-4e33-494f-a4c7-4d00f0877d47)
+
+
+
+<br>
+
+## 1. 개발 환경
+- 사용언어 : Python
+- Front : HTML, CSS, JS를 활용한 UI 생성
+- Back-end : CSV로 dataset 생성 및 OCR 활용
+- 버전 및 이슈관리 : Github, Github Issues, Github Project
+- 협업 툴 : Discord
+- 서비스 배포 환경 : Flask
+<br>
+
