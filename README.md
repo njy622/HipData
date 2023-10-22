@@ -14,7 +14,7 @@
 
 ## 프로젝트 소개
 
-| :---------: |  :------: | :------: | :------: | :------: |
+| :---------: |  :------: |
 | [<img src="https://github.com/njy622/HipData/assets/139431528/f4f0a874-3cdc-45d6-ab58-4930b8ce4f89" height=400>  <br/> 그린카드](https://www.green-card.co.kr/app/mainPage.do) | [<img src="https://github.com/njy622/HipData/assets/139431528/a036f66d-2562-4240-903b-7085e96e2e39" height=400> <br/> 챗봇] | 
 
 
