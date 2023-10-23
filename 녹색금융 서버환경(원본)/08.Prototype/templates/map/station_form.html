@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block addtional_head %}
+    <style>
+        input {margin: 10px;}
+    </style>
+{% endblock %}
+{% block subtitle %}지하철역{% endblock %}
+{% block content %}
+   
+        <a href="/" class="btn btn-primary">Map 홈으로</a></h2>
+        <hr>
+        
+        <form action="/map/station" method="post">
+            <div class="d-grid gap-6">
+                <input type="text" name="station"  class="btn btn-outline-primary" >
+                <input type="text" name="station"  class="btn btn-outline-secondary" >
+                <input type="text" name="station"  class="btn btn-outline-success" >
+                <input type="text" name="station"  class="btn btn-outline-info" >
+                <input type="text" name="station"  class="btn btn-outline-warning" >
+                <button class="btn btn-primary" type="submit">제출</button>
+            </div>
+        </form>
+        
+   
+{% endblock %}
