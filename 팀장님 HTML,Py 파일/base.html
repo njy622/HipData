@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>{% block title %}Prototype{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/fdb840a8cc.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <style>
+        * { font-family: 'Noto Sans KR', sans-serif; }
+        a { text-decoration: none; }
+        .outer-container {
+            border: 2px solid #000;
+            padding: 10px;
+            border-radius: 20px; /* 조절 가능한 값 /
+        }
+        .input-group input[placeholder] {
+        opacity: 0.8; / 투명도 조절 */
+        }
+    </style>
+    <script src="{{url_for('static', filename='js/ajax.js')}}"></script>
+    {% block additional_head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <a class="navbar-brand mx-5" href="#"><img src="{{url_for('static', filename='data/hipdata_logo.png')}}" height="36" width="100"></a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li class="nav-item ms-3">
+                    <a class="nav-link {% if menu.ho %}active{% endif %}" href="{% if menu.ho %}#{% else %}/{% endif %}"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item ms-3">
+                    <a class="nav-link {% if menu.us %}active{% endif %}" href="/user"><i class="fas fa-user-friends"></i> 사용자</a>
+                </li>
+                <li class="nav-item dropdown ms-3">
+                    <a class="nav-link dropdown-toggle {% if menu.cr %}active{% endif %}" href="#" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-spider"></i> 크롤링
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/crawling/interpark">인터파크</a></li>
+                        <li><a class="dropdown-item" href="/crawling/melon">멜론차트</a></li>
+                        <li><a class="dropdown-item" href="/crawling/siksin">식신</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown ms-3">
+                    <a class="nav-link dropdown-toggle {% if menu.ma %}active{% endif %}" href="#" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-map-location-dot"></i> 지도
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/map/station">지하철역</a></li>
+                        <li><a class="dropdown-item" href="/map/cctv_pop">CCTV/인구</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown ms-3">
+                    <a class="nav-link dropdown-toggle {% if menu.cb %}active{% endif %}" href="#" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-brain"></i> 챗봇
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/chatbot/counsel">녹색금융</a></li>
+                        <li><a class="dropdown-item" href="/chatbot/bard">구글 바드</a></li>
+                        <li><hr class="dropdown-divider" ></li>
+                        <li><a class="dropdown-item" href="/chatbot/genImg">이미지 생성</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item ms-3">
+                    <a class="nav-link {% if menu.sc %}active{% endif %}" href="{% if menu.sc %}#{% else %}/schedule/calendar/this{% endif %}"><i class="fa-solid fa-calendar-days"></i> 스케쥴</a>
+                </li>
+                <li class="nav-item ms-3">
+                    {% if session['uid'] %}
+                        <a class="nav-link" href="/user/logout"><i class="fas fa-sign-out-alt"></i> 로그아웃</a>
+                    {% else %}
+                        <a class="nav-link" href="/user/login"><i class="fas fa-sign-in-alt"></i> 로그인</a>
+                    {% endif %}
+                </li>
+            </ul>
+            <span class="navbar-text me-3">
+                {% if session['uid'] %}
+                    {{ session['uname'] }}님 환영합니다.
+                {% endif %}
+            </span>
+        </div>
+    </nav>
+
+    <div class="container" style="margin-top:80px">
+        <div class="row">
+            <div class="col-3">
+                <a href="javascript:changeProfile()">
+                    <img id="profile" src="{{url_for('static', filename='data/hipdata_logo_white.png')}}" class="rounded" width="90%">
+                    <!-- <img src="https://picsum.photos/256/256" class="rounded-circle" width="90%"> -->
+                </a>
+                <div id="imageInput" class="mt-2 d-none">
+                    <input type="file" id="image" class="form-control form-control-sm">
+                    <a href="javascript:imageSubmit()">
+                        <span class="badge bg-primary">확인</span>
+                    </a>
+                </div>
+                <div class="mt-2">
+                    <!-- <span id="quoteMsg">{% if session['quote'] %}{{session['quote']}}{% else %}{{quote}}{% endif %}</span> -->
+                    <span id="quoteMsg">{{ session['quote'] }}</span>
+                    <a href="javascript:changeQuote()"><span class="badge bg-secondary">수정</span></a>
+                </div>
+                <div class="mt-5">
+                    <i class="fa fa-envelope me-2"></i>HipData<br>
+                    <img src="{{url_for('static', filename='data/github.png')}}" height="16" class="me-2"><a href="#">HipData</a><br>
+                    <img src="{{url_for('static', filename='data/facebook.png')}}" height="16" class="me-2"><a href="#">HipData</a><br>
+                    <a href="#" onclick="changeAddr(); return false;">
+                        <img src="{{url_for('static', filename='data/addr.png')}}" height="16">
+                    </a>
+                        <span id="addr">{{ session['addr'] }}</span>
+                        <a href="javascript:changeWeather()"><span class="badge bg-secondary">날씨</span></a>
+                    <div id="addrInput" class="mt-2 d-none">
+                        <input type="text" id="addrInputTag" class="form-control form-control-sm"
+                            onkeyup="if(window.event.keyCode==13) {addrSubmit()}">
+                        <a href="javascript:addrSubmit()">
+                            <span class="badge bg-primary">확인</span>
+                        </a>
+                    </div>
+                    <div id="weather"></div>
+                    <button class="btn btn-sm btn-outline-primary mt-3">Edit Profile</button>
+                </div>
+            </div>
+            <div class="col-9">
+                <h3><strong>{% block subtitle %}{% endblock %}</strong></h3>
+                <hr>
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-sm bg-light fixed-bottom">
+        <div class="container-fluid justify-content-center">
+            <span class="navbar-text">
+                Copyright &copy; 2023 HipData Corp. All rights reserved.
+            </span>
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script>
+                alert("{{messages[-1]}}");
+            </script>
+        {% endif %}
+    {% endwith %}
+    {% block additional_body %}{% endblock %}
+</body>
+</html>
