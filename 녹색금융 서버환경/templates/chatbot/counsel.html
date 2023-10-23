@@ -57,7 +57,10 @@
                             })
                             .css('margin-right', '12px')
                             .text('녹색 금융 추천')
-                            .appendTo(buttonContainer);
+                            .appendTo(buttonContainer)
+                            .on('click', function() {
+                            // 버튼 클릭 시 수행될 동작
+                        });
 
                     // 녹색 소비처 버튼
                     $('<button></button>')
@@ -222,29 +225,7 @@
             }
         }
 
- /* <------------------------  챗봇 클리어  ----------------------> */
 
-        function clearDefaultText() {
-            var userInput = document.getElementById("chatContainer");
-            chatContainer.innerHTML = ''; // 채팅 창을 비워주는 코드
-            }
-        function receiveMessageFromChatbot(message) {
-            var chatContainer = document.getElementById('chatContainer');
-            var messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            messageElement.textContent = message;
-            chatContainer.appendChild(messageElement);
-            chatContainer.scrollTop = chatContainer.scrollHeight; // 자동으로 스크롤
-        }
-        function sendMessageToChatbot(message) {
-            var chatContainer = document.getElementById('chatContainer');
-            var messageElement = document.createElement('div');
-            messageElement.classList.add('message', 'user');
-            messageElement.textContent = message;
-            chatContainer.appendChild(messageElement);
-            chatContainer.scrollTop = chatContainer.scrollHeight; // 자동으로 스크롤
-            }
- /* <------------------------ ---------------- ----------------------> */
 
 
         function restoreDefaultText() {
