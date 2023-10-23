@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block subtitle %}서울시 구별 현황 선택 화면{% endblock %}
+{% block content %}
+    {# <form action="/map/cctv_pop" method="post"> #}
+        <table class="table table-borderless">
+            <tr>
+                <td style="width: 10%;"><label class="col-form-label">항목:</label></td>
+                <td style="width: 30%;">
+                    <select name="column" class="form-select" id="column">
+                        {% for column in columns %}
+                            <option value="{{column}}">{{column}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td style="width: 10%;"><label class="col-form-label">컬러맵:</label></td>
+                <td style="width: 30%;">
+                    <select name="colormap" class="form-select col-form-label" id="colormap">
+                        {% for colormap in colormaps %}
+                            <option value="{{colormap}}">{{colormap}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td><button class="btn btn-primary" type="post" onclick="javascript:submit_gu_status()">제출</button></td>
+            </tr>
+        </table>
+    {# </form> #}
+    <hr>
+    <div id="gu_status"></div>
+{% endblock %}

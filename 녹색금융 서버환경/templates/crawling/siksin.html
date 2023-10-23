@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}식신 맛집{% endblock %}
+{% block subtitle %}식신 맛집{% endblock %}
+{% block content %}
+    <table class="table table-striped">
+        <tr>
+            <th>업소명</th>
+            <th>평점</th>
+            <th>메뉴</th>
+            <th>주소</th>
+            <th>전화번호</th>
+        </tr>
+        {% for rest in rest_list %}
+            <tr>
+                <td>{{rest.업소명}}</td>
+                <td>{{rest.평점}}</td>
+                <td>{{rest.메뉴}}</td>
+                <td>{{rest.주소}}</td>
+                <td>{{rest.전화번호}}</td>
+            </tr>
+        {% endfor %}
+{% endblock %}

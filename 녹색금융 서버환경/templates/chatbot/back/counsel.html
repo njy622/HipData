@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}심리상담 챗봇{% endblock %}
+{% block additional_head %} 
+    <script>
+        function send() {
+            let userInput = $('#userInput').val();
+            $('#userInput').val('')
+            let mark = 'mark' + Math.floor(Math.random() * 100000)
+            $.ajax({
+                type: 'POST',
+                url: '/chatbot/counsel',
+                data: {userInput: userInput},
+                success: function(result) {
+                    let obj = JSON.parse(result);
+					$('<div></div>')
+							.attr({'class': 'd-flex flex-row mt-1', id: mark+'1'})
+							.appendTo('#container');
+						$('<div></div>')
+							.attr({'class': 'card w-75', id: mark+'2'}).appendTo('#'+mark+'1');
+						$('<div></div>')
+							.attr({'class': 'card-body', id: mark+'3'}).appendTo('#'+mark+'2');
+						$('<img></img>')
+							.attr({src: "{{url_for('static', filename='img/person.png')}}", height: '32'}).appendTo('#'+mark+'3');
+						$('<span></span>')
+							.text(' '+obj.user).appendTo('#'+mark+'3');
+					$('<div></div>')
+							.attr({'class': 'd-flex flex-row-reverse mt-1', id: mark+'6'})
+							.appendTo('#container');
+						$('<div></div>')
+							.attr({'class': 'card bg-light text-dark w-75', id: mark+'7'}).appendTo('#'+mark+'6');
+						$('<div></div>')
+							.attr({'class': 'card-body text-end', id: mark+'8'}).appendTo('#'+mark+'7');
+						$('<span></span>')
+							.text(obj.chatbot+' ').appendTo('#'+mark+'8');
+						$('<img></img>')
+							.attr({src: "{{url_for('static', filename='img/ai.png')}}", height: '32'}).appendTo('#'+mark+'8');                    
+                }
+            });
+        }
+    </script>
+{% endblock %}
+{% block subtitle %}심리상담 챗봇{% endblock %}
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <div class="input-group mb-3" style="width: 80%;">
+            <span class="input-group-text">당신:</span>
+            <input type="text" class="form-control" name="userInput" id="userInput"
+                onkeyup="if(window.event.keyCode==13) {send()}">
+            <button class="btn btn-primary" type="submit" onclick="send()">전송</button>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center" style="margin-bottom: 80px;">
+        <div class="container overflow-auto" id="container" style="width: 80%; height: 600px;">
+        </div>
+   </div>
+{% endblock %}

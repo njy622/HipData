@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block subtitle %}서울시 구별 {{column}} 현황{% endblock %}
+{% block content %}
+        <iframe src="{{url_for('static', filename='img/cctv_pop.html')}}" frameborder="1"
+        width="800" height="500"></iframe><br>
+        <button class="btn btn-primary" onclick="location.href='/map/cctv_pop'">재실행</button>&nbsp;&nbsp;&nbsp;
+        <span>선택한 컬러맵 : {{colormap}}</span>
+{% endblock %}

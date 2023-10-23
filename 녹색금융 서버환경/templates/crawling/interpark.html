@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block subtitle %}인터파크 베스트셀러{% endblock %}
+{% block additional_head %}
+    <style>
+        th, td { text-align: center; }
+    </style>
+{% endblock %}
+{% block content %}
+    <table class="table">
+        <tr>
+            <th style="width: 8%;">순위</th>
+            <th style="width: 12%;">이미지</th>
+            <th style="width: 30%;">제목</th>
+            <th style="width: 20%;">저자</th>
+            <th style="width: 18%;">출판사</th>
+            <th style="width: 10%;">가격</th>
+        </tr>
+        {% for book in book_list %}
+            <tr>
+                <td>{{book.순위}}</td>
+                <td><img src="{{book.이미지}}" alt="" height="40px"></td>
+                <td><a href="{{book.링크}}" target="_blank">{{book.제목}}</a></td>
+                <td>{{book.저자}}</td>
+                <td>{{book.출판사}}</td>
+                <td style="text-align: right;">{{book.가격}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

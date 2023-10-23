@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block subtitle %}지하철역{% endblock %}
+{% block content %}
+    {# <form name="station_list" id="station_list"> #}
+        <table class="table table-borderless">
+            <tr>
+                <td><input type="text" id="station1" class="form-control" name="station1"></td>
+                <td><input type="text" id="station2" class="form-control" name="station2"></td>
+                <td><input type="text" id="station3" class="form-control" name="station3"></td>
+            </tr>
+            <tr>
+                <td><input type="text" id="station4" class="form-control" name="station4"></td>
+                <td><input type="text" id="station5" class="form-control" name="station5"></td>
+                <td><button class="btn btn-primary" type="" onclick="javascript:submit_station()">제출</button></td>
+            </tr>
+        </table>
+    {# </form> #}
+    <div id="station_status"></div>
+{% endblock %}

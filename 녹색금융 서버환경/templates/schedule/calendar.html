@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% block title %}스케쥴{% endblock %}
+{% block additional_head %}
+    <style>
+        th { text-align: center; width: 14.28%; }
+    </style>
+    <script src="{{url_for('static', filename='js/calendar.js')}}"></script>
+{% endblock %}
+{% block subtitle %}일정표{% endblock %}
+{% block content %}
+    <div class="d-flex justify-content-between">
+        <div>{{today}}</div>
+        <div>
+            <a href="/schedule/calendar/left2"><i class="fa-solid fa-angles-left"></i></a>
+            <a href="/schedule/calendar/left"><i class="fa-solid fa-angle-left ms-2"></i></a>
+            <span class="badge bg-primary mx-2">{{year}}.{{month}}</span>
+            <a href="/schedule/calendar/right"><i class="fa-solid fa-angle-right me-2"></i></a>
+            <a href="/schedule/calendar/right2"><i class="fa-solid fa-angles-right"></i></a>
+        </div>
+        <div>
+            <a href="#" onclick="addAnniversary()"><i class="fa-solid fa-cake-candles"></i></a>
+        </div>
+    </div>
+    <table class="table table-bordered mt-2">
+        <tr>
+            <th class="text-danger">일</th>
+            <th>월</th><th>화</th><th>수</th><th>목</th><th>금</th>
+            <th class="text-primary">토</th>
+        </tr>
+        {% for week in schedule_month %}
+        <tr>
+            {% for day in week %}
+            <td style="height: {{600/number_of_weeks}}px;{% if today.replace('-','')[:8] == day.sdate %}background-color: #efffff;{% endif %}" 
+			 onclick="cellClick({{day.sdate}})">
+                <div class="d-flex justify-content-between">
+                {% if day.isOtherMonth == 1 %}
+                    {% if day.webDate == 0 or day.isHoliday == 1 %}
+                        <div class="text-danger" style="opacity: 0.5;"><strong>{{day.day}}</strong></div>
+                    {% else %}
+                        {% if day.webDate == 6 %}
+                            <div class="text-primary" style="opacity: 0.5;"><strong>{{day.day}}</strong></div>
+                        {% else %}
+                            <div style="opacity: 0.5;"><strong>{{day.day}}</strong></div>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    {% if day.webDate == 0 or day.isHoliday == 1 %}
+                        <div class="text-danger"><strong>{{day.day}}</strong></div>
+                    {% else %}
+                        {% if day.webDate == 6 %}
+                            <div class="text-primary"><strong>{{day.day}}</strong></div>
+                        {% else %}
+                            <div><strong>{{day.day}}</strong></div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                    <div>
+                    {% for anniv in day.annivList %}
+                        {% if not loop.first %}&middot;{% endif %} <!-- 두개의 기념일이 있으면 중간에 점으로 구분-->
+                        <span onclick="annivClick({{anniv[0]}})">{{anniv[1]}}</span>
+                    {% endfor %}
+                    </div>
+                </div>
+                {% for sched in day.schedList %}
+                    <div {% if loop.first %}class="mt-1"{% endif %} style="font-size: 12px;" onclick="schedClick({{sched[0]}})">
+                        {{sched[5]}}
+                        {% if sched[7] == 1 %}<strong>{% endif %}
+                            {{sched[3]}}
+                        {% if sched[7] == 1 %}</strong>{% endif %}
+                    </div>
+                {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+{% block additional_body %}
+	<div class="modal" id="addModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">일정 추가</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+			
+				<!-- Modal body -->
+				<div class="modal-body">
+					<form action="/schedule/insert" method="post">
+						<table class="table table-borderless">
+	                        <tr>
+	                            <td colspan="2">
+	                                <label for="title">제목</label>
+	                                <input class="ms-5 me-2" type="checkbox" name="importance">중요
+	                                <input class="form-control" type="text" id="title" name="title">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                                <label for="startDate">시작일</label>
+	                                <input class="form-control" type="date" id="startDate" name="startDate">
+	                            </td>
+	                            <td>
+	                                <label for="startTime">시작시간</label>
+	                                <select class="form-control" name="startTime" id="startTime">
+                                    {% for tl in timeList %}
+	                                    <option value="{{tl}}">{{tl}}</option>
+	                                {% endfor %}
+	                                </select>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                                <label for="endDate">종료일</label>
+	                                <input class="form-control" type="date" id="endDate" name="endDate">
+	                            </td>
+	                            <td>
+	                                <label for="endTime">종료시간</label>
+	                                <select class="form-control" name="endTime" id="endTime">
+                                    {% for tl in timeList %}
+	                                    <option value="{{tl}}">{{tl}}</option>
+	                                {% endfor %}
+	                                </select>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="2">
+	                                <label for="place">장소</label>
+	                                <input class="form-control" type="text" id="place" name="place">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="2">
+	                                <label for="memo">메모</label>
+	                                <input class="form-control" type="text" id="memo" name="memo">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="2" style="text-align: right;">
+	                                <button class="btn btn-primary me-1" type="submit">제출</button>
+	                                <!-- <button class="btn btn-secondary" type="reset">취소</button> -->
+	                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">종료</button>
+	                            </td>
+	                        </tr>
+	                    </table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="updateModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">일정 조회/수정/삭제</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+			
+				<!-- Modal body -->
+				<div class="modal-body">
+					<form action="/schedule/update" method="post">
+						<input type="hidden" name="sid" id="sid2">
+						<table class="table table-borderless">
+	                        <tr>
+	                            <td colspan="2">
+	                                <label for="title2">제목</label>
+	                                <input class="ms-5 me-2" type="checkbox" id="importance2" name="importance">중요
+	                                <input class="form-control" type="text" id="title2" name="title">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                                <label for="startDate2">시작일</label>
+	                                <input class="form-control" type="date" id="startDate2" name="startDate">
+	                            </td>
+	                            <td>
+	                                <label for="startTime2">시작시간</label>
+	                                <select class="form-control" name="startTime" id="startTime2">
+                                    {% for tl in timeList %}
+	                                    <option value="{{tl}}">{{tl}}</option>
+	                                {% endfor %}
+	                                </select>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                                <label for="endDate2">종료일</label>
+	                                <input class="form-control" type="date" id="endDate2" name="endDate">
+	                            </td>
+	                            <td>
+	                                <label for="endTime2">종료시간</label>
+	                                <select class="form-control" name="endTime" id="endTime2">
+                                    {% for tl in timeList %}
+	                                    <option value="{{tl}}">{{tl}}</option>
+	                                {% endfor %}
+	                                </select>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="2">
+	                                <label for="place2">장소</label>
+	                                <input class="form-control" type="text" id="place2" name="place">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="2">
+	                                <label for="memo2">메모</label>
+	                                <input class="form-control" type="text" id="memo2" name="memo">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="2" style="text-align: right;">
+	                                <button class="btn btn-primary me-1" type="submit">수정</button>
+	                                <button class="btn btn-danger me-1" type="button" data-bs-dismiss="modal" onclick="deleteSchedule()">삭제</button>
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">종료</button> <!--data-bs-dismiss="modal"  누르면 없어짐-->
+	                            </td>
+	                        </tr>
+	                    </table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="addAnnivModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">기념일 추가</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+			
+				<!-- Modal body -->
+				<div class="modal-body">
+					<form action="/schedule/insertAnniv" method="post">
+						<table class="table table-borderless">
+	                        <tr>
+	                            <td>
+	                                <label for="aname">이름</label>
+	                                <input class="ms-5 me-2" type="checkbox" name="holiday">공휴일
+	                                <input class="form-control" type="text" id="aname" name="aname">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                                <label for="annivDate">날짜</label>
+	                                <input class="form-control" type="date" id="annivDate" name="annivDate">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td style="text-align: right;">
+	                                <button class="btn btn-primary me-1" type="submit">제출</button>
+	                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">종료</button>
+	                            </td>
+	                        </tr>
+	                    </table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" id="updateAnnivModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">기념일 조회/수정/삭제</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+			
+				<!-- Modal body -->
+				<div class="modal-body">
+					<form action="/schedule/updateAnniv" method="post">
+						<input type="hidden" name="aid" id="aid">
+						<input type="hidden" name="uid" id="uid">
+						<table class="table table-borderless">
+							<tr>
+								<td>
+									<label for="aname2">이름</label>
+									<input class="ms-5 me-2" type="checkbox" id="holiday2" name="holiday">공휴일
+									<input class="form-control" type="text" id="aname2" name="aname">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="annivDate2">날짜</label>
+									<input class="form-control" type="date" id="annivDate2" name="annivDate">
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align: right;">
+									<button class="btn btn-primary me-1" type="submit">수정</button>
+	                                <button class="btn btn-danger me-1" type="button" data-bs-dismiss="modal" onclick="deleteAnniv()">삭제</button>
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">종료</button>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

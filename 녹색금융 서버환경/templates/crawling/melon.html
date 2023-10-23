@@ -1,0 +1,29 @@
+{% extends "base.html" %} {# X "../base.html" 부르는 사람 입장에서 ../ 위 디렉토리로 안감. #}
+{% block title %}Crawling{% endblock %}
+{% block weather %}{{ weather | safe() }}{% endblock %}
+{% block additional_head %} 
+    <style>
+        th  {text-align: center;}
+    </style>
+{% endblock %}
+{% block subtitle %}멜론차트 Top 50{% endblock %}
+{% block content %}
+    <table class="table" style="margin-bottom: 100px;">
+        <tr>
+            <th style="width: 8%;">순위</th>
+            <th style="width: 10%;">이미지</th>
+            <th style="width: 30%;">곡명</th>
+            <th style="width: 26%;">아티스트</th>
+            <th style="width: 26%;">앨범명</th>
+        </tr>
+        {% for song in song_list %}
+        <tr>
+            <td style="text-align: center;">{{song.순위}}</td>
+            <td style="text-align: center;"><img src="{{song.이미지}}" height="32"></td>
+            <td>{{song.제목}}</a></td>
+            <td>{{song.아티스트}}</td>
+            <td>{{song.앨범}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

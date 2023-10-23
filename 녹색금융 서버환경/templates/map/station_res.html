@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block subtitle %}지하철역{% endblock %}
+{% block content %}
+    <iframe src="{{url_for('static', filename='img/station_map.html')}}" frameborder="1"
+        width="800" height="500"></iframe>
+    <button onclick="location.href='/map/station'">재실행</button>
+{% endblock %}
