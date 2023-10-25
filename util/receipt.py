@@ -10,13 +10,13 @@ def receipt_get_point(receipt_data):
     # 영수증 전처리
     receipt = receipt_data.split('\n')
     receipt_df = pd.DataFrame(receipt, columns=['title'])
-    receipt_df['title'] = receipt_df['title'].apply(lambda x: re.sub('[^가-힣]', '', x))
+    receipt_df['title'] = receipt_df['title'].apply(lambda x: re.sub('[^가-힣\s]', '', x))
     receipt_df = receipt_df[receipt_df.title != '']
     receipt_df.set_index('title', inplace=True)
     receipt_df.reset_index(inplace=True)
 
     # 비교 데이터프레임 호출
-    list_df = pd.read_csv('data/eco_product.csv')
+    list_df = pd.read_csv('../data/eco_product.csv')
 
     # TF-IDF 벡터화
     tv = TfidfVectorizer()
@@ -39,6 +39,28 @@ def receipt_get_point(receipt_data):
     # cosine_similarity의 값이 1.0인 경우만 추출
     receipt_df = receipt_df[receipt_df['cosine_similarity'] == 1.0]
 
-    # 포인트 합계
-    return receipt_df['point'].sum()
+    # 결과
+    receipt_list = []
+    point_list = []
+    for i in receipt_df.index:
+        point_list.append(receipt_df['point'][i])
+        receipt_list.append(f'''{receipt_df['title'][i]}({str(receipt_df['point'][i])+'% 적립' if receipt_df['point'][i] == 10 else str(receipt_df['point'][i])+'p'})''')
+    total_item = '\n'.join(receipt_list)
+    accu = 0
+    t_point = 0
+    for i in point_list:
+        if i == 10:
+            accu += i
+        else:
+            t_point += i
+
+    if accu == 0:
+        total_point = f'\n\n총 {t_point}p'
+    elif t_point == 0:
+        total_point = f'\n\n총 {accu}% 적립'
+    else:
+        total_point = f'\n\n총 {accu}% 적립 + {t_point}p'
+
+    total_result = total_item + total_point
+    return total_result
 

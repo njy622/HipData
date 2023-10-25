@@ -33,7 +33,7 @@ def get_title_market(title):
             tv = TfidfVectorizer()
             title_tv = tv.fit_transform(title_df['title'])
     except:
-        return '올바른 상품명을 입력해주세요.'
+        return ['올바른 상품명을 입력해주세요.']
 
     # 품목 리스트 TF-IDF 벡터화
     list_tv = tv.transform(list_df['title'])
@@ -51,7 +51,7 @@ def get_title_market(title):
     global market
     market = list(set(list_df['market'].values))[:3]
     if market == []:
-        return '해당 상품을 취급하는 매장이 없습니다.'
+        return ['해당 상품을 취급하는 매장이 없습니다.']
     
     return market
 
