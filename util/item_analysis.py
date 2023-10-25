@@ -14,13 +14,28 @@ def get_title_market(title):
     # 비교 데이터프레임 호출
     list_df = pd.read_csv('data/eco_product.csv')
 
-    # 검색어 데이터프레임 화
-    title = [title]
-    title_df = pd.DataFrame(title, columns=['title'])
+    # 찾는 품목이 '무' 또는 '김'처럼 한 글자일 경우
+    # TfidfVectorizer의 Default 값으로 한 글자 단어는 제외하게 되어있으므로
+    # 하이퍼 파라미터로 해결 23.10.25
 
-    # TF-IDF 벡터화
-    tv = TfidfVectorizer()
-    title_tv = tv.fit_transform(title_df['title'])
+    title = [title.strip(' ')]
+    try:
+        # 찾는 품목이 한 글자 단어일 경우
+        if len(title[0]) == 1:
+            # TF-IDF 벡터화
+            tv = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}')
+            title_tv = tv.fit_transform(title).toarray()
+        # 찾는 품목이 두 글자 이상일 경우
+        else:
+            # 데이터프레임 화
+            title_df = pd.DataFrame(title, columns=['title'])
+            # TF-IDF 벡터화
+            tv = TfidfVectorizer()
+            title_tv = tv.fit_transform(title_df['title'])
+    except:
+        return '올바른 상품명을 입력해주세요.'
+
+    # 품목 리스트 TF-IDF 벡터화
     list_tv = tv.transform(list_df['title'])
 
     # 코사인 유사도 계산
@@ -29,8 +44,8 @@ def get_title_market(title):
     # 유사도 컬럼으로 추가
     list_df['cosine_similarity'] = cosine_similarities.reshape(-1,1)
 
-    # cosine_similarity의 값이 0.5 이상인 경우만 추출
-    list_df = list_df[list_df['cosine_similarity'] >= 0.3]
+    # cosine_similarity의 값이 1.0인 경우만 추출
+    list_df = list_df[list_df['cosine_similarity'] == 1.0]
 
     # 관련된 마켓명
     global market
