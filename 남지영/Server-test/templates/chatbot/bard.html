@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Bard API{% endblock %}
+{% block additional_head %} 
+    <script>
+        function send() {
+            let userInput = $('#userInput').val();
+            $('<img></img>')
+                .attr({src: "{{url_for('static', filename='img/please-wait.gif')}}", id: 'waitImg'})
+                .prependTo('#container');
+            let mark = 'mark' + Date.now();
+            $.ajax({
+                type: 'POST',
+                url: '/chatbot/bard',
+                data: {userInput: userInput},
+                success: function(result) {
+                    $('#waitImg').remove();
+                    $('#userInput').val('');
+                    let obj = JSON.parse(result);
+					$('<div></div>')
+							.attr({'class': 'd-flex flex-row mt-1', id: mark+'1'})
+							.prependTo('#container');
+						$('<div></div>')
+							.attr({'class': 'card', id: mark+'2'}).appendTo('#'+mark+'1');
+						$('<div></div>')
+							.attr({'class': 'card-body', id: mark+'3'}).appendTo('#'+mark+'2');
+                        $('<img></img>')
+							.attr({src: "{{url_for('static', filename='img/person.png')}}", height: '32'}).appendTo('#'+mark+'3');
+                        $('<span></span>')
+                            .html(' '+obj.user+'<br><br>').appendTo('#'+mark+'3');
+                        $('<img></img>')
+                            .attr({src: "{{url_for('static', filename='img/bard-logo.png')}}", height: '32'}).appendTo('#'+mark+'3');                    
+						$('<span></span>')
+							.html(' '+obj.chatbot.replaceAll('\n','<br>')).appendTo('#'+mark+'3');
+                }
+            });
+        }
+    </script>
+{% endblock %}
+{% block subtitle %}Bard API{% endblock %}
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <div class="input-group mb-3" style="width: 80%;">
+            <span class="input-group-text">당신:</span>
+            <input type="text" class="form-control" name="userInput" id="userInput"
+                onkeyup="if(window.event.keyCode==13) {send()}">
+            <button class="btn btn-primary" type="submit" onclick="send()">전송</button>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center" style="margin-bottom: 60px;">
+        <div class="container overflow-auto" id="container" style="width: 80%; height: 600px;">
+        </div>
+   </div>
+{% endblock %}
