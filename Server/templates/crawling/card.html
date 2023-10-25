@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block addtional_head %}
+    <style>
+        h3, th, td {text-align: center; margin: 20px;}
+    </style>
+
+    <meta charset="utf-8">
+    <title>그린카드 상품 안내</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+{% endblock %}
+{% block content %}
+    <h3>{{place}} 그린카드 상품 안내</h3>
+    <div class="container">
+        {% for table in tables %}
+          {{ table|safe }}
+        {% endfor %}
+      </div>
+
+    </table>
+{% endblock %}

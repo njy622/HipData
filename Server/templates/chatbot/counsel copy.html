@@ -1,0 +1,406 @@
+{% extends "base.html" %}
+{% block title %}소비패턴에 따른 녹색금융 추천{% endblock %}
+{% block addtional_head %}
+    <script>
+        function send() {
+                let userInput = $("#userInput").val();
+                $("#userInput").val("");
+                let mark = "mark" + Date.now();
+                $.ajax({
+                    type: "POST",
+                    url: "/",
+                    data: { userInput: userInput },
+                    success: function (result) {
+                        let obj = JSON.parse(result);
+                        $("<div></div>")
+                            .attr({ class: "d-flex flex-row mt-1", id: mark + "1" })
+                            .appendTo("#container");
+                        $("<div></div>")
+                            .attr({ class: "card w-75", id: mark + "2" })
+                            .appendTo("#" + mark + "1");
+                        $("<div></div>")
+                            .attr({ class: "card-body", id: mark + "3" })
+                            .appendTo("#" + mark + "2");
+                        $("<img></img>")
+                            .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "32" })
+                            .appendTo("#" + mark + "3");
+                        $("<span></span>")
+                            .text(" " + obj.user)
+                            .appendTo("#" + mark + "3");
+                        $("<div></div>")
+                            .attr({ class: "d-flex flex-row-reverse mt-1", id: mark + "6" })
+                            .appendTo("#container");
+                        $("<div></div>")
+                            .attr({ class: "card bg-light text-dark w-75", id: mark + "7" })
+                            .appendTo("#" + mark + "6");
+                        $("<div></div>")
+                            .attr({ class: "card-body text-end", id: mark + "8" })
+                            .appendTo("#" + mark + "7");
+                        $("<span></span>")
+                            .text(obj.chatbot + " ")
+                            .appendTo("#" + mark + "8");
+                        $("<img></img>")
+                            .attr({ src: "{{url_for('static', filename='img/ai.png')}}", height: "32" })
+                            .appendTo("#" + mark + "8");
+                        
+                    },
+                });
+            }
+        
+            
+
+            
+
+        function requestChatbot(type, userInput) {
+            let url, data;
+            if (type === 'GET') {
+                url = '/chatbot/get_welcome_message';
+                data = {};
+            } else if (type === 'POST') {
+                url = '/chatbot/counsel';
+                data = { userInput: userInput };
+            } else {
+                console.error("Invalid request type");
+                return;
+            }
+
+            $.ajax({
+                type: type,
+                url: url,
+                data: data,
+                success: function(result) {
+                    let obj = JSON.parse(result);
+                    let mark = 'mark' + Math.floor(Math.random() * 100000);
+
+                    if (type === 'POST') {
+                        // 유저 메시지 생성
+                        $('<div></div>')
+                            .attr({'class': 'd-flex flex-row-reverse mt-1', id: mark+'1'})
+                            .appendTo('#container');
+                        $('<div></div>')
+                            .attr({'class': 'card bg-secondary text-white w-60', id: mark+'2'}).appendTo('#'+mark+'1');
+                        $('<div></div>')
+                            .attr({'class': 'card-body text-end', id: mark+'3'}).appendTo('#'+mark+'2');
+                        $('<img></img>')
+                            .attr({src: "{{url_for('static', filename='img/person.png')}}", height: '32'}).appendTo('#'+mark+'3');
+                        $('<span></span>')
+                            .text(' '+ obj.user).appendTo('#'+mark+'3');
+                        
+                        // 봇 메시지 생성
+                        $('<div></div>')
+                            .attr({'class': 'd-flex flex-row mt-1', id: mark+'6'})
+                            .appendTo('#container');
+                        $('<div></div>')
+                            .attr({'class': 'card bg-success text-white w-75', id: mark+'7'}).appendTo('#'+mark+'6');
+                        $('<div></div>')
+                            .attr({'class': 'card-body', id: mark+'8'}).appendTo('#'+mark+'7');
+                        $('<img></img>')
+                            .attr({src: "{{url_for('static', filename='img/ai.png')}}", height: '32'}).appendTo('#'+mark+'8');                    
+                        $('<span></span>')
+                            .text(' '+obj.chatbot).appendTo('#'+mark+'8');
+                    } else if (type === 'GET') {
+                        // 초기 메시지 생성
+                        $('<div></div>')
+                            .attr({'class': 'd-flex flex-row mt-1', id: mark + '9'})
+                            .appendTo('#container');
+                        $('<div></div>')
+                            .attr({'class': 'card bg-success text-white w-75', id: mark + '10'})
+                            .appendTo('#container');
+                        $('<div></div>')
+                            .attr({'class': 'card-body', id: mark + '11'})
+                            .appendTo('#' + mark + '10');
+                        $('<img></img>')
+                            .attr({src: "{{url_for('static', filename='img/ai.png')}}", height: '32'})
+                            .appendTo('#' + mark + '11');
+                        $('<span></span>')
+                            .text(' ' + obj.message)
+                            .appendTo('#' + mark + '11');
+                    }
+
+                    let buttonContainer = $('<div></div>')
+                        .attr({'class': 'd-flex flex-row mt-1', id: mark + 'ButtonContainer'})
+                        .appendTo('#container');
+
+                    let Buttons = [
+                        { text: '영수증 업로드', id: mark + 'introduce' },
+                        { text: '녹색금융 추천', id: mark + 'recommend' },
+                        { text: '녹색소비처', id: mark + 'place' },
+                    ];
+
+
+                    Buttons.forEach(function(buttonInfo) {
+                    $('<button></button>')
+                        .attr({
+                            'class': 'btn btn-primary m-1',
+                            'data-bs-toggle': 'button', 
+                            'id': buttonInfo.id
+                        })
+                        .text(buttonInfo.text)
+                        .appendTo(buttonContainer)
+                        .on('click', function() {
+                            if (buttonInfo.text === '영수증 업로드') {
+                                createBootstrapCardWithButtons('영수증 업로드')
+                            }
+                            else if (buttonInfo.text === '녹색금융 추천') {
+                                createBootstrapCardWithButtons('녹색금융 추천');
+                            } 
+                            else if (buttonInfo.text === '녹색소비처') {
+                                createBootstrapCardWithButtons('녹색소비처');
+                            } 
+                        });
+                    }); 
+                        
+  
+                    function createBootstrapCardWithButtons(type) {
+                        let buttons;
+                        let cardTitleText; 
+                        
+                        const introduceButtons = [
+                            { text: '업로드', id: 'upload' },
+                            { text: '친환경제품', id: 'item' },
+                            { text: '가까운 매장', id: 'place' },
+                            { text: '금융상품 추천', id: 'recommend' },
+                        ];
+
+                        const recommendButtons = [
+                            { text: '1. 은행', id: 'bank' },
+                            { text: '2. 투자', id: 'fund' },
+                            { text: '3. 카드', id: 'card' },
+                        
+                        ];
+
+                        const placeButtons = [
+                            { text: '1. 영수증 분석', id: 'receipt' },
+                            { text: '2. 품목 분석', id: 'item' },
+                        
+                        ];
+
+                        if (type === '영수증 업로드') {
+                            buttons = introduceButtons;
+                            cardTitleText = '영수증 업로드 정보';
+                        } else if (type === '녹색금융 추천') {
+                            buttons = recommendButtons;
+                            cardTitleText = '녹색금융 추천 정보';
+                        } else if (type === '녹색소비처') {
+                            buttons = placeButtons;
+                            cardTitleText = '녹색소비처 정보';
+                        } else {
+                            console.error("Unknown type provided to createBootstrapCardWithButtons:", type);
+                            return;
+                        }
+
+                        let cardContainer = $('<div></div>').attr('class',  'card bg-success text-white w-75 mt-3');
+                        let cardBody = $('<div></div>').attr('class', 'card-body');
+                        // 아이콘 생성
+                        let aiIcon = $('<img>').attr({
+                            'src': "{{url_for('static', filename='img/ai.png')}}",
+                            'height': '32',
+                            'class': 'mr-2', // 오른쪽 여백 추가
+                            'alt': 'AI Icon'
+                        });
+                        // 카드 제목 생성 및 아이콘 추가
+                        let cardTitle = $('<h5></h5>').attr('class', 'card-title').append(aiIcon).append(cardTitleText);  // 동적으로 제목을 설정
+                                            
+                        cardContainer.append(cardBody);
+                        cardBody.append(cardTitle);
+                        
+                        
+                        buttons.forEach(function(buttonInfo) {
+                            let button = $('<button></button>')
+                                .attr({
+                                    'class': 'btn btn-primary mt-2 mr-2',
+                                    'type': 'button',
+                                    'id': buttonInfo.id
+                                })
+                                .css('margin-right', '12px')
+                                .text(buttonInfo.text)
+                                .on('click', function() {
+                                    displayJeonseDetail(buttonInfo.id);
+                                });
+                            cardBody.append(button);
+                        });
+
+
+                        
+
+                        // #container에 생성한 카드를 추가합니다.
+                        $('#container').append(cardContainer);
+                    }
+
+                    const introduceDetails = {
+                        upload: '업로드 하신 영수증 데이터입니다.',
+                        'item': '친환경 제품을 안내해드립니다. : ',
+                        'place': '가까운 매장은  ',
+                        'recommend': '녹색금융상품에 대해 질문을 입력하여 주세요! ',
+                     
+                    };
+
+                    const recommendDetails = {
+                        bank: '은행',
+                        'fund': '투자',
+                        'card': '카드 ',
+                      
+                    };
+                    const placeDetails = {
+                        receipt: '영수증',
+                        'item': '품목'
+                    };
+                    
+
+
+
+                    function displayintroduceDetail(detailKey) {
+                        const details = introduceDetails
+                   
+                        
+                        // 새로운 Bootstrap Card를 생성하여 detail을 표시합니다.
+                        let cardContainer = $('<div></div>').attr('class', 'card bg-success text-white w-75 mt-3');
+                        let cardBody = $('<div></div>').attr('class', 'card-body');
+                        let cardText = $('<p></p>').attr('class', 'card-text').html(details[detailKey]);  // .text() 대신 .html() 사용
+                        cardBody.append(cardText);
+                        cardContainer.append(cardBody);
+                        
+                         // #container에 새로운 카드를 추가합니다.
+                         $('#container').append(cardContainer);
+                    }
+                    
+        
+        function receipt_get_point(receipt_data){
+            /* # 영수증 전처리 */
+            receipt = receipt_data.split('\n')
+            receipt_df = pd.DataFrame(receipt, columns=['title'])
+            receipt_df['title'] = receipt_df['title'].apply(lambda x: re.sub('[^가-힣]', '', x))
+            receipt_df = receipt_df[receipt_df.title != '']
+            receipt_df.set_index('title', inplace=True)
+            receipt_df.reset_index(inplace=True)
+
+            /* # 비교 데이터프레임 호출 */
+            list_df = pd.read_csv('data/eco_product.csv')
+
+            /* # TF-IDF 벡터화 */
+            tv = TfidfVectorizer()
+            receipt_tv = tv.fit_transform(receipt_df['title'])
+            list_tv = tv.transform(list_df['title_mod'])
+
+            /*   # 코사인 유사도 계산 */
+            cosine_similarities = cosine_similarity(receipt_tv, list_tv)
+
+            /*  # 유사도 컬럼으로 추가 */
+            receipt_df['cosine_similarity'] = cosine_similarities.max(axis=1)
+
+            /*  # 유사한 항목 추가 */
+            most_similar_indices = cosine_similarities.argmax(axis=1)
+            most_similar_items = list_df.loc[most_similar_indices, 'title_mod'].values
+            receipt_df['most_similar_item'] = most_similar_items
+            receipt_df['point'] = list_df.loc[most_similar_indices, 'point'].values
+            receipt_df['title'] = list_df.loc[most_similar_indices, 'title'].values
+
+            /*  # cosine_similarity의 값이 0.5 이상인 경우만 추출 */
+            receipt_df = receipt_df[receipt_df['cosine_similarity'] >= 0.5]
+
+            /* # 포인트 합계 */
+            return receipt_df['point'].sum()
+            
+        };            
+
+
+
+
+                    // ... 나머지 로직 ...
+
+                    // response 처리를 위한 로직, 
+                    // 예: obj.message나 obj.user, obj.chatbot 값에 따라서 분기 처리 등
+                }
+            });
+        }
+        
+        // 사용 예:
+        // GET 요청
+        requestChatbot('GET');
+
+    </script>
+{% endblock %}
+{% block subtitle %}소비패턴에 따른 녹색금융{% endblock %}
+{% block content %}
+        
+        <div class="d-flex justify-content-center outer-container" style="margin-top: 80px;">
+            <div class="container overflow-auto" id="container" style="width: 80%; height: 350px;">
+                <!-- 초기 환영 메시지는 이 부분에 직접 추가 -->
+            </div>
+        </div>
+  
+
+        <div class="d-flex justify-content-center outer-container" style="margin-top: 10px;">
+            <div class="input-group mb-3" style="width: 80%;">
+                <input type="text" class="form-control" name="userInput" id="userInput" onkeyup="if(window.event.keyCode==13) {send()}"
+                    onfocus="if(this.value=='문의할 내용을 적어주세요') { this.value=''; this.style.opacity = 1; }"
+                    onblur="if(this.value=='') { this.value='문의할 내용을 적어주세요'; this.style.opacity = 0.7; }"
+                    placeholder="문의할 내용을 적어주세요">
+                <button class="btn btn-success m3" type="submit" onclick="send()">전송</button>
+                <button class="btn btn-sm btn-outline-primary m3" onclick="getProfile()">영수증 업로드</button>
+            </div>
+        </div>
+        </div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <script>
+                    alert("{{messages[-1]}}");
+                </script>
+            {% endif %}
+        {% endwith %}
+        <div class="modal" id="profileModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">영수증 업로드</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="hiddenImage" id="hiddenImage">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><label class="col-form-label">이미지 업로드</label></td>
+                                    <td><input type="file" name="image" id="modalImage" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align: center;">
+                                        <button class="btn btn-primary" onclick="changeProfile(); return false;">수정</button>
+                                        <button class="btn btn-secondary ms-1" data-bs-dismiss="modal">취소</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script>
+        
+        function clearDefaultText() {
+            var userInput = document.getElementById("userInput");
+            if (userInput.value == "문의할 내용을 적어주세요.") {
+                userInput.value = "";
+            }
+        }
+
+        function restoreDefaultText() {
+            var userInput = document.getElementById("userInput");
+            if (userInput.value === "") {
+                userInput.value = "문의할 내용을 적어주세요.";
+            }
+        }
+
+        function askQuestion(question) {
+            $.ajax({
+                type: 'POST',
+                url: '/rule_based_chat',
+                data: {user_input: question},
+                success: function (data) {
+                    $('#response').text(data.response);
+                }
+            });
+        }
+        
+    </script>
+{% endblock %}
