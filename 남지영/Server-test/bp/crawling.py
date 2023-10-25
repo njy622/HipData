@@ -15,31 +15,36 @@ bank_products = [
         "id": 100,
         "name": "우리 으쓱(ESG) 적금",
         "description": "3.60%, 우리카드로 대중교통 이용시 연 0.4%p 금리우대, 환경보호 실천운동 달성시 연 0.4%p 금리우대",
-        "image_url": "../static/img/우리은행.jpg"
+        "image_url": "../static/img/우리은행.jpg",
+        "image_url2": "../static/img/우리적금.jpg"
     },
     {
         "id": 101,
         "name": "KB맑은하늘적금",
         "description": "1.95%, 만기해지 할 때까지 이 적금을 종이통장으로 발행한 이력이 없는 경우 0.1%p 우대 영업점의 디지털창구 및 KB태블릿브랜치, 비대면채널(인터넷뱅킹/KB스타뱅킹/스마트상담부)을 통해 이 적금을 가입한 경우  연0.2%p 이 적금의 신규일이 포함된 월의 1일부터 만기일이 포함된 월을 기준으로 전전월 말일까지, 본인명의 KB국민(신용/체크)카드(KB국민비씨카드 제외) 대중교통 이용실적(주) 발생월수가 계약기간의 1/2 이상인 경우 만기해지 할 때까지 이 적금 전용화면을 통해 미세먼지 관련 퀴즈(총 3문항)를 모두 맞춘 경우 연 0.1%p",
-        "image_url": "../static/img/국민은행.png"
+        "image_url": "../static/img/국민은행.png",
+        "image_url2": "../static/img/국민하늘적금.jpg"
     },
     {
         "id": 102,
         "name": "KB맑은바다적금",
         "description": "2.25%,이 적금 신규 시 해양쓰레기 줄이기 활동에 동의한 경우 [동의문] 본인은 맑은바다를 위한 해양쓰레기 줄이기 활동에 동참하고자 장바구니를 생활화하고 플라스틱 일회용품 사용을 최소화하겠습니다. 연 0.1%p 이 적금 만기해지 할 때까지 종이통장으로 발행한 이력이 없는 경우 연 0.1%p 이 적금 만기해지 할 때까지 본인명의 예금이 「손으로 출금(영업점창구/자동화기기」 이용계좌로 등록되어 있는 경우 연 0.3%p 이 적금 신규월의 다음월 말일 기준으로 아래 2가지 조건 모두 충족한 경우 ① 오픈뱅킹 다른금융 계좌 등록 ②[은행] 개인(신용)정보 수집·이용 (상품서비스 안내 등 및 오픈뱅킹 활용 상품서비스 안내 등) 동의 연 0.3%p ",
-        "image_url": "../static/img/국민은행.png"
+        "image_url": "../static/img/국민은행.png",
+        "image_url2": "../static/img/국민바다적금.jpg"
     },
     {
         "id": 103,
         "name": "아름다운 용기 적금",
         "description": "2.60%",
-        "image_url": "../static/img/신한은행.png"
+        "image_url": "../static/img/신한은행.png",
+        "image_url2": "../static/img/신한적금.jpg"
     },
     {
         "id": 5,
         "name": "탄소Zero챌린지적금Ⅱ",
         "description": "2%, 친환경, 저탄소 농축산물 인증서 보유 시 0.01~0.5%p 친환경, 저탄소 농축산물 인증제도 학습 시 0.01~0.5%p ‘탄소중립생활 실천’ 동참 서약 시 0.01~0.5%p 영업점 특별 우대 0.01~0.5%p",
-        "image_url": "../static/img/NH농협.png"
+        "image_url": "../static/img/NH농협.png",
+        "image_url2": "../static/img/농협적금.jpg"
     },
 ]
 ##################################
@@ -53,7 +58,7 @@ def bank():
 ########## 금융상품 리스트 ################
 # CSV 파일에서 데이터를 읽어오기
 def read_csv():
-    financial_products = pd.read_csv(r'D:/IT 공부/Workspace/HipData/남지영/Server-test/static/data/증권사상품.csv')
+    financial_products = pd.read_csv('static/data/증권사상품.csv')
     financial_products.drop(columns='Unnamed: 0', inplace=True)    
     return financial_products
 
@@ -204,8 +209,3 @@ products = [
 def card():    
         return render_template('/crawling/card.html',  menu=menu, products=products)
 
-
-@crawl_bp.route('/public')
-def public():    
-    df = pd.read_csv(r'D:/WorkSpace/99.Project/팀프로젝트/08.Prototype/static/data/공공기관.csv') 
-    return render_template('/crawling/public.html', menu=menu, tables=[df.to_html(classes='data')], titles=df.columns.values)

@@ -2,6 +2,7 @@
 {% block addtional_head %}
   <style>
     h3, th, td {text-align: center; margin: 20px;}
+    th {width: 30px;}
   </style>
 
   <meta charset="utf-8">
@@ -17,9 +18,10 @@
       <div class="col-lg-4 mb-2">
         <div class="card">
           <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
-          <div class="card-body">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <button class="btn btn-primary" data-toggle="modal" data-target="#productModal{{ product.id }}">상세 정보 보기</button>
+          <div class="card-body" style="height: 170px;">
+            <h5 class="card-title" style="color: blueviolet;"><strong>{{ product.name }}</strong></h5> 
+            <p style="font-size: 15px;">{{product.description.split('||')[1]}}</p>      
+            <button class="btn btn-primary mt-3;" data-toggle="modal" data-target="#productModal{{ product.id }}">상세 정보 보기</button>
           </div>
         </div>
       </div>
@@ -35,7 +37,50 @@
               </button>
             </div>
             <div class="modal-body">
-              <p>{{ product.description }}</p>
+              <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+                <table style="width:100%">
+                  <tr>
+                    <th></th>
+                    <th style="text-align: left; font-size: 20px; color: blueviolet;"><i class="fa-solid fa-circle-info"></i>  상세 혜택</th>
+                  </tr>
+                  {% for i in product.description.split('||') %}
+                  {% if i != product.description.split('||')[-1] %}
+                  <tr>
+                    <td></td>
+                      <td>
+                        <i class="fa-solid fa-splotch"></i> {{ i }}
+                      </td>
+                  </tr>
+                    {% else %}
+                        <!-- {% for i in product.description.split('||')[-1].split(',') %}
+                        <tr>
+                          <td></td>
+                          <td>
+                            {{ i }}
+                          </td>
+                        </tr>
+                        {% endfor %} -->
+                        <tr>
+                          <td></td>
+                            <td>
+                              <i class="fa-solid fa-splotch"></i>  {{product.description.split('||')[-1].split(',')[0]}}
+                            </td>
+                        </tr>
+                          <td></td>
+                          <td>
+                            <i class="fa-solid fa-diamond-exclamation"></i> (전월 실적)  {{product.description.split('||')[-1].split(',')[1]}}
+                            </td>
+                        </tr>
+                          <td></td>
+                            <td>
+                            <i class="fa-solid fa-diamond-exclamation"></i> (연회비) {{product.description.split('||')[-1].split(',')[2]}}
+                            </td>
+                        </tr>
+                      {% endif %}
+                  {% endfor %}
+                  
+              </table>
+
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>

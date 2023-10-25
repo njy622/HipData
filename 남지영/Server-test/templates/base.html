@@ -13,13 +13,17 @@
     <style>
         * { font-family: 'Noto Sans KR', sans-serif; }
         a { text-decoration: none; }
+        header { height:150px;}
+        content { height:calc(100vh - 500px)}
+        footer { height: 100px;}
     </style>
     <script src="{{url_for('static', filename='js/ajax.js')}}"></script>
     {% block additional_head %}{% endblock %}
 </head>
 <body>
+
     <!--                                           홈페이지 상단 네비게이션  start                                         -->
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <nav class="navbar navbar-expand-sm bg-success navbar-dark fixed-top">
         <div class="container-fluid">
             <ul class="navbar-nav">
                 <a class="navbar-brand mx-5" href="#"><img src="{{url_for('static', filename='data/ck-logo.png')}}" height="40" width="70"></a>
@@ -32,18 +36,18 @@
                 </li>
                 <li class="nav-item dropdown ms-3">
                     <a class="nav-link dropdown-toggle {% if menu.cr %}active{% endif %}" href="#" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-spider"></i> 녹색서비스 소개
+                        <i class="fa-solid fa-leaf"></i> 녹색서비스 소개
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="https://www.green-card.co.kr/app/greenservice/greenShopListPage.do">녹색소비</a></li>
                         <li><a class="dropdown-item" href="https://www.green-card.co.kr/app/greenservice/pubTransitListPage.do">대중교통</a></li>
                         <li><a class="dropdown-item" href="https://www.green-card.co.kr/app/greenservice/carbonPointListPage.do">에너지 절약</a></li>
-                        <li><a class="dropdown-item" href="/crawling/public">공공시설</a></li>
+                        <li><a class="dropdown-item" href="/map/public">공공시설</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown ms-3">
                     <a class="nav-link dropdown-toggle {% if menu.cr %}active{% endif %}" href="#" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-spider"></i> 녹색금융 추천
+                        <i class="fa-solid fa-coins"></i> 녹색금융 추천
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/crawling/bank">은행</a></li>
@@ -53,7 +57,7 @@
                 </li>
                 <li class="nav-item dropdown ms-3">
                     <a class="nav-link dropdown-toggle {% if menu.cb %}active{% endif %}" href="#" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-brain"></i> 챗봇
+                        <i class="fa-solid fa-robot"></i> 챗봇
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/chatbot/counsel">녹색금융</a></li>
@@ -131,14 +135,8 @@
 <!--                                           홈페이지 좌측 프로파일 end                                          -->
 
 
-<nav class="navbar navbar-expand-sm bg-light fixed-bottom m-100">
-    <div class="container-fluid justify-content-center">
-        <span class="navbar-text">
-            Copyright &copy; 2023 CK World Corp. All rights reserved.
-        </span>
-    </div>
-    <!--                                           홈페이지 프로파일 업로드 start                                          -->
-    </nav>
+
+<!--                                           홈페이지 프로파일 업로드 start                                          -->
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <script>
@@ -197,4 +195,13 @@
     <!--                                           홈페이지 프로파일 업로드 start                                          -->
     {% block additional_body %}{% endblock %}
 </body>
+<footer>
+    <nav class="navbar navbar-expand-sm bg-light fixed-bottom">
+        <div class="container-fluid justify-content-center">
+            <span class="navbar-text">
+                Copyright &copy; 2023 Hip Data  Green product Corp. All rights reserved.
+            </span>
+        </div>
+    </nav>
+</footer>
 </html>

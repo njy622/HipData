@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, session
+from flask import Flask, render_template, request, flash, session, current_app, jsonify
 from bp.crawling import crawl_bp
 from bp.map import map_bp
 from bp.user import user_bp
@@ -10,6 +10,10 @@ import util.weather_util as wu
 import util.image_util as iu
 import db_sqlite.profile_dao as pdao
 
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'static/receipts'
+
 app = Flask(__name__)
 
 app.register_blueprint(crawl_bp, url_prefix='/crawling')    # localhost:5000/crawling/* 는 crawl bp가 처리
@@ -19,6 +23,8 @@ app.register_blueprint(chatbot_bp, url_prefix='/chatbot')
 app.register_blueprint(schdedule_bp, url_prefix='/schedule')
 
 # for AJAX ###################################################
+
+""" 프로파일 날씨정보 불러오기 """
 @app.route('/weather')
 def weather():
     # 서울시 영등포구 + '청' -> 도로명 주소 -> 카카오 로컬 -> 좌표 획득
@@ -27,6 +33,9 @@ def weather():
     html = wu.get_weather(app.static_folder, lat, lng)
     return html
 
+
+
+""" 프로파일 정보 """
 @app.route('/changeProfile', methods=['GET','POST'])
 def change_profile():
     if request.method == 'GET':
@@ -57,7 +66,7 @@ def change_profile():
         profile.append(mtime)
         profile.append(need_refresh)
         return json.dumps(profile)
-###################################################
+####################################################################################################
 
 @app.route('/')
 def home():
@@ -71,21 +80,36 @@ if __name__ == '__main__':
 
 
 
-#### 테스트
+""" ############################ 영수증 데이터 불러오기 ############################################
 
-from flask import Flask, render_template
+@app.route('/receipt', methods=['GET', 'POST'])
+def receipt():
+    if request.method == 'GET':
+        return render_template('receipt.html')
+    else:
+        if 'image' not in request.files:
+            return jsonify({'message': '이미지가 없습니다.'}), 400
 
-app = Flask(__name__)
+        file = request.files['image']
 
-# Global variable to store chat history
-chat_history = ["Hello!", "How are you?", "I'm good, thanks!"]
+        if file.filename == '':
+            return jsonify({'message': '이미지 파일을 선택하세요.'}), 400
 
-@app.route('/')
-def index():
-    return render_template('index.html', messages=chat_history)
+        if file:
+            file.save(os.path.join(
+                app.config['UPLOAD_FOLDER'], "receipt01.jpg"))
 
-@app.route('/move_up')
-def move_up():
-    if len(chat_history) > 1:
-        chat_history[-1], chat_history[-2] = chat_history[-2], chat_history[-1]
-    return render_template('index.html', messages=chat_history)
+            receipt_data = tess.get_item_from_img()
+            result = rece.receipt_get_point(receipt_data)
+
+            return str(result)
+
+
+@app.route('/receipt2', methods=['POST'])
+def receipt2():
+    user_input = request.form['userInput']
+    result = item.get_title_market(user_input)
+    return json.dumps(result)
+
+########################################################################################################
+ """

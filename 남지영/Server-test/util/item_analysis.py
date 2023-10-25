@@ -1,5 +1,6 @@
 import pandas as pd
-import re, requests
+import re
+import requests
 from urllib.parse import quote
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -10,13 +11,16 @@ from bs4 import BeautifulSoup
 
 
 '''품목을 취급하는 매장 3곳'''
+
+
 def get_title_market(title):
+    global market
     # 품목 리스트 데이터프레임 화
     list_df = pd.read_csv('data/eco_product.csv')
 
-    ### 찾는 품목이 '무' 또는 '김'처럼 한 글자일 경우 에러
-    ### TfidfVectorizer의 Default 값으로 한 글자 단어는 제외하게 되어있으므로
-    ### 하이퍼 파라미터로 해결 23.10.25
+    # 찾는 품목이 '무' 또는 '김'처럼 한 글자일 경우 에러
+    # TfidfVectorizer의 Default 값으로 한 글자 단어는 제외하게 되어있으므로
+    # 하이퍼 파라미터로 해결 23.10.25
 
     title = [title.strip(' ')]
 
@@ -33,7 +37,7 @@ def get_title_market(title):
             tv = TfidfVectorizer()
             title_tv = tv.fit_transform(title_df['title'])
     except:
-        return '올바른 상품명을 입력해주세요.'
+        return ['올바른 상품명을 입력해주세요.']
 
     # 품목 리스트 TF-IDF 벡터화
     list_tv = tv.transform(list_df['title'])
@@ -42,29 +46,29 @@ def get_title_market(title):
     cosine_similarities = cosine_similarity(title_tv, list_tv)
 
     # 유사도 컬럼으로 추가
-    list_df['cosine_similarity'] = cosine_similarities.reshape(-1,1)
+    list_df['cosine_similarity'] = cosine_similarities.reshape(-1, 1)
 
     # cosine_similarity의 값이 1.0인 경우만 추출
     list_df = list_df[list_df['cosine_similarity'] == 1.0]
 
     # 관련된 매장명
-    global market
     market = list(set(list_df['market'].values))[:3]
     if market == []:
-        return '해당 상품을 취급하는 매장이 없습니다.'
-    
+        return ['해당 상품을 취급하는 매장이 없습니다.']
+
     return market
 
 
-
-### 주소 잘못 입력 시, 또는 근처에 매장이 없을 시 리턴 메세지 추가 23.10.24
+# 주소 잘못 입력 시, 또는 근처에 매장이 없을 시 리턴 메세지 추가 23.10.24
 '''입력한 주소 근처에 매장이 있는지 알아보기'''
+
+
 def get_market_info(addr):
     # get_title_market 리턴값인 market 가져오기
     market_list = market
 
     # 고객이 입력한 주소 ['시', '구'] 가져오기
-    ### ['군', '면', '리'] 정보 추가 23.10.24
+    # ['군', '면', '리'] 정보 추가 23.10.24
     addr_list = addr.split(' ')
     addr_list1 = []
     addr_list2 = []
@@ -113,12 +117,14 @@ def get_market_info(addr):
         driver.get(n_place_url)
 
         # '목록보기' 클릭
-        filter = driver.find_element(By.XPATH, '//*[@id="_place_portal_root"]/div/a') 
+        filter = driver.find_element(
+            By.XPATH, '//*[@id="_place_portal_root"]/div/a')
         filter.click()
         time.sleep(3)
 
         # '거리순' 클릭
-        short_way = driver.find_element(By.XPATH, '//*[@id="_list_scroll_container"]/div/div/div[1]/div/div/div/span[2]/a') 
+        short_way = driver.find_element(
+            By.XPATH, '//*[@id="_list_scroll_container"]/div/div/div[1]/div/div/div/span[2]/a')
         short_way.click()
         time.sleep(3)
 
@@ -134,7 +140,8 @@ def get_market_info(addr):
             mart = market_list.find('li', recursive=False)
 
             # 현재 위치에서 마켓 거리
-            m_distance = mart.select_one('span.lWwyx.NVngW').get_text().split('서')[1]
+            m_distance = mart.select_one(
+                'span.lWwyx.NVngW').get_text().split('서')[1]
             # 마켓 이름
             m_title = mart.select_one('span.place_bluelink.YwYLL').get_text()
             # 마켓 주소

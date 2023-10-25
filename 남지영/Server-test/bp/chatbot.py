@@ -4,6 +4,16 @@ import bardapi, openai
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import pandas as pd
+# tesseract
+import util.tesseract_util as tess
+# receipt
+import util.receipt_util as rece
+# item_analysis
+import util.item_analysis as item
+
 
 chatbot_bp = Blueprint('chatbot_bp', __name__)
 
@@ -15,36 +25,68 @@ menu = {'ho':0, 'us':0, 'cr':0, 'ma':0, 'cb':1, 'sc':0}
 def before_app_first_request():
     global model, wdf
     model = SentenceTransformer('jhgan/ko-sroberta-multitask')
-    filename = os.path.join(current_app.static_folder, 'data/core_data_mod.csv')
+    filename = os.path.join(current_app.static_folder, 'core_data_mod.csv')
     wdf = pd.read_csv(filename)
     wdf.embedding = wdf.embedding.apply(json.loads)
-    print('Wellness initialization is done.')
 
 @chatbot_bp.route('/counsel', methods=['GET','POST'])
 def counsel():
     if request.method == 'GET':
         return render_template('chatbot/counsel.html', menu=menu)
-    
-    
     else:
         user_input = request.form['userInput']
         embedding = model.encode(user_input)
-        wdf['유사도'] = wdf.embedding.map(lambda x: cosine_similarity([embedding],[x]).squeeze())
+        wdf['유사도'] = wdf.embedding.map(
+            lambda x: cosine_similarity([embedding], [x]).squeeze())
         answer = wdf.loc[wdf.유사도.idxmax()]
         result = {
-            'category':answer.구분, 'user':user_input, 'chatbot':answer.챗봇, 'similarity':answer.유사도
+            'category': answer.구분, 'user': user_input, 'chatbot': answer.챗봇, 'similarity': answer.유사도
         }
         return json.dumps(result)
     
 
 
     
+############################ 영수증 데이터 불러오기 ############################################
+
+@chatbot_bp.route('/receipt', methods=['GET', 'POST'])
+def receipt():
+    if request.method == 'GET':
+        return render_template('receipt.html')
+    else:
+        if 'image' not in request.files:
+            return jsonify({'message': '이미지가 없습니다.'}), 400
+
+        file = request.files['image']
+
+        if file.filename == '':
+            return jsonify({'message': '이미지 파일을 선택하세요.'}), 400
+
+        if file:
+            file.save(os.path.join(
+                chatbot_bp.config['UPLOAD_FOLDER'], "receipt01.jpg"))
+
+            receipt_data = tess.get_item_from_img()
+            result = rece.receipt_get_point(receipt_data)
+
+            return str(result)
+
+
+@chatbot_bp.route('/receipt2', methods=['POST'])
+def receipt2():
+    user_input = request.form['userInput']
+    result = item.get_title_market(user_input)
+    return json.dumps(result)
+
+
+########################################################################################################
+   
 
 
 
 
         
-#################################################################################################################
+
 
 @chatbot_bp.route('/bard', methods=['GET','POST'])
 def bard():
@@ -83,3 +125,4 @@ def gen_img():
         img_url = dalle_response['data'][0]['url']
         result = {'img_url':img_url, 'translated_text': prompt}
         return json.dumps(result) 
+ 
