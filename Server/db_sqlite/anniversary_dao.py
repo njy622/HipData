@@ -14,7 +14,7 @@ def get_anniv(aid):
 def get_anniv_list(sdate, edate, uid):
     conn = sq.connect('./db_sqlite/project.db')
     cur = conn.cursor()
-    if uid == 'admin':
+    if uid == 'admin': 
         sql = 'select * from anniversary where adate between ? and ? and uid=?'
     else:
         sql = "select * from anniversary where adate between ? and ? and (uid='admin' or uid=?)"
