@@ -5,6 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 
+'''영수증으로 얻을 수 있는 포인트 알아보기'''
 def receipt_get_point(receipt_data):
     # 영수증 전처리
     receipt = receipt_data.split('\n')
@@ -35,35 +36,9 @@ def receipt_get_point(receipt_data):
     receipt_df['point'] = list_df.loc[most_similar_indices, 'point'].values
     receipt_df['title'] = list_df.loc[most_similar_indices, 'title'].values
 
-    # cosine_similarity의 값이 0.5 이상인 경우만 추출
-    receipt_df = receipt_df[receipt_df['cosine_similarity'] >= 0.5]
+    # cosine_similarity의 값이 1.0인 경우만 추출
+    receipt_df = receipt_df[receipt_df['cosine_similarity'] == 1.0]
 
     # 포인트 합계
     return receipt_df['point'].sum()
-
-    # 비교 데이터프레임 호출
-    list_df = pd.read_csv('data/eco_product.csv')
-
-    # 검색어 데이터프레임 화
-    title = [title]
-    title_df = pd.DataFrame(title, columns=['title'])
-    title_df
-
-    # TF-IDF 벡터화
-    tv = TfidfVectorizer()
-    title_tv = tv.fit_transform(title_df['title'])
-    list_tv = tv.transform(list_df['title'])
-
-    # 코사인 유사도 계산
-    cosine_similarities = cosine_similarity(title_tv, list_tv)
-
-    # 유사도 컬럼으로 추가
-    list_df['cosine_similarity'] = cosine_similarities.reshape(-1,1)
-
-    # cosine_similarity의 값이 0.5 이상인 경우만 추출
-    list_df = list_df[list_df['cosine_similarity'] >= 0.3]
-
-    # 관련된 마켓명
-    market = set(list_df['market'].values.tolist())
-    return list(market)[:5]
 
