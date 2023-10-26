@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block addtional_head %}
+    <style>
+        select {margin: 15px;}
+    </style>
+{% endblock %}
+{% block subtitle %}서울시 구별 CCTV/인구 현황{% endblock %}
+{% block content %}
+    <div class="container mt-4">
+        
+        <hr>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-7">
+        
+                <form action="/map/cctv_pop" method="post">
+                    항목: 
+                    <select name="column"  class="form-control">
+                        {% for column in columns %}
+                            <option value="{{column}}">{{column}}</option>
+                        {% endfor %}
+                    </select>
+                    &nbsp;&nbsp;&nbsp;컬러맵:
+                    <select name="colormap"  class="form-control">
+                        {% for colormap in colormaps %}
+                            <option value="{{colormap}}">{{colormap}}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-primary" type="submit">제출</button>
+                </form> 
+            </div>
+        </div>
+    </div>
+{% endblock %}

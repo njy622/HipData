@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block addtional_head %}
+    <style>
+        input {margin: 10px;}
+    </style>
+{% endblock %}
+{% block subtitle %}영등포 주요 지하철역{% endblock %}
+{% block content %}
+    
+        
+        <hr>
+        <iframe src="{{url_for('static', filename='img/station_map.html')}}" frameborder="1"
+        width="800" height="500"></iframe>
+        <a href="/map/station" class="btn btn-primary">재실행</a> 
+        <a href="/" class="btn btn-primary">홈으로</a>   
+    
+        
+            
+        
+
+{% endblock %}

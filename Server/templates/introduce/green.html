@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block title %}녹색소비 | 그린카드{% endblock %}
+{% block additional_head %} 
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link type="text/css" rel="stylesheet" href="/pc/assets/styles/css/common_renew.css" />
+<!-- 221006 파비콘 추가 -->
+<link rel="icon" href="/pc/assets/images/favicon.png">
+<link rel="shortcut icon" href="/pc/assets/images/favicon.png">
+<script src="/pc/assets/scripts/libs/jquery-3.2.1.min.js"></script>
+<!-- <script src="./common_renew.js"></script> -->
+<script src="/pc/assets/scripts/common.ui.js"></script>
+<script src="/pc/assets/scripts/common_input.js"></script>
+<script src="/pc/assets/scripts/libs/swiper.min.4.5.1.js"></script>
+<script src="/js/green_common.js?ver=1"></script>
+<script src="/js/green_mobile.js?ver=2"></script>
+<script src="/js/green_native.js?ver=1"></script>
+<script type="text/javascript">
+
+  commAjax.body("/app/mainBannerAjax.do", "", function(status, data) {
+      if (status.code  != 0) {
+          alert("error");
+      } else {
+          if(data.imgUrl != null){
+              $(".gnb-banner-area").html("<a href="+data.bannerLinkUrl+" target='blank'><img src="+data.imgUrl+" alt="+data.ctetNm+" ></a>");  
+          }
+          $("#redirectUrl").attr("href",data.redirectUrl);
+          $("#qrCode").attr("src",data.qrCode);
+      } 
+      
+  });
+  
+  function fnClip(url){
+	  var textarea = document.createElement("textarea");
+	  document.body.appendChild(textarea);
+	  textarea.value = url;
+	  textarea.readOnly=true;
+	  textarea.select();
+	  document.execCommand("copy");
+	  document.body.removeChild(textarea);
+	  alert("URL이 복사되었습니다.");
+  }
+</script>
+<meta charset="UTF-8">
+<script type="text/javascript">
+function goEcdProdcut(){
+    commCall.link("/app/greenservice/ecoProductListPage.do");
+}
+
+$(function() {
+	$("#main .wrap").load("/html/greenservice/greenShopListWeb.html");
+});
+</script>
+{% endblock %}
+{% block subtitle %}소비패턴에 따른 녹색금융{% endblock %}
+{% block content %}
+<div id="skipnavi">
+    <a href="#main">본문 바로가기</a>
+</div>
+<div id="body-wrap" class="sub">
+    <header id="header">
+        <div class="wrap">
+            <h1 class="logo">
+                <a href="/app/mainPage.do"><span class="blind">green card</span></a>
+            </h1>
+            <nav id="gnb">
+                <a href="/app/mainPage.do"><img src="/pc/assets/images/bg/logo.svg" width="72" alt="green card"></a>
+                <ul>
+                    <li id="M000">
+                        <a href="/app/ecomoney/ecoMoneyAccumulationGuidePage.do">에코머니 포인트</a>
+                        <ul class="depth2">
+                            <li id="M001"><a href="/app/ecomoney/ecoMoneyAccumulationGuidePage.do">적립 / 사용 안내</a></li>
+                        </ul>
+                    </li>
+                    <li id="M100">
+                        <a href="/app/greenservice/greenShopListPage.do">그린서비스</a>
+                        <ul class="depth2">
+                            <li id="M101"><a href="/app/greenservice/greenShopListPage.do">녹색소비</a></li>
+                            <li id="M102"><a href="/app/greenservice/pubTransitListPage.do">대중교통</a></li>
+                            <li id="M103"><a href="/app/greenservice/carbonPointListPage.do">에너지절약</a></li>
+                            <li id="M104"><a href="/app/greenservice/pubEstablishmentListPage.do">공공시설</a></li>
+                        </ul>
+                    </li>
+                    <li id="M200">
+                        <a href="/app/greencard/greenCardGuideListPage.do">그린카드</a>
+		                <ul class="depth2">
+		                  <li id="M201"><a href="/app/greencard/greenCardGuideListPage.do">카드 소개</a></li>
+		                  <li id="M202"><a href="/app/greencard/greenCardViewV1ListPage.do">그린카드 V1</a></li>
+		                  <li id="M203"><a href="/app/greencard/greenCardViewV2ListPage.do">그린카드 V2</a></li>
+		                  <li id="M204"><a href="/app/greencard/greenCardViewPlatformListPage.do">플랫폼카드</a></li>
+		                </ul>
+                    </li>
+                    <li id="M300">
+                        <a href="/app/event/eventListPage.do">이벤트</a>
+                    </li>
+                    <li  id="M400">
+                        <a href="/app/notice/noticeListPage.do">공지/뉴스</a>
+                        <ul class="depth2">
+                            <li id="M401"><a href="/app/notice/noticeListPage.do">공지사항</a></li>
+                            <li id="M402"><a href="/app/notice/ecoNewsListPage.do">친환경뉴스</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="gnb-depth">
+                    <div class="gnb-banner-area">
+                        
+                    </div>
+                </div>
+                <div class="btn-area"><a id="redirectUrl" class="btn-floating type01 btn-app-download" href="#none">앱 다운로드</a></div>
+		        <button type="button" class="btn-gnb-open" aria-label="메뉴 열기" onclick="$('#gnb').removeClass('close').addClass('active')"></button>
+		        <button type="button" class="layer-close-btn btn-gnb-close" aria-label="메뉴 닫기"></button>
+            </nav>
+            <button type="button" class="app-download btn-app-download" onclick="common.htmlLockOn(); $('.app-download-area').show().css('display','flex');">앱 다운로드</button>
+	        <button type="button" class="btn-gnb-open" aria-label="메뉴 열기"></button>
+	        <div class="app-download-area">
+	          <div>
+	            <dl>
+	              <dt>에코라이프의 시작! 그린카드와 함께 하세요!</dt>
+	              <dd>
+	                <dfn>스토어 다운로드</dfn>
+	                <a href="https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=com.bccard.greenapp"><img src="/pc/assets/images/icon/icon-google.png" height="28" alt="">Google Play</a>
+	                <a href="https://itunes.apple.com/kr/app/geulinkadeu-ecomoney-ekomeoni/id760260161"><img src="/pc/assets/images/icon/icon-apple.png" height="28" alt="">App Store</a>
+	              </dd>
+	              <dd>
+	                <dfn>QR코드 다운로드</dfn>
+	                <figure>
+	                  <img id="qrCode" alt="qr code">
+	                  <figcaption class="blind">qr코드를 촬영하세요</figcaption>
+	                </figure>
+	              </dd>
+	            </dl>
+	            <button type="button" class="layer-close-btn" aria-label="창 닫기" onclick="common.htmlLockOff(); $('.app-download-area').hide();"></button>
+	          </div>
+	        </div>
+	      </div>
+	    </header>
+    
+    
+<script type="text/javascript">
+    var curmenuId = "M101";
+</script>
+<main id="main" class="sub-green-consumption">
+    <div id="lnb">
+        <button type="button" class="lnb-toggle-menu"></button>
+        <ul class="lnb-menu-list"></ul>
+    </div>
+    <div class="wrap">
+        <div class="sub-tit-wrap">
+            <h2 class="sub-tit">녹색소비</h2>
+            
+	    
+        </div>
+        
+        
+    </div>
+        
+</main>
+
+
+    <script type="text/javascript">
+    if(typeof curmenuId !== "undefined"){
+        if(curmenuId != 'M999'){
+        	$("#"+curmenuId).addClass("current");
+            $("#"+curmenuId).parents("li").addClass("current");
+        }
+    }
+    </script>
+    <footer id="footer">
+        <div class="wrap">
+            <h6>그린카드</h6>
+            <div class="util">
+                <a href="/app/customer/customerListPage.do">고객센터</a>
+                <a href="https://www.bccard.com/app/card/ContentsLinkActn.do?pgm_id=ind0492" target="blank">개인정보취급방침</a>
+                <a href="/app/customer/termsServiceListPage.do">이용약관</a>
+                <a href="tel:1566-2929">에코머니 전용상담 1566-2929</a>
+            </div>
+        </div>
+    </footer>
+  </div>
+  <!-- 221004 탑버튼 , 공유버튼 추가 (공유는 이벤트 상세만) -->
+  <div class="floating-btn-box">
+    
+    <a href="javascript:void(0);" aria-label="TOP 버튼" class="btn-top"></a>
+  </div>
+{% endblock %}

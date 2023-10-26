@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>공공시설 | 그린카드</title>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link type="text/css" rel="stylesheet" href="/pc/assets/styles/css/common_renew.css" />
+<!-- 221006 파비콘 추가 -->
+<link rel="icon" href="/pc/assets/images/favicon.png">
+<link rel="shortcut icon" href="/pc/assets/images/favicon.png">
+<script src="/pc/assets/scripts/libs/jquery-3.2.1.min.js"></script>
+<!-- <script src="./common_renew.js"></script> -->
+<script src="/pc/assets/scripts/common.ui.js"></script>
+<script src="/pc/assets/scripts/common_input.js"></script>
+<script src="/pc/assets/scripts/libs/swiper.min.4.5.1.js"></script>
+<script src="/js/green_common.js?ver=1"></script>
+<script src="/js/green_mobile.js?ver=2"></script>
+<script src="/js/green_native.js?ver=1"></script>
+<script type="text/javascript">
+
+  commAjax.body("/app/mainBannerAjax.do", "", function(status, data) {
+      if (status.code  != 0) {
+          alert("error");
+      } else {
+          if(data.imgUrl != null){
+              $(".gnb-banner-area").html("<a href="+data.bannerLinkUrl+" target='blank'><img src="+data.imgUrl+" alt="+data.ctetNm+" ></a>");  
+          }
+          $("#redirectUrl").attr("href",data.redirectUrl);
+          $("#qrCode").attr("src",data.qrCode);
+      } 
+      
+  });
+  
+  function fnClip(url){
+	  var textarea = document.createElement("textarea");
+	  document.body.appendChild(textarea);
+	  textarea.value = url;
+	  textarea.readOnly=true;
+	  textarea.select();
+	  document.execCommand("copy");
+	  document.body.removeChild(textarea);
+	  alert("URL이 복사되었습니다.");
+  }
+</script>
+<meta charset="UTF-8">
+<script src="/pc/assets/scripts/libs/swiper.min.4.5.1.js"></script>
+<script type="text/javascript">
+$(function() {
+    $("#merDv").text($("label[for='merClss"+$("input[name='merClss']:checked").val() +"']").text())
+    $("#rgnLlfClss").text($("label[for='searchLoc1"+ $("input[name='searchLoc1']:checked").val() +"']").text())
+    $("#rgnMlfClss").text($("label[for='cmmCode-0']").text())
+    $("#searchCtnt").hide();
+    
+    searchList(1);
+    
+    $("input[name='searchLoc1']").on("change", function(){
+        var val = $(this).val();
+        var codeKey = {codeKey : "LLFCD."+val, selectedCd : "302000"};
+        if($("input[name='searchLoc1']:checked").val() == "999999"){
+            commUI.codeList("", "#codeList");
+     }else{
+            commUI.codeList(codeKey, "#codeList");
+        }
+    })
+})
+function layerOpen(){
+    mobileUI.layerShow("#public-facilities-search");
+}
+function layerClose(){
+    $("input[id='merClss"+$("#merDv").val() +"']").prop("checked", true);
+    $("input[id='searchLoc1"+$("#rgnLlfClss").val() +"']").prop("checked", true);
+    if($("#rgnLlfClss").val() == "999999"){
+        commUI.codeList("", "#codeList");
+    }else if($("#rgnMlfClss").val() == 'on'){
+        $("input[id='cmmCode-0").prop("checked", true);
+    } else {
+        $("input[id='cmmCode-"+$("#rgnMlfClss").val() +"']").prop("checked", true);
+    }
+    
+    if($("#searchCtnt").is(":visible") == false) {
+        $("#searchCtnt").text(null);
+    } else {
+        $("input[name='merNm").val($("#searchCtnt").text());
+    }
+    mobileUI.layerHide("#public-facilities-search");
+}
+function searchList(pageNo){
+    //시군구가 전체일 경우
+	if($("input[name='cmmCode']:checked").attr("id") == 'cmmCode-0'){
+        $("#merDv").text($("label[for='merClss"+$("input[name='merClss']:checked").val() +"']").text())
+        $("#merDv").val($("input[id='merClss"+$("input[name='merClss']:checked").val() +"']").val())
+        $("#rgnLlfClss").text($("label[for='searchLoc1"+ $("input[name='searchLoc1']:checked").val() +"']").text())
+        $("#rgnLlfClss").val($("input[id='searchLoc1"+$("input[name='searchLoc1']:checked").val() +"']").val())
+        $("#rgnMlfClss").text($("label[for='cmmCode-0']").text())
+        $("#rgnMlfClss").val($("input[id='cmmCode-0").val())
+    }else{
+        $("#merDv").text($("label[for='merClss"+$("input[name='merClss']:checked").val() +"']").text())
+        $("#merDv").val($("input[id='merClss"+$("input[name='merClss']:checked").val() +"']").val())
+        $("#rgnLlfClss").text($("label[for='searchLoc1"+ $("input[name='searchLoc1']:checked").val() +"']").text())
+        $("#rgnLlfClss").val($("input[id='searchLoc1"+$("input[name='searchLoc1']:checked").val() +"']").val())
+        $("#rgnMlfClss").text($("label[for='cmmCode-"+ $("input[name='cmmCode']:checked").val() +"']").text())
+        $("#rgnMlfClss").val($("input[id='cmmCode-"+$("input[name='cmmCode']:checked").val() +"']").val())
+    }
+    $("#searchLoc1").val($("input[name='cmmCode']:checked").val())
+    if($("#merNm").val() == "" || $("#merNm").val() == null){
+        $("#searchCtnt").hide();
+    }else{
+        $("#searchCtnt").show();
+        $("#searchCtnt").text($("#merNm").val())
+    }
+    $("#pageNo").val(pageNo);
+    
+    //form데이터 세팅
+    formDataSet();
+    // 더블클릭 방지
+    if (commUtil.isDoubleSubmit()) {
+        return false;
+    }
+    if(pageNo == '1') {
+        $("#listAjax").empty();
+    }
+    commAjax.htmlAppend("/app/greenservice/pubEstablishmentListAjax.do", "#form1", "#listAjax", function () {
+        mobilePage.init("#listAjax", function (nextPage) {
+            searchList(nextPage);
+        });
+    });
+        
+}
+
+function formDataSet(){
+    if($("input[name='cmmCode']:checked").attr("id") == 'cmmCode-0'){
+        $("#searchLoc2Form").val('999999');
+    }else{
+        $("#searchLoc2Form").val($("input[name='cmmCode']:checked").val());
+    }
+    $("#searchLoc1Form").val($("input[name='searchLoc1']:checked").val());
+    $("#merClssForm").val($("input[name='merClss']:checked").val());
+    $("#merNmForm").val($("#merNm").val());
+}
+
+function searchInit(){
+    initBtn();    
+    searchList(1);
+    
+}
+function initBtn(){
+    $('#searchLoc1999999').click();
+    $('#cmmCode-0').prop("checked", true);
+    $('#merClssAll').prop("checked", true);
+    $("#merNm").val("");
+    
+}
+function searchInit2(){
+	$("#merNm").val("");
+}
+</script>
+</head>
+<body>
+<div id="skipnavi">
+    <a href="#main">본문 바로가기</a>
+</div>
+<div id="body-wrap" class="sub">
+    <header id="header">
+        <div class="wrap">
+            <h1 class="logo">
+                <a href="/app/mainPage.do"><span class="blind">green card</span></a>
+            </h1>
+            <nav id="gnb">
+                <a href="/app/mainPage.do"><img src="/pc/assets/images/bg/logo.svg" width="72" alt="green card"></a>
+                <ul>
+                    <li id="M000">
+                        <a href="/app/ecomoney/ecoMoneyAccumulationGuidePage.do">에코머니 포인트</a>
+                        <ul class="depth2">
+                            <li id="M001"><a href="/app/ecomoney/ecoMoneyAccumulationGuidePage.do">적립 / 사용 안내</a></li>
+                        </ul>
+                    </li>
+                    <li id="M100">
+                        <a href="/app/greenservice/greenShopListPage.do">그린서비스</a>
+                        <ul class="depth2">
+                            <li id="M101"><a href="/app/greenservice/greenShopListPage.do">녹색소비</a></li>
+                            <li id="M102"><a href="/app/greenservice/pubTransitListPage.do">대중교통</a></li>
+                            <li id="M103"><a href="/app/greenservice/carbonPointListPage.do">에너지절약</a></li>
+                            <li id="M104"><a href="/app/greenservice/pubEstablishmentListPage.do">공공시설</a></li>
+                        </ul>
+                    </li>
+                    <li id="M200">
+                        <a href="/app/greencard/greenCardGuideListPage.do">그린카드</a>
+		                <ul class="depth2">
+		                  <li id="M201"><a href="/app/greencard/greenCardGuideListPage.do">카드 소개</a></li>
+		                  <li id="M202"><a href="/app/greencard/greenCardViewV1ListPage.do">그린카드 V1</a></li>
+		                  <li id="M203"><a href="/app/greencard/greenCardViewV2ListPage.do">그린카드 V2</a></li>
+		                  <li id="M204"><a href="/app/greencard/greenCardViewPlatformListPage.do">플랫폼카드</a></li>
+		                </ul>
+                    </li>
+                    <li id="M300">
+                        <a href="/app/event/eventListPage.do">이벤트</a>
+                    </li>
+                    <li  id="M400">
+                        <a href="/app/notice/noticeListPage.do">공지/뉴스</a>
+                        <ul class="depth2">
+                            <li id="M401"><a href="/app/notice/noticeListPage.do">공지사항</a></li>
+                            <li id="M402"><a href="/app/notice/ecoNewsListPage.do">친환경뉴스</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="gnb-depth">
+                    <div class="gnb-banner-area">
+                        
+                    </div>
+                </div>
+                <div class="btn-area"><a id="redirectUrl" class="btn-floating type01 btn-app-download" href="#none">앱 다운로드</a></div>
+		        <button type="button" class="btn-gnb-open" aria-label="메뉴 열기" onclick="$('#gnb').removeClass('close').addClass('active')"></button>
+		        <button type="button" class="layer-close-btn btn-gnb-close" aria-label="메뉴 닫기"></button>
+            </nav>
+            <button type="button" class="app-download btn-app-download" onclick="common.htmlLockOn(); $('.app-download-area').show().css('display','flex');">앱 다운로드</button>
+	        <button type="button" class="btn-gnb-open" aria-label="메뉴 열기"></button>
+	        <div class="app-download-area">
+	          <div>
+	            <dl>
+	              <dt>에코라이프의 시작! 그린카드와 함께 하세요!</dt>
+	              <dd>
+	                <dfn>스토어 다운로드</dfn>
+	                <a href="https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=com.bccard.greenapp"><img src="/pc/assets/images/icon/icon-google.png" height="28" alt="">Google Play</a>
+	                <a href="https://itunes.apple.com/kr/app/geulinkadeu-ecomoney-ekomeoni/id760260161"><img src="/pc/assets/images/icon/icon-apple.png" height="28" alt="">App Store</a>
+	              </dd>
+	              <dd>
+	                <dfn>QR코드 다운로드</dfn>
+	                <figure>
+	                  <img id="qrCode" alt="qr code">
+	                  <figcaption class="blind">qr코드를 촬영하세요</figcaption>
+	                </figure>
+	              </dd>
+	            </dl>
+	            <button type="button" class="layer-close-btn" aria-label="창 닫기" onclick="common.htmlLockOff(); $('.app-download-area').hide();"></button>
+	          </div>
+	        </div>
+	      </div>
+	    </header>
+    
+    
+<script type="text/javascript">
+    var curmenuId = "M104";
+</script>
+<main id="main" class="sub-public-facilities">
+    <div id="lnb">
+        <button type="button" class="lnb-toggle-menu"></button>
+        <ul class="lnb-menu-list"></ul>
+    </div>
+    <div class="wrap">
+        <div class="sub-tit-wrap">
+            <h2 class="sub-tit">공공시설</h2>
+            
+        </div>
+        
+         <form id="form1" name="form1" onsubmit="return false;">
+                <input type="hidden" id="pageNo" name="pageNo"/>
+                <input type="hidden"  name="searchLoc2" id="searchLoc2Form" value=""/>
+                <input type="hidden"  name="searchLoc1" id="searchLoc1Form" value=""/>
+                <input type="hidden"  name="merClss" id="merClssForm" value=""/>
+                <input type="hidden"  name="merNm" id="merNmForm" value=""/>
+            
+            <div class="contents-area-gray">
+            
+          <div class="public-facilities">
+            
+            <div class="public-facilities-header">
+              <div class="list-num-box">
+                <p class="total-num">총 <b>00</b>개</p>
+              </div>
+
+              <div>
+                <button type="button" class="btn-refresh" aria-label="검색결과 초기화" onclick="searchInit()"></button>
+                <button type="button" class="btn-filter btnLayerOpen" data-id="public-facilities-search" aria-label="검색 필터" onclick="layerOpen()"></button>
+
+              </div>
+            </div>
+            <div class="public-facilities-search-conditions tab-menu type04">
+              <div class="tab-item" id="merDv"></div>
+              <div class="tab-item" id="rgnLlfClss"></div>
+              <div class="tab-item" id="rgnMlfClss"></div>
+              <div class="tab-item" id="searchCtnt"></div>
+            </div>
+            
+            <div class="public-facilities-list">
+                <div id="listAjax"></div>
+             </div>
+          </div>
+        </div>
+        </form>
+    
+    </div>
+    
+       <!-- 검색 레이어 -->
+      <div id="public-facilities-search" class="layer-wrap type04" aria-hidden="true">
+        <form class="layer-container"  onsubmit="return false;">
+          <div class="layer-header">
+            <div class="layer-title">검색</div>
+          </div>
+          <div class="layer-body">
+            <div class="input-wrap">
+              <div class="input-wrap-group">
+                <input type="text" id="merNm" name="merNm" placeholder="검색어를 입력하세요.">
+                <label class="input-wrap-label" for="inp-facilities">시설명 검색</label>
+                <button type="button" class="btn-input-clear" aria-label="입력내용 삭제" onclick="searchInit2()"></button>
+              </div>
+            </div>
+
+            <div class="radiobtn-group">
+              <div class="radiobtn-group-title">할인 구분</div>
+              <div class="radiobtn-group-item">
+	            <div class="input-radio-type"><input type="radio" id="merClssAll" name="merClss" value="All" checked><label for="merClssAll">전체</label></div>
+	            
+	                <div class="input-radio-type">
+	                    <input type="radio" id="merClssA" name="merClss" value="A">
+	                    <label class="custom-control-label" for="merClssA">할인</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="merClssB" name="merClss" value="B">
+	                    <label class="custom-control-label" for="merClssB">무료</label>
+	                </div>
+	             
+	          </div>
+            </div>
+
+            <div class="radiobtn-group">
+              <div class="radiobtn-group-title">지역 선택</div>
+              <input type="hidden"  name="searchLoc1" id="searchLoc1" value=""/>
+	          <div class="radiobtn-group-item">
+	            <div class="input-radio-type"><input type="radio" id="searchLoc1999999" name="searchLoc1" value="999999" checked><label for="searchLoc1999999">지역 전체</label></div>
+	            
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1110000" name="searchLoc1" value="110000" >
+	                    <label class="custom-control-label" for="searchLoc1110000">서울</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1260000" name="searchLoc1" value="260000" >
+	                    <label class="custom-control-label" for="searchLoc1260000">부산</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1270000" name="searchLoc1" value="270000" >
+	                    <label class="custom-control-label" for="searchLoc1270000">대구</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1280000" name="searchLoc1" value="280000" >
+	                    <label class="custom-control-label" for="searchLoc1280000">인천</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1290000" name="searchLoc1" value="290000" >
+	                    <label class="custom-control-label" for="searchLoc1290000">광주</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1300000" name="searchLoc1" value="300000" >
+	                    <label class="custom-control-label" for="searchLoc1300000">대전</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1310000" name="searchLoc1" value="310000" >
+	                    <label class="custom-control-label" for="searchLoc1310000">울산</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1360000" name="searchLoc1" value="360000" >
+	                    <label class="custom-control-label" for="searchLoc1360000">세종</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1410000" name="searchLoc1" value="410000" >
+	                    <label class="custom-control-label" for="searchLoc1410000">경기</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1420000" name="searchLoc1" value="420000" >
+	                    <label class="custom-control-label" for="searchLoc1420000">강원</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1430000" name="searchLoc1" value="430000" >
+	                    <label class="custom-control-label" for="searchLoc1430000">충북</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1440000" name="searchLoc1" value="440000" >
+	                    <label class="custom-control-label" for="searchLoc1440000">충남</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1450000" name="searchLoc1" value="450000" >
+	                    <label class="custom-control-label" for="searchLoc1450000">전북</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1460000" name="searchLoc1" value="460000" >
+	                    <label class="custom-control-label" for="searchLoc1460000">전남</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1470000" name="searchLoc1" value="470000" >
+	                    <label class="custom-control-label" for="searchLoc1470000">경북</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1480000" name="searchLoc1" value="480000" >
+	                    <label class="custom-control-label" for="searchLoc1480000">경남</label>
+	                </div>
+	             
+	                <div class="input-radio-type">
+	                    <input type="radio" id="searchLoc1500000" name="searchLoc1" value="500000" >
+	                    <label class="custom-control-label" for="searchLoc1500000">제주</label>
+	                </div>
+	             
+	          </div>
+            </div>
+
+
+            <div class="radiobtn-group">
+              <div class="radiobtn-group-title">시군구 선택</div>
+              <div class="radiobtn-group-item" id="codeList">
+	            <div class="input-radio-type"><input type="radio" value="999999" id="cmmCode-0" name="cmmCode" checked><label for="cmmCode-0">도시 전체</label></div>
+	          </div>
+            </div>
+
+          </div>
+          <div class="layer-footer">
+            <button type="button" class="btn-floating type01 btnLayerClose" onclick="searchList(1);">조회</button>
+          </div>
+          <div class="layer-close-area">
+            <button type="reset" class="btn-refresh" aria-label="검색조건 재설정" onclick="initBtn()"></button>
+            <button type="button" class="layer-close-btn btnLayerClose" aria-label="창 닫기" onclick="layerClose()"></button>
+          </div>
+        </form>
+      </div>
+            
+</main>
+
+
+    <script type="text/javascript">
+    if(typeof curmenuId !== "undefined"){
+        if(curmenuId != 'M999'){
+        	$("#"+curmenuId).addClass("current");
+            $("#"+curmenuId).parents("li").addClass("current");
+        }
+    }
+    </script>
+    <footer id="footer">
+        <div class="wrap">
+            <h6>그린카드</h6>
+            <div class="util">
+                <a href="/app/customer/customerListPage.do">고객센터</a>
+                <a href="https://www.bccard.com/app/card/ContentsLinkActn.do?pgm_id=ind0492" target="blank">개인정보취급방침</a>
+                <a href="/app/customer/termsServiceListPage.do">이용약관</a>
+                <a href="tel:1566-2929">에코머니 전용상담 1566-2929</a>
+            </div>
+        </div>
+    </footer>
+  </div>
+  <!-- 221004 탑버튼 , 공유버튼 추가 (공유는 이벤트 상세만) -->
+  <div class="floating-btn-box">
+    
+    <a href="javascript:void(0);" aria-label="TOP 버튼" class="btn-top"></a>
+  </div>
+</body>
+</html>

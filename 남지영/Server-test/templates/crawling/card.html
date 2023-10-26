@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block addtional_head %}
+  <style>
+    h3, th, td {text-align: center; margin: 20px;}
+    th {width: 30px;}
+  </style>
+
+  <meta charset="utf-8">
+  <title>그린카드 상품 안내</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+{% endblock %}
+{% block content %}
+  <h3>{{place}}그린카드 상품 안내</h3>
+  <div class="container mt-5">
+    <div class="row">
+      {% for product in products %}
+      <div class="col-lg-4 mb-2">
+        <div class="card">
+          <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+          <div class="card-body" style="height: 170px;">
+            <h5 class="card-title" style="color: blueviolet;"><strong>{{ product.name }}</strong></h5> 
+            <p style="font-size: 15px;">{{product.description.split('||')[1]}}</p>      
+            <button class="btn btn-primary mt-3;" data-toggle="modal" data-target="#productModal{{ product.id }}">상세 정보 보기</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 모달 창 -->
+      <div class="modal fade" id="productModal{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="productModalLabel">{{ product.name }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+                <table style="width:100%">
+                  <tr>
+                    <th></th>
+                    <th style="text-align: left; font-size: 20px; color: blueviolet;"><i class="fa-solid fa-circle-info"></i>  상세 혜택</th>
+                  </tr>
+                  {% for i in product.description.split('||') %}
+                  {% if i != product.description.split('||')[-1] %}
+                  <tr>
+                    <td></td>
+                      <td>
+                        <i class="fa-solid fa-splotch"></i> {{ i }}
+                      </td>
+                  </tr>
+                    {% else %}
+                        <!-- {% for i in product.description.split('||')[-1].split(',') %}
+                        <tr>
+                          <td></td>
+                          <td>
+                            {{ i }}
+                          </td>
+                        </tr>
+                        {% endfor %} -->
+                        <tr>
+                          <td></td>
+                            <td>
+                              <i class="fa-solid fa-splotch"></i>  {{product.description.split('||')[-1].split(',')[0]}}
+                            </td>
+                        </tr>
+                          <td></td>
+                          <td>
+                            <i class="fa-solid fa-diamond-exclamation"></i> (전월 실적)  {{product.description.split('||')[-1].split(',')[1]}}
+                            </td>
+                        </tr>
+                          <td></td>
+                            <td>
+                            <i class="fa-solid fa-diamond-exclamation"></i> (연회비) {{product.description.split('||')[-1].split(',')[2]}}
+                            </td>
+                        </tr>
+                      {% endif %}
+                  {% endfor %}
+                  
+              </table>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  </body>
+  </html>
+{% endblock %}

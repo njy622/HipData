@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}사용자 목록{% endblock %}
+{% block additional_head %} 
+    <style>
+        th, td  {text-align: center;}
+    </style>
+    <script>
+        function updateFunc(uid) {
+            $.ajax({
+                type: 'GET',
+                url: '/user/update?uid=' + uid,
+                success: function(userInfo) {
+                    let u = JSON.parse(userInfo);
+                    $('#hiddenUid').val(u[0]);
+                    $('#uid').val(u[0]);
+                    $('#uname').val(u[2]);
+                    $('#email').val(u[3]);
+                    $('#updateModal').modal('show');
+                }
+            });
+        }
+        function deleteFunc() {
+            $('#deleteModal').modal('show');
+        }
+    </script>
+{% endblock %}
+{% block subtitle %}사용자 목록{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <table class="table" style="margin-bottom: 100px;">
+                <tr>
+                    <th style="width: 20%;">사용자 ID</th>
+                    <th style="width: 20%;">사용자 이름</th>
+                    <th style="width: 40%;">이메일</th>
+                    <th style="width: 20%;">액션</th>
+                </tr>
+                {% for user in user_list %}
+                <tr>
+                    <td>{{user[0]}}</td>
+                    <td>{{user[2]}}</td>
+                    <td>{{user[3]}}</td>
+                    <td>
+                    {% if session['uid'] == user[0] %}
+                        <a href="javascript:updateFunc('{{user[0]}}')"><i class="fas fa-user-edit"></i></a>
+                        <a href="#" onclick="deleteFunc(); return false;"><i class="fas fa-user-minus"></i></a>
+                    {% else %}
+                        <a href="#"><i class="fas fa-user-edit"></i></a>
+                        <a href="#"><i class="fas fa-user-minus"></i></a>
+                    {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-2"></div>
+    </div>
+{% endblock %}
+
+{% block additional_body %}
+    <div class="modal" id="updateModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">사용자 수정</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/user/update" method="post">
+                        <input type="hidden" name="uid" id="hiddenUid">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td style="width:35%"><label class="col-form-label">사용자 ID</label></td>
+                                <td style="width:65%"><input type="text" id="uid" class="form-control" disabled></td>
+                            </tr>
+                            <tr>
+                                <td><label class="col-form-label">패스워드</label></td>
+                                <td><input type="password" name="pwd" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td><label class="col-form-label">패스워드 확인</label></td>
+                                <td><input type="password" name="pwd2" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td><label class="col-form-label">이름</label></td>
+                                <td><input type="text" name="uname" id="uname" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td><label class="col-form-label">이메일</label></td>
+                                <td><input type="text" name="email" id="email" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">
+                                    <input class="btn btn-primary" type="submit" value="수정">
+                                    <button class="btn btn-secondary ms-1" data-bs-dismiss="modal">취소</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">사용자 탈퇴</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <strong>탈퇴하시겠습니까?</strong>
+                    <div class="text-center mt-5">
+                        <button class="btn btn-danger" onclick="location.href='/user/delete'">삭제</button>
+                        <button class="btn btn-secondary ms-1" data-bs-dismiss="modal">취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block addtional_head %}
+    <style>
+        h3, th, td {text-align: center; margin: 20px;}
+    </style>
+{% endblock %}
+{% block content %}
+    <h3>{{place}} 맛집</h3>
+    <table class="table table-striped" style="margin-bottom: 100px;">
+        <tr>
+            <th>업소명</th>
+            <th>평점</th>
+            <th>메뉴</th>
+            <th>주소</th>
+            <th>전화번호</th>
+            <th>이미지</th>
+        </tr>
+
+        {% for rest in rest_list %}
+            <tr>
+                <td><a href="{{rest.href}}" target="_blank">{{rest.업소명}}</a></td>
+                <td>{{rest.평점}}</td>
+                <td>{{rest.메뉴}}</td>
+                <td>{{rest.주소}}</td>
+                <td>{{rest.전화번호}}</td>
+                <td><img src="{{rest.이미지}}" height="32"></td>
+            </tr>
+
+        {% endfor %}
+
+
+    </table>
+{% endblock %}

@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+{% block title %}부동산 사회초년생을 위한 챗봇{% endblock %}
+{% block addtional_head %}
+    <script>
+        function requestChatbot(type, userInput) {
+            let url, data;
+            if (type === 'GET') {
+                url = '/chatbot/get_welcome_message';
+                data = {};
+            } else if (type === 'POST') {
+                url = '/chatbot/counsel';
+                data = { userInput: userInput };
+            } else {
+                console.error("Invalid request type");
+                return;
+            }
+
+            $.ajax({
+                type: type,
+                url: url,
+                data: data,
+                success: function(result) {
+                    let obj = JSON.parse(result);
+                    let mark = 'mark' + Math.floor(Math.random() * 100000);
+
+                    if (type === 'POST') {
+                        // 유저 메시지 생성
+                        $('<div></div>')
+                            .attr({'class': 'd-flex flex-row-reverse mt-1', id: mark+'1'})
+                            .appendTo('#container');
+                        $('<div></div>')
+                            .attr({'class': 'card bg-secondary text-white w-60', id: mark+'2'}).appendTo('#'+mark+'1');
+                        $('<div></div>')
+                            .attr({'class': 'card-body text-end', id: mark+'3'}).appendTo('#'+mark+'2');
+                        $('<img></img>')
+                            .attr({src: "{{url_for('static', filename='img/person.png')}}", height: '32'}).appendTo('#'+mark+'3');
+                        $('<span></span>')
+                            .text(' '+ obj.user).appendTo('#'+mark+'3');
+                        
+                        // 봇 메시지 생성
+                        $('<div></div>')
+                            .attr({'class': 'd-flex flex-row mt-1', id: mark+'6'})
+                            .appendTo('#container');
+                        $('<div></div>')
+                            .attr({'class': 'card bg-success text-white w-75', id: mark+'7'}).appendTo('#'+mark+'6');
+                        $('<div></div>')
+                            .attr({'class': 'card-body', id: mark+'8'}).appendTo('#'+mark+'7');
+                        $('<img></img>')
+                            .attr({src: "{{url_for('static', filename='img/ai.png')}}", height: '32'}).appendTo('#'+mark+'8');                    
+                        $('<span></span>')
+                            .text(' '+obj.chatbot).appendTo('#'+mark+'8');
+                    } else if (type === 'GET') {
+                        // 초기 메시지 생성
+                        $('<div></div>')
+                            .attr({'class': 'd-flex flex-row mt-1', id: mark + '9'})
+                            .appendTo('#container');
+                        $('<div></div>')
+                            .attr({'class': 'card bg-success text-white w-75', id: mark + '10'})
+                            .appendTo('#container');
+                        $('<div></div>')
+                            .attr({'class': 'card-body', id: mark + '11'})
+                            .appendTo('#' + mark + '10');
+                        $('<img></img>')
+                            .attr({src: "{{url_for('static', filename='img/ai.png')}}", height: '32'})
+                            .appendTo('#' + mark + '11');
+                        $('<span></span>')
+                            .text(' ' + obj.message)
+                            .appendTo('#' + mark + '11');
+                    }
+
+                    let buttonContainer = $('<div></div>')
+                        .attr({'class': 'd-flex flex-row mt-1', id: mark + 'ButtonContainer'})
+                        .appendTo('#container');
+
+                    // 부동산 사기 유형 버튼
+                    $('<button></button>')
+                        .attr({'class': 'btn btn-primary mr-3', id: mark + 'RealEstateScam'})
+                        .css('margin-right', '12px')
+                        .text('부동산 사기 유형')
+                        .appendTo(buttonContainer)
+                        .on('click', function() {
+                            // 버튼 클릭 시 수행될 동작
+                        });
+
+                    // 부동산 기초정보 버튼
+                    $('<button></button>')
+                            .attr({
+                                'class': 'btn btn-primary dropdown-toggle',
+                                'data-bs-toggle': 'dropdown',
+                                id: mark + 'RealEstateTerms'
+                            })
+                            .css('margin-right', '12px')
+                            .text('부동산 기초정보')
+                            .appendTo(buttonContainer);
+
+
+                    let dropdownMenu = $('<div></div>')
+                        .attr({'class': 'dropdown-menu', id: mark + 'SubButtonContainer'})
+                        .appendTo(buttonContainer);
+
+                    let subButtons = [
+                        { text: '전세', id: mark + 'Jeonse' },
+                        { text: '월세', id: mark + 'MonthlyRent' },
+                        { text: '팁', id: mark + 'Tips' },
+                        { text: '주의사항', id: mark + 'Warnings' },
+                    ];
+
+                    subButtons.forEach(function(buttonInfo) {
+                    $('<button></button>')
+                        .attr({
+                            'class': 'dropdown-item btn btn-primary',
+                            'type': 'button',
+                            'id': buttonInfo.id
+                        })
+                        .text(buttonInfo.text)
+                        .appendTo(dropdownMenu)
+                        .on('click', function() {
+                            if (buttonInfo.text === '전세') {
+                                createBootstrapCardWithButtons('전세');
+                            }
+                            else if (buttonInfo.text === '월세') {
+                                createBootstrapCardWithButtons('월세');
+                            } 
+                        });
+                    });
+                    function createBootstrapCardWithButtons(type) {
+                        let buttons;
+                        let cardTitleText; 
+                        
+                        const jeonseButtons = [
+                            { text: '1. 정의', id: 'Definition' },
+                            { text: '2. 전세 계약의 특징', id: 'Features' },
+                            { text: '3. 전세 계약 시 주의사항', id: 'Precautions' },
+                            { text: '4. 전세금 반환', id: 'Refund' },
+                            { text: '5. 전세 대출', id: 'Loan' },
+                            { text: '6. 관련 법규', id: 'Laws' }
+                        ];
+
+                        const wolseButtons = [
+                            { text: '1. 정의', id: 'Definition' },
+                            { text: '2. 월세 계약과 기간', id: 'Features' },
+                            { text: '3. 보증금', id: 'Precautions' },
+                            { text: '4. 월세액', id: 'Refund' },
+                            { text: '5. 관리비', id: 'Loan' },
+                        ];
+
+
+                        if (type === '전세') {
+                            buttons = jeonseButtons;
+                            cardTitleText = '전세 정보';
+                        } else if (type === '월세') {
+                            buttons = wolseButtons;
+                            cardTitleText = '월세 정보';
+                        } else {
+                            console.error("Unknown type provided to createBootstrapCardWithButtons:", type);
+                            return;
+                        }
+
+                        let cardContainer = $('<div></div>').attr('class',  'card bg-success text-white w-75 mt-3');
+                        let cardBody = $('<div></div>').attr('class', 'card-body');
+                        // 아이콘 생성
+                        let aiIcon = $('<img>').attr({
+                            'src': "{{url_for('static', filename='img/ai.png')}}",
+                            'height': '32',
+                            'class': 'mr-2', // 오른쪽 여백 추가
+                            'alt': 'AI Icon'
+                        });
+                        // 카드 제목 생성 및 아이콘 추가
+                        let cardTitle = $('<h5></h5>').attr('class', 'card-title').append(aiIcon).append(cardTitleText);  // 동적으로 제목을 설정
+                                            
+                        cardContainer.append(cardBody);
+                        cardBody.append(cardTitle);
+                        
+                        
+                        buttons.forEach(function(buttonInfo) {
+                            let button = $('<button></button>')
+                                .attr({
+                                    'class': 'btn btn-primary mt-2 mr-2',
+                                    'type': 'button',
+                                    'id': buttonInfo.id
+                                })
+                                .css('margin-right', '12px')
+                                .text(buttonInfo.text)
+                                .on('click', function() {
+                                    displayJeonseDetail(buttonInfo.id);
+                                });
+                            cardBody.append(button);
+                        });
+
+
+                        
+
+                        // #container에 생성한 카드를 추가합니다.
+                        $('#container').append(cardContainer);
+                    }
+
+                    const jeonseDetails = {
+                        'Definition': '전세 : 임대인이 임차인에게 주택을 일정 기간 사용하게 하고, 임차인은 그 대가로 임대인에게 일정 금액을 미리 지급하는 계약 방식입니다.',
+                        'Features': '전세금 : 임차인은 계약 시 임대인에게 전세금을 지급합니다. 이 금액은 임대 기간 동안 반환받지 않습니다. <br>계약 기간: 전세 계약의 기간은 일반적으로 2년이며, 계약 만료 시 재계약 또는 계약 해지가 가능합니다.',
+                        'Precautions': '계약서 : 계약 내용을 명확하게 서면으로 작성해야 합니다. <br>계약금: 전체 전세금의 일부를 미리 지불하며, 나머지는 계약 이행 시 지불됩니다. <br>계약 해지: 계약 기간 중 해지할 경우, 반드시 그 이유와 조건을 명시해야 합니다.',
+                        'Refund': '전세금 반환 : 계약 만료 시 임차인은 임대인으로부터 전세금 전액을 반환받아야 합니다. 만약 임대인이 전세금을 반환하지 않을 경우, 임차인은 법적 조치를 취할 수 있습니다.',
+                        'Loan': '전세 대출 : 일부 임차인은 전세금을 마련하기 위해 전세 대출을 받을 수 있습니다. 여러 은행과 금융 기관에서 전세 대출 상품을 제공하므로, 대출 조건과 이자율을 비교해보는 것이 좋습니다.',
+                        'Laws': '관련 법규 : 전세 계약 및 관련 사항은 「주택임대차보호법」에 규정되어 있습니다. 계약 시 이 법의 내용을 잘 숙지하고, 권리를 보호받는 것이 중요합니다.'
+                    };
+
+                    const wolseDetails = {
+                        'Definition': '월세는 부동산을 임대하는 형태 중 하나로, 임차인이 매월 일정 금액을 임대인에게 지불하는 방식입니다. 이는 주택, 아파트, 상가, 사무실 등 다양한 부동산 유형에 적용됩니다.',
+                        'Features': '월세 계약은 보통 1년 또는 더 긴 기간으로 체결됩니다. 임대료와 관련된 조건, 납부일, 인상률 등이 계약서에 명시되어야 합니다.',
+                        'Precautions': '월세 계약에서 임차인은 임대인에게 보증금을 지불합니다. 보증금은 월세 계약 종료 시에 임대인이 월세 미납 또는 손해가 발생한 경우에 사용됩니다.',
+                        'Refund': '월세액은 매월 임차인이 임대인에게 지불해야 하는 금액을 나타냅니다. 월세액은 부동산의 위치, 크기, 상태, 시장 조건 등에 따라 다양하게 결정됩니다.',
+                        'Loan': '일부 월세 계약에는 관리비가 포함되어 있을 수 있습니다. 관리비는 건물의 유지보수, 청소, 수도, 가스, 전기, 인터넷 등 부가적인 비용을 나타냅니다. 이러한 정보를 숙지하고 부동산 월세 계약을 체결할 때 계약서를 주의 깊게 검토하는 것이 중요합니다. 부동산 월세에 관한 규정은 국가 및 지역에 따라 다를 수 있으므로, 해당 지역의 법률 및 규정을 따라야 합니다.'
+                    };
+
+
+
+                    function displayJeonseDetail(detailKey) {
+                         const details = (type === '전세') ? jeonseDetails : wolseDetails;
+
+                        // 새로운 Bootstrap Card를 생성하여 detail을 표시합니다.
+                        let cardContainer = $('<div></div>').attr('class', 'card bg-success text-white w-75 mt-3');
+                        let cardBody = $('<div></div>').attr('class', 'card-body');
+                        let cardText = $('<p></p>').attr('class', 'card-text').html(details[detailKey]);  // .text() 대신 .html() 사용
+                        cardBody.append(cardText);
+                        cardContainer.append(cardBody);
+                        
+                        // #container에 새로운 카드를 추가합니다.
+                        $('#container').append(cardContainer);
+                    }
+
+                    
+
+
+                    // ... 나머지 로직 ...
+
+                    // response 처리를 위한 로직, 
+                    // 예: obj.message나 obj.user, obj.chatbot 값에 따라서 분기 처리 등
+                }
+            });
+        }
+        function send() {
+            let userInput = document.getElementById("userInput").value;
+            requestChatbot('POST', userInput);
+        }
+
+        // 사용 예:
+        // GET 요청
+        requestChatbot('GET');
+
+    </script>
+{% endblock %}
+{% block subtitle %}사회초년생을 위한 챗봇{% endblock %}
+{% block content %}
+        
+        <div class="d-flex justify-content-center outer-container" style="margin-top: 80px;">
+            <div class="container overflow-auto" id="container" style="width: 80%; height: 350px;">
+                <!-- 초기 환영 메시지는 이 부분에 직접 추가 -->
+            </div>
+        </div>
+  
+
+        <div class="d-flex justify-content-center outer-container" style="margin-top: 10px;">
+            <div class="input-group mb-3" style="width: 80%;">
+                <input type="text" class="form-control" name="userInput" id="userInput" onkeyup="if(window.event.keyCode==13) {send()}"
+                    onfocus="if(this.value=='문의할 내용을 적어주세요') { this.value=''; this.style.opacity = 1; }"
+                    onblur="if(this.value=='') { this.value='문의할 내용을 적어주세요'; this.style.opacity = 0.7; }"
+                    placeholder="문의할 내용을 적어주세요">
+                <button class="btn btn-success" type="submit" onclick="send()">전송</button>
+            </div>
+        </div>
+    <script>
+       
+        
+        function clearDefaultText() {
+            var userInput = document.getElementById("userInput");
+            if (userInput.value == "문의할 내용을 적어주세요.") {
+                userInput.value = "";
+            }
+        }
+
+        function restoreDefaultText() {
+            var userInput = document.getElementById("userInput");
+            if (userInput.value === "") {
+                userInput.value = "문의할 내용을 적어주세요.";
+            }
+        }
+
+        function askQuestion(question) {
+            $.ajax({
+                type: 'POST',
+                url: '/rule_based_chat',
+                data: {user_input: question},
+                success: function (data) {
+                    $('#response').text(data.response);
+                }
+            });
+        }
+        
+    </script>
+{% endblock %}

@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>에너지절약 | 그린카드</title>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link type="text/css" rel="stylesheet" href="/pc/assets/styles/css/common_renew.css" />
+<!-- 221006 파비콘 추가 -->
+<link rel="icon" href="/pc/assets/images/favicon.png">
+<link rel="shortcut icon" href="/pc/assets/images/favicon.png">
+<script src="/pc/assets/scripts/libs/jquery-3.2.1.min.js"></script>
+<!-- <script src="./common_renew.js"></script> -->
+<script src="/pc/assets/scripts/common.ui.js"></script>
+<script src="/pc/assets/scripts/common_input.js"></script>
+<script src="/pc/assets/scripts/libs/swiper.min.4.5.1.js"></script>
+<script src="/js/green_common.js?ver=1"></script>
+<script src="/js/green_mobile.js?ver=2"></script>
+<script src="/js/green_native.js?ver=1"></script>
+<script type="text/javascript">
+
+  commAjax.body("/app/mainBannerAjax.do", "", function(status, data) {
+      if (status.code  != 0) {
+          alert("error");
+      } else {
+          if(data.imgUrl != null){
+              $(".gnb-banner-area").html("<a href="+data.bannerLinkUrl+" target='blank'><img src="+data.imgUrl+" alt="+data.ctetNm+" ></a>");  
+          }
+          $("#redirectUrl").attr("href",data.redirectUrl);
+          $("#qrCode").attr("src",data.qrCode);
+      } 
+      
+  });
+  
+  function fnClip(url){
+	  var textarea = document.createElement("textarea");
+	  document.body.appendChild(textarea);
+	  textarea.value = url;
+	  textarea.readOnly=true;
+	  textarea.select();
+	  document.execCommand("copy");
+	  document.body.removeChild(textarea);
+	  alert("URL이 복사되었습니다.");
+  }
+</script>
+<meta charset="UTF-8">
+<script type="text/javascript">
+
+</script>
+</head>
+<body>
+<div id="skipnavi">
+    <a href="#main">본문 바로가기</a>
+</div>
+<div id="body-wrap" class="sub">
+    <header id="header">
+        <div class="wrap">
+            <h1 class="logo">
+                <a href="/app/mainPage.do"><span class="blind">green card</span></a>
+            </h1>
+            <nav id="gnb">
+                <a href="/app/mainPage.do"><img src="/pc/assets/images/bg/logo.svg" width="72" alt="green card"></a>
+                <ul>
+                    <li id="M000">
+                        <a href="/app/ecomoney/ecoMoneyAccumulationGuidePage.do">에코머니 포인트</a>
+                        <ul class="depth2">
+                            <li id="M001"><a href="/app/ecomoney/ecoMoneyAccumulationGuidePage.do">적립 / 사용 안내</a></li>
+                        </ul>
+                    </li>
+                    <li id="M100">
+                        <a href="/app/greenservice/greenShopListPage.do">그린서비스</a>
+                        <ul class="depth2">
+                            <li id="M101"><a href="/app/greenservice/greenShopListPage.do">녹색소비</a></li>
+                            <li id="M102"><a href="/app/greenservice/pubTransitListPage.do">대중교통</a></li>
+                            <li id="M103"><a href="/app/greenservice/carbonPointListPage.do">에너지절약</a></li>
+                            <li id="M104"><a href="/app/greenservice/pubEstablishmentListPage.do">공공시설</a></li>
+                        </ul>
+                    </li>
+                    <li id="M200">
+                        <a href="/app/greencard/greenCardGuideListPage.do">그린카드</a>
+		                <ul class="depth2">
+		                  <li id="M201"><a href="/app/greencard/greenCardGuideListPage.do">카드 소개</a></li>
+		                  <li id="M202"><a href="/app/greencard/greenCardViewV1ListPage.do">그린카드 V1</a></li>
+		                  <li id="M203"><a href="/app/greencard/greenCardViewV2ListPage.do">그린카드 V2</a></li>
+		                  <li id="M204"><a href="/app/greencard/greenCardViewPlatformListPage.do">플랫폼카드</a></li>
+		                </ul>
+                    </li>
+                    <li id="M300">
+                        <a href="/app/event/eventListPage.do">이벤트</a>
+                    </li>
+                    <li  id="M400">
+                        <a href="/app/notice/noticeListPage.do">공지/뉴스</a>
+                        <ul class="depth2">
+                            <li id="M401"><a href="/app/notice/noticeListPage.do">공지사항</a></li>
+                            <li id="M402"><a href="/app/notice/ecoNewsListPage.do">친환경뉴스</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="gnb-depth">
+                    <div class="gnb-banner-area">
+                        
+                    </div>
+                </div>
+                <div class="btn-area"><a id="redirectUrl" class="btn-floating type01 btn-app-download" href="#none">앱 다운로드</a></div>
+		        <button type="button" class="btn-gnb-open" aria-label="메뉴 열기" onclick="$('#gnb').removeClass('close').addClass('active')"></button>
+		        <button type="button" class="layer-close-btn btn-gnb-close" aria-label="메뉴 닫기"></button>
+            </nav>
+            <button type="button" class="app-download btn-app-download" onclick="common.htmlLockOn(); $('.app-download-area').show().css('display','flex');">앱 다운로드</button>
+	        <button type="button" class="btn-gnb-open" aria-label="메뉴 열기"></button>
+	        <div class="app-download-area">
+	          <div>
+	            <dl>
+	              <dt>에코라이프의 시작! 그린카드와 함께 하세요!</dt>
+	              <dd>
+	                <dfn>스토어 다운로드</dfn>
+	                <a href="https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=com.bccard.greenapp"><img src="/pc/assets/images/icon/icon-google.png" height="28" alt="">Google Play</a>
+	                <a href="https://itunes.apple.com/kr/app/geulinkadeu-ecomoney-ekomeoni/id760260161"><img src="/pc/assets/images/icon/icon-apple.png" height="28" alt="">App Store</a>
+	              </dd>
+	              <dd>
+	                <dfn>QR코드 다운로드</dfn>
+	                <figure>
+	                  <img id="qrCode" alt="qr code">
+	                  <figcaption class="blind">qr코드를 촬영하세요</figcaption>
+	                </figure>
+	              </dd>
+	            </dl>
+	            <button type="button" class="layer-close-btn" aria-label="창 닫기" onclick="common.htmlLockOff(); $('.app-download-area').hide();"></button>
+	          </div>
+	        </div>
+	      </div>
+	    </header>
+    
+    
+<script type="text/javascript">
+    var curmenuId = "M103";
+</script>
+<main id="main" class="sub-energy-concervation">
+    <div id="lnb">
+        <button type="button" class="lnb-toggle-menu"></button>
+        <ul class="lnb-menu-list"></ul>
+    </div>
+    <div class="wrap">
+        <div class="sub-tit-wrap">
+            <h2 class="sub-tit">에너지절약</h2>
+            
+	        <p class="sub-desc">생활 에너지 절약하고 <strong>에코머니 포인트로 돌려받아요!</strong></p>
+	    
+        </div>
+        
+	   <!-- energy-concervation -->
+        <div class="energy-concervation">
+
+          <!-- sub-sponsored-by -->
+          <div class="sub-sponsored-by contents-area-gray">
+            <div class="img-box">
+              <img src="/pc/assets/images/bg/visual-energy-concervation.png" alt="" />
+              <ul class="sponsored-logo">
+                <li class="item">
+                  <img src="/pc/assets/images/bg/bg-logo-cpoint.png" width="124" alt="탄소포인트제">
+                  <span>서울 외 지역</span>
+                </li>
+                <li class="item">
+                  <img src="/pc/assets/images/bg/bg-logo-eco.png" width="124" alt="eco 마일리지">
+                  <span>서울</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="txt-box">
+              <p class="title-type01"><strong class="highlight">전기, 상수도, 도시가스 </strong>절약하면<br> 인센티브를 지급받을 수 있어요!</p>
+              <p>탄소포인트제/에코마일리지는 기후위기 대응을 위하여 온실가스를 줄일 수 있도록 가정, 상업, 아파트 단지 등에서 전기, 상수도, 도시가스의 사용량을 절감하고 감축률에 따라 환경부 및 지자체에서 인센티브를 제공하는 국민 참여형 온실가스 감축 실천 프로그램입니다.</p>
+              <p><strong>그린카드 발급 후 탄소포인트제/에코마일리지에 가입하시면</strong>에너지 절약 인센티브를 에코머니 포인트로 받을 수 있습니다.</p>
+            </div>
+
+          </div>
+          <!-- //sub-sponsored-by -->
+
+
+
+          <h3 class="title-type01">제도 소개</h3>
+
+          <div class="tab-menu type02 tabSwiper">
+            <div class="swiper-wrapper">
+              <a href="#none" class="swiper-slide tab-item active">탄소포인트제(전국)</a>
+              <a href="#none" class="swiper-slide tab-item">에코마일리지(서울)</a>
+            </div>
+          </div>
+          <div class="tab-menu-contents">
+            <!-- 탄소포인트제(전국) -->
+            <div class="active">
+
+              <dl class="sub-dl">
+                <dt class="sub-dt">개요</dt>
+                <dd class="sub-dd bullet-type01">환경부에서 운영하는 전국민대상 온실가스 감축 시민 참여 프로그램</dd>
+              </dl>
+              <dl class="sub-dl">
+                <dt class="sub-dt">가입대상</dt>
+                <dd class="sub-dd bullet-type01">전 국민(서울시민 제외)</dd>
+              </dl>
+              <dl class="sub-dl">
+                <dt class="sub-dt">인센티브 지급</dt>
+                <dd class="sub-dd bullet-type01">가정 내 사용하는 에너지 항목(전기, 상수도, 도시가스)을 과거 1 ~ 2년간 월별 평균 사용량과 현재 사용량을 비교하여 절감비율에 따라 에코머니 포인트 지급(연간 최대 10만점)</dd>
+              </dl>
+              <dl class="sub-dl">
+                <dt class="sub-dt">가입방법</dt>
+                <dd class="sub-dd bullet-type01">
+                  <strong>오프라인</strong><br>
+                  탄소포인트제 참여 신청서 작성 후 지방자치단체(전국 시청, 구청 주민센터)에 제출
+                </dd>
+                <dd class="sub-dd bullet-type01">
+                  <strong>온라인</strong><br>
+                  한국환경공단 탄소포인트제 홈페이지에서 가입<br />
+                  <a class="btn-mini type2" href="https://cpoint.or.kr" target="_blank">홈페이지 바로가기</a>
+                </dd>
+              </dl>
+              <dl class="sub-dl">
+                <dt class="sub-dt">지급기준</dt>
+                <dd class="sub-dd bullet-type01">온실가스 감축률에 따라 탄소포인트 부여 (개인/연 2회)</dd>
+                <dd class="sub-dd bullet-type01">1 탄소포인트 = 최대 2원</dd>
+              </dl>
+              <dl class="sub-dl">
+                <dt class="sub-dt">감축 인센티브</dt>
+                <dd class="sub-dd bullet-type01">감축률 5% 이상인 참여자에게 지급</dd>
+              </dl>
+              <div class="info-table">
+                <table>
+                  <caption>감축 인센티브 표</caption>
+                  <colgroup>
+                    <col style="width:28%" />
+                    <col style="width:24%" />
+                    <col style="width:24%" />
+                    <col style="width:24%" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th scope="col">감축률</th>
+                      <th scope="col">전기</th>
+                      <th scope="col">상수도</th>
+                      <th scope="col">도시가스</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>5% 이상 ~ 10% 미만</td>
+                      <td>5,000 P</td>
+                      <td>750 P</td>
+                      <td>3,000P</td>
+                    </tr>
+                    <tr>
+                      <td>10% 이상 ~ 15% 미만</td>
+                      <td>10,000 P</td>
+                      <td>1,500 P</td>
+                      <td>6,000 P</td>
+                    </tr>
+                    <tr>
+                      <td>15% 이상</td>
+                      <td>15,000 P</td>
+                      <td>2,000 P</td>
+                      <td>8,000 P</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <dl class="sub-dl">
+                <dt class="sub-dt">유지 인센티브</dt>
+                <dd class="sub-dd bullet-type01">2회 이상 연속으로 5% 이상 감축하여 인센티브를 받은 참여자가 이어서 0% 초과 ~ 5% 미만의 감축률을 유지할 경우 지급</dd>
+              </dl>
+              <div class="info-table">
+                <table>
+                  <caption>유지 인센티브 표</caption>
+                  <colgroup>
+                    <col style="width:28%" />
+                    <col style="width:24%" />
+                    <col style="width:24%" />
+                    <col style="width:24%" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th scope="col">감축률</th>
+                      <th scope="col">전기</th>
+                      <th scope="col">상수도</th>
+                      <th scope="col">도시가스</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>0% 초과 ~ 5% 미만</td>
+                      <td>3,000 P</td>
+                      <td>450 P</td>
+                      <td>1,800 P</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+            <!-- //탄소포인트제(전국) -->
+
+            <!-- 에코마일리지(서울) -->
+            <div>
+              <dl class="sub-dl">
+                <dt class="sub-dt">개요</dt>
+                <dd class="sub-dd bullet-type01">서울시에서 운영하는 온실가스 감축 시민 참여 프로그램</dd>
+              </dl>
+              <dl class="sub-dl">
+                <dt class="sub-dt">가입대상</dt>
+                <dd class="sub-dd bullet-type01">서울시민</dd>
+              </dl>
+              <dl class="sub-dl">
+                <dt class="sub-dt">인센티브 지급</dt>
+                <dd class="sub-dd bullet-type01">기준 사용량(최근 2년) 대비 6개월 간 월평균 에너지 항목(전기, 수도, 가스(지역난방 포함) 중 2개 항목 이상의 온실가스를 5% 이상 감축할 경우, 절감비율에 따라 에코머니 포인트 지급(연간 최대 10만점)</dd>
+              </dl>
+              <dl class="sub-dl">
+                <dt class="sub-dt">가입방법</dt>
+                <dd class="sub-dd bullet-type01">
+                  <strong>오프라인</strong><br>
+                  ‘에코마일리지 가입 신청서’ 작성 후 거주 지방자치단체(서울시내 시청, 구청, 주민센터)에 제출
+                </dd>
+                <dd class="sub-dd bullet-type01">
+                  <strong>온라인</strong><br>
+                  서울시 에코마일리지 홈페이지에서 가입<br />
+                  <a class="btn-mini type2" href="https://ecomileage.seoul.go.kr/" target="_blank">홈페이지 바로가기</a>
+                </dd>
+              </dl>
+              <dl class="sub-dl">
+                <dt class="sub-dt">지급기준</dt>
+              </dl>
+              <div class="info-table">
+                <table>
+                  <caption>지급기준 표</caption>
+                  <colgroup>
+                    <col style="width:55%" />
+                    <col style="width:45%" />
+                  </colgroup>
+                  <thead>
+
+                    <tr>
+                      <th scope="col">감축률</th>
+                      <th scope="col">포인트</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>5% 이상 ~ 10% 미만</td>
+                      <td>10,000 P</td>
+                    </tr>
+                    <tr>
+                      <td>10% 이상 ~ 15% 미만</td>
+                      <td>30,000 P</td>
+                    </tr>
+                    <tr>
+                      <td>15% 이상</td>
+                      <td>50,000 P</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- //에코마일리지(서울) -->
+          </div>
+
+
+          <div class="about-info">
+            <h3 class="title-type01">가입 및 제도안내</h3>
+            <ul class="txt-list circle">
+              <li class="txt-list-item"><strong>에너지사용량이 집계되지 않는 일부 지역의 경우, 서비스 이용에 제약이 발생할 수 있습니다.</strong></li>
+              <li class="txt-list-item"><strong>그린카드 발급 후, 탄소포인트(에코마일리지) 프로그램 회원가입 및 에너지 수집 정보를 입력하셔야 포인트를 적립 받으실 수 있습니다.</strong></li>
+              <li class="txt-list-item">거주 지역(주민등록상)에 따라 하나의 제도만 가입 가능하며, 가입 방법 및 인센티브 지급 기준 등 자세한 내용은 지역별로 다를 수 있으므로, 해당 홈페이지를 참고해 주시기 바랍니다.</li>
+              <li class="txt-list-item">고객님의 주민등록상 주소지가 변경된 경우, 해당 탄소포인트제 홈페이지에서도 반드시 수정해주시기 바랍니다. 해당 홈페이지에서 수정하지 않으신 경우 에너지절감 인센티브가 지급되지 않을 수 있습니다.</li>
+            </ul>
+          </div>
+
+          <div class="info-noti-box">
+            <dl class="sub-dl call-center-num">
+              <dt class="sub-dt">에너지 사용량 관련문의</dt>
+              <dd class="sub-dd bullet-type01">에코마일리지 (서울시)<span>다산콜센터 120</span></dd>
+              <dd class="sub-dd bullet-type01">탄소포인트제 (서울시를 제외한 전국)<span>한국환경공단 032-590-3420~6</span></dd>
+            </dl>
+          </div>
+
+        </div>
+        <!-- //energy-concervation -->
+	        
+        
+    </div>
+        
+</main>
+
+
+    <script type="text/javascript">
+    if(typeof curmenuId !== "undefined"){
+        if(curmenuId != 'M999'){
+        	$("#"+curmenuId).addClass("current");
+            $("#"+curmenuId).parents("li").addClass("current");
+        }
+    }
+    </script>
+    <footer id="footer">
+        <div class="wrap">
+            <h6>그린카드</h6>
+            <div class="util">
+                <a href="/app/customer/customerListPage.do">고객센터</a>
+                <a href="https://www.bccard.com/app/card/ContentsLinkActn.do?pgm_id=ind0492" target="blank">개인정보취급방침</a>
+                <a href="/app/customer/termsServiceListPage.do">이용약관</a>
+                <a href="tel:1566-2929">에코머니 전용상담 1566-2929</a>
+            </div>
+        </div>
+    </footer>
+  </div>
+  <!-- 221004 탑버튼 , 공유버튼 추가 (공유는 이벤트 상세만) -->
+  <div class="floating-btn-box">
+    
+    <a href="javascript:void(0);" aria-label="TOP 버튼" class="btn-top"></a>
+  </div>
+</body>
+</html>

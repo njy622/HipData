@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block addtional_head %}
+    <style>
+        h3, input {text-align: center; margin: 20px;}
+    </style>
+{% endblock %}
+{% block content %}
+    <h3> 맛집 검색</h3>
+   
+    <form action="/crawling/siksin" method="post">
+        <div class="d-grid gap-2">
+            검색 <input type="text" id="place" name="place" class="btn btn-outline-primary">
+            <button class="btn btn-primary" type="submit">제출</button>
+        </div>
+    </form>
+    
+{% endblock %}

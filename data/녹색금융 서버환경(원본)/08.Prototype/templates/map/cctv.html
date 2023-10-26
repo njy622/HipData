@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block addtional_head %}
+    <style>
+        input {margin: 10px;}
+    </style>
+{% endblock %}
+{% block subtitle %}서울시 구별 CCTV/인구 현황{% endblock %}
+{% block content %}
+    <div class="container mt-4">
+        
+        <hr>
+        <iframe src="{{url_for('static', filename='img/cctv.html')}}" frameborder="1"
+        width="800" height="500"></iframe>
+        <a href="/map/cctv" class="btn btn-primary">재실행</a> 
+        <a href="/" class="btn btn-primary">홈으로</a>  
+    
+        
+            
+        
+
+    </div>
+{% endblock %}

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>{% block title %}Prototype{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="{{url_for('static', filename='favicon.ico')}}">   <!-- favicon.ico -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/fdb840a8cc.js" crossorigin="anonymous"></script>
+    <style>
+        * { font-family: 'Noto Sans KR', sans-serif; }
+        a { text-decoration: none; }
+    </style>
+    <script src="{{url_for('static', filename='js/ajax.js')}}"></script>
+    {% block additional_head %}{% endblock %}
+</head>
+<body>
+    <!--                                           홈페이지 상단 네비게이션  start                                         -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <a class="navbar-brand mx-5" href="#"><img src="{{url_for('static', filename='data/ck-logo.png')}}" height="40" width="70"></a>
+                <li class="nav-item ms-3">
+                    <a class="nav-link {% if menu.ho %}active{% endif %}" href="{% if menu.ho %}#{% else %}/{% endif %}"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item ms-3">
+                    <a class="nav-link {% if menu.us %}active{% endif %}" href="{% if menu.us %}#{% else %}/user/list{% endif %}"><i class="fas fa-user-friends"></i> 사용자</a>
+                </li>
+                </li>
+                <li class="nav-item dropdown ms-3">
+                    <a class="nav-link dropdown-toggle {% if menu.cr %}active{% endif %}" href="#" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-spider"></i> 녹색서비스 소개
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="https://www.green-card.co.kr/app/greenservice/greenShopListPage.do">녹색소비</a></li>
+                        <li><a class="dropdown-item" href="https://www.green-card.co.kr/app/greenservice/pubTransitListPage.do">대중교통</a></li>
+                        <li><a class="dropdown-item" href="https://www.green-card.co.kr/app/greenservice/carbonPointListPage.do">에너지 절약</a></li>
+                        <li><a class="dropdown-item" href="/crawling/public">공공시설</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown ms-3">
+                    <a class="nav-link dropdown-toggle {% if menu.cr %}active{% endif %}" href="#" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-spider"></i> 녹색금융 추천
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/crawling/bank">은행</a></li>
+                        <li><a class="dropdown-item" href="/crawling/finance">금융사</a></li>
+                        <li><a class="dropdown-item" href="/crawling/card">카드</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown ms-3">
+                    <a class="nav-link dropdown-toggle {% if menu.cb %}active{% endif %}" href="#" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-brain"></i> 챗봇
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/chatbot/counsel">녹색금융</a></li>
+                        <li><a class="dropdown-item" href="/chatbot/bard">구글 바드</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/chatbot/genImg">이미지 생성</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item ms-3">
+                    <a class="nav-link {% if menu.sc %}active{% endif %}" href="{% if menu.sc %}#{% else %}/schedule/calendar/this{% endif %}"><i class="fa-solid fa-calendar-days"></i> 스케쥴</a>
+                </li>
+                <li class="nav-item ms-3">
+                    {% if session['uid'] %}
+                        <a class="nav-link" href="/user/logout"><i class="fas fa-sign-out-alt"></i> 로그아웃</a>
+                    {% else %}
+                        <a class="nav-link" href="/user/login"><i class="fas fa-sign-in-alt"></i> 로그인</a>
+                    {% endif %}
+                </li>
+            </ul>
+            <span class="navbar-text me-3">
+                {% if session['uid'] %}
+                    {{ session['uname'] }}님 환영합니다.
+                {% endif %}
+            </span>
+        </div>
+    </nav>
+<!--                                           홈페이지 상단 네비게이션 end                                          -->
+
+<!--                                           홈페이지 좌측 프로파일 start                                          -->
+    <div class="container" style="margin-top:80px">
+        <div class="row">
+            <div class="col-3">
+            {% if session['uid'] %}
+                {% if session['profile'][1] %}
+                    <img id="profileImage" src="{{url_for('static', filename='profile/' + session['uid'] + '.png')}}" class="rounded-circle" width="90%">
+                {% else %}
+                    <img id="profileImage" src="{{url_for('static', filename='data/profile.png')}}" class="rounded-circle" width="90%">
+                {% endif %}
+                {% if session['profile'][2] %}
+                    <div id="profileStateMsg" class="mt-2">{{ session['profile'][2] }}</div>
+                {% else %}
+                    <div id="profileStateMsg" class="mt-2">{{ session['quote'] }}</div>
+                {% endif %}
+                <div class="mt-3">
+                    <i class="fa fa-envelope me-2"></i>{{ session['profile'][0] }}<br>
+                    {% if session['profile'][3] %}
+                        <i class="fa-brands fa-github me-1"></i>
+                            <a id="profileGithub" href="https://github.com/{{ session['profile'][3] }}" target="_blank">{{ session['profile'][3] }}</a><br>
+                    {% endif %}
+                    {% if session['profile'][4] %}
+                        <i class="fa-brands fa-square-instagram me-1"></i>
+                            <a id="profileInsta" href="https://www.instagram.com/{{ session['profile'][4] }}" target="_blank">{{ session['profile'][4] }}</a><br>
+                    {% endif %}
+                    {% if session['profile'][5] %}
+                        <i class="fa-solid fa-location-dot me-1"></i>
+                            <span id="profileAddr">{{ session['profile'][5] }}</span>
+                        <a href="javascript:changeWeather()"><span class="badge bg-secondary">날씨</span></a>
+                        <div id="weather" class="ms-3"></div>
+                    {% endif %}
+                    <button class="btn btn-sm btn-outline-primary mt-3" onclick="getProfile()">Edit Profile</button>
+                </div>
+            {% else %}
+                <img id="profile" src="https://picsum.photos/256/256" class="rounded-circle" width="90%">
+                <br><br>
+                <a href="/user/login">로그인</a> 하세요.
+            {% endif %}
+            </div>
+            <div class="col-9 mt-3">
+                <h3><strong>{% block subtitle %}{% endblock %}</strong></h3>
+                <hr>
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+<!--                                           홈페이지 좌측 프로파일 end                                          -->
+
+
+<!--                                           홈페이지 프로파일 업로드 start                                          -->
+<nav class="navbar navbar-expand-sm bg-light fixed-bottom">
+    <div class="container-fluid justify-content-center">
+            <span class="navbar-text">
+                Copyright &copy; 2023 CK World Corp. All rights reserved.
+            </span>
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <script>
+        alert("{{messages[-1]}}");
+        </script>
+        {% endif %}
+        {% endwith %}
+        <div class="modal" id="profileModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">프로파일 수정</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="email" id="hiddenEmail">
+                        <input type="hidden" name="hiddenImage" id="hiddenImage">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td style="width:25%"><label class="col-form-label">email</label></td>
+                                <td style="width:75%"><input type="text" id="modalEmail" class="form-control" disabled></td>
+                            </tr>
+                            <tr>
+                                <td><label class="col-form-label">사진 이미지</label></td>
+                                <td><input type="file" name="image" id="modalImage" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td><label class="col-form-label">상태 메세지</label></td>
+                                <td><input type="text" name="stateMsg" id="modalStateMsg" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td><label class="col-form-label">깃허브</label></td>
+                                <td><input type="text" name="github" id="modalGithub" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td><label class="col-form-label">인스타그램</label></td>
+                                <td><input type="text" name="insta" id="modalInsta" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td><label class="col-form-label">주소</label></td>
+                                <td><input type="text" name="addr" id="modalAddr" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">
+                                    <button class="btn btn-primary" onclick="changeProfile(); return false;">수정</button>
+                                    <button class="btn btn-secondary ms-1" data-bs-dismiss="modal">취소</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--                                           홈페이지 프로파일 업로드 start                                          -->
+    {% block additional_body %}{% endblock %}
+</body>
+</html>
