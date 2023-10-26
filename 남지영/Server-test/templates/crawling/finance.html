@@ -12,6 +12,28 @@
 {% endblock %}
 
 {% block content %}
+<!-- 금융사 연락처 모달 및 버튼--> 
+<h3 style="color: green;"><strong>금융사 친환경 투자상품 안내 </strong> <button class="btn btn-success mt-3;"style="position: absolute; right: 110px;" data-toggle="modal" data-target="#call">금융사 고객센터</button></h3>
+<p style="color: rgb(169, 169, 169);">해당 상품은 2023.10.20일 기준 데이터로 자세한 내용은 각 금융사로 확인바랍니다.</p>
+    
+<div class="modal fade" id="call" tabindex="-1" role="dialog" aria-labelledby="bank_productModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="bank_productModalLabel"><strong>금융사 고객센터 안내</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img src="/static/img/증권사 연락처.png" style="width: 460px;">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
     <!-- 모달 버튼 -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#csvModal" id='NH투자증권'>
     <img src="../static/img/NH투자증권.jpg" width="300px" height="100px">

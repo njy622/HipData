@@ -11,7 +11,30 @@
 
 {% endblock %}
 {% block content %}
-  <h3>{{place}}그린카드 상품 안내</h3>
+<!-- 카드사 연락처 모달 및 버튼--> 
+<h3 style="color: green;"><strong>그린 · 친환경 카드상품 안내 </strong><button class="btn btn-success mt-3;"style="position: absolute; right: 110px;" data-toggle="modal" data-target="#call">카드사 고객센터</button></h3>
+  <p style="color: rgb(169, 169, 169);">해당 상품은 2023.10.20일 기준 데이터로 자세한 내용은 각 카드사로 확인바랍니다.</p>
+      
+  <div class="modal fade" id="call" tabindex="-1" role="dialog" aria-labelledby="bank_productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bank_productModalLabel"><strong>카드사 고객센터 안내</strong></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img src="/static/img/카드사연락처.png" style="width: 700px;">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<!-- 카드 목록  -->
   <div class="container mt-5">
     <div class="row">
       {% for product in products %}
@@ -19,7 +42,7 @@
         <div class="card">
           <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
           <div class="card-body" style="height: 170px;">
-            <h5 class="card-title" style="color: blueviolet;"><strong>{{ product.name }}</strong></h5> 
+            <h5 class="card-title" style="font-size: 19px; color: blueviolet;"><strong>{{ product.name }}</strong></h5> 
             <p style="font-size: 15px;">{{product.description.split('||')[1]}}</p>      
             <button class="btn btn-primary mt-3;" data-toggle="modal" data-target="#productModal{{ product.id }}">상세 정보 보기</button>
           </div>
@@ -52,14 +75,6 @@
                       </td>
                   </tr>
                     {% else %}
-                        <!-- {% for i in product.description.split('||')[-1].split(',') %}
-                        <tr>
-                          <td></td>
-                          <td>
-                            {{ i }}
-                          </td>
-                        </tr>
-                        {% endfor %} -->
                         <tr>
                           <td></td>
                             <td>
@@ -76,6 +91,7 @@
                             <i class="fa-solid fa-diamond-exclamation"></i> (연회비) {{product.description.split('||')[-1].split(',')[2]}}
                             </td>
                         </tr>
+                      
                       {% endif %}
                   {% endfor %}
                   
