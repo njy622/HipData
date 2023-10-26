@@ -7,12 +7,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
-# tesseract
-import util.tesseract_util as tess
-# receipt
-import util.receipt_util as rece
-# item_analysis
-import util.item_analysis as item
 
 
 chatbot_bp = Blueprint('chatbot_bp', __name__)
@@ -47,40 +41,6 @@ def counsel():
 
 
     
-############################ 영수증 데이터 불러오기 ############################################
-
-@chatbot_bp.route('/receipt', methods=['GET', 'POST'])
-def receipt():
-    if request.method == 'GET':
-        return render_template('receipt.html')
-    else:
-        if 'image' not in request.files:
-            return jsonify({'message': '이미지가 없습니다.'}), 400
-
-        file = request.files['image']
-
-        if file.filename == '':
-            return jsonify({'message': '이미지 파일을 선택하세요.'}), 400
-
-        if file:
-            file.save(os.path.join(
-                chatbot_bp.config['UPLOAD_FOLDER'], "receipt01.jpg"))
-
-            receipt_data = tess.get_item_from_img()
-            result = rece.receipt_get_point(receipt_data)
-
-            return str(result)
-
-
-@chatbot_bp.route('/receipt2', methods=['POST'])
-def receipt2():
-    user_input = request.form['userInput']
-    result = item.get_title_market(user_input)
-    return json.dumps(result)
-
-
-########################################################################################################
-   
 
 
 

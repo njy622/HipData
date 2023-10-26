@@ -9,12 +9,17 @@ import util.map_util as mu
 import util.weather_util as wu
 import util.image_util as iu
 import db_sqlite.profile_dao as pdao
+# tesseract
+import util.tesseract_util as tess
+# receipt
+import util.receipt_util as rece
+# item_analysis
+import util.item_analysis as item
 
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/receipts'
 
-app = Flask(__name__)
 
 app.register_blueprint(crawl_bp, url_prefix='/crawling')    # localhost:5000/crawling/* 는 crawl bp가 처리
 app.register_blueprint(map_bp, url_prefix='/map')
@@ -77,6 +82,55 @@ def home():
 if __name__ == '__main__':
     app.run(debug=True)
 
+############################ 영수증 데이터 불러오기 ############################################
+
+
+@chatbot_bp.route('/receipt', methods=['GET', 'POST'])
+def receipt():
+    if request.method == 'GET':
+        return render_template('receipt.html')
+    else:
+        if 'image' not in request.files:
+            return jsonify({'message': '이미지가 없습니다.'}), 400
+
+        file = request.files['image']
+
+        if file.filename == '':
+            return jsonify({'message': '이미지 파일을 선택하세요.'}), 400
+
+        if file:
+            file.save(os.path.join(
+                chatbot_bp.config['UPLOAD_FOLDER'], "receipt01.jpg"))
+
+            receipt_data = tess.get_item_from_img()
+            result = rece.receipt_get_point(receipt_data)
+
+            return str(result)
+
+# 23.10.24
+# 품목명(titleInput)을 입력받아 품목별 포인트를 리턴
+
+
+@chatbot_bp.route('/receipt2', methods=['POST'])
+def receipt2():
+    user_input = request.form['userInput']
+    result = item.get_title_market(user_input)
+    return json.dumps(result)
+
+# 23.10.25
+# 주소(AddrInput)를 입력받아 해당 주소 근처에 있는 매장 리턴
+
+
+@chatbot_bp.route('/receipt3', methods=['POST'])
+def receipt3():
+    addr_input = request.form['addrInput']
+    result = item.get_market_info(addr_input)
+    # Send this json_data as a response to your AJAX request
+    return json.dumps(result)
+
+
+########################################################################################################
+   
 
 
 
