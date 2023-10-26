@@ -132,15 +132,20 @@
             $('#userInput').val('');
             let mark = 'mark' + Date.now();
             
+            $('<img></img>')
+                .attr({src: "{{url_for('static', filename='img/please-wait.gif')}}", id: 'waitImg'})
+                .prependTo('#container');
             $.ajax({
                 type: 'POST',
                 url: '/chatbot/counsel',
                 data: {userInput: userInput},
                 success: function(result) {
+                    $('#waitImg').remove();
+                    $('#userInput').val('');
                     let obj = JSON.parse(result);
 					$('<div></div>')
 							.attr({'class': 'd-flex flex-row mt-1', id: mark+'1'})
-							.appendTo('#container');
+							.prependTo('#container');
                         $('<img></img>')
                         .attr({src: "{{url_for('static', filename='img/person.png')}}", height: '50', class:'m-3'}).appendTo('#'+mark+'1');    
 						$('<div></div>')
@@ -202,6 +207,35 @@
  -->
 
 
+ <div class="mt-3 mb-3">
+     <a href="/crawling/bank"><button class="btn btn-success">은행상품 안내 바로가기</button></a>
+     <a href="/crawling/finance"><button class="btn btn-success ">투자상품 안내 바로가기</button></a>
+     <a href="/crawling/card"><button class="btn btn-success ">그린카드 안내 바로가기</button></a>
+ </div>
+ <div class="d-flex justify-content-center">
+    <div class=" mb-3 outer-container" style="width: 100%;">
+        <span style="color: black; font-size: 20px;">영수증으로 알아보는 친환경상품과 에코포인트 계산해보기</span>
+        <form  style="color: black; margin-top: 20px;"   id="uploadForm" enctype="multipart/form-data" method="POST">
+            <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
+            <input type="file" name="image" accept="image/*" />
+            <input class="btn btn-sm btn-success margin-left-5" type="submit" value="upload" />
+        </form>
+        <div id="message"></div>
+    </div>
+</div>
+<!--  <div class="d-flex justify-content-center">
+    <div class="input-group mb-3 outer-container" style="width: 100%;">
+        <span style="color: black; font-size: 20px;">영수증으로 알아보는 친환경상품과 에코포인트 계산해보기</span>
+        <form  style="color: black; margin-top: 20px;"   id="uploadForm" enctype="multipart/form-data" method="POST">
+         <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
+         <input type="file" name="image" accept="image/*" />
+         <input class="btn btn-sm btn-success margin-left-5" type="submit" value="upload" />
+     </form>
+     <div id="message"></div>
+    </div>
+</div> -->
+
+
 
 <div class="d-flex justify-content-center">
     <div class="input-group mb-3 outer-container" style="width: 100%;">
@@ -212,34 +246,19 @@
         onblur="if(this.value=='') { this.value='안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.'; this.style.opacity = 0.7; }"
         placeholder="안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.">
         <button class="btn btn-success" type="submit" onclick="send()">전송</button>
-            
+        
     </div>
 </div>
-<div class="d-flex justify-content-left" style="margin-bottom: 60px ">
-    
+<div class="d-flex justify-content-left" style="margin-bottom: 60px; margin: top 100px;">
     <div class="container" id="container" 
             style=" padding-right: 250px; color: #0a703a; width: 1000px; height: 500px; border: 4px solid; border-radius: 30px; overflow: auto">
-        <div class="mt-3 mb-3">
-            <a href="/crawling/bank"><button class="btn btn-success">은행상품 안내 바로가기</button></a>
-            <a href="/crawling/finance"><button class="btn btn-success ">투자상품 안내 바로가기</button></a>
-            <a href="/crawling/card"><button class="btn btn-success ">그린카드 안내 바로가기</button></a>
-        </div>
         <div class="d-flex flex-row mt-1">
             <div class="card w-100">
-                <div class="card-body">        
-                    <span style="color: black; font-size: 20px;">영수증을 업로드 하시겠습니까?</span>
-                    <form  style="color: black; margin-top: 20px;"   id="uploadForm" enctype="multipart/form-data" method="POST">
-                        <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
-                        <input type="file" name="image" accept="image/*" />
-                        <input class="btn btn-sm btn-success margin-left-5" type="submit" value="upload" />
-                    </form>
-                    <div id="message"></div>
-                </div>
             </div>
         </div>
     </div>
     <img src="../static/img/chatbot.png" style="
-            position: absolute; right: 20px; top: 335px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
+            position: absolute; right: 20px; top: 470px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
 </div>
 
 
