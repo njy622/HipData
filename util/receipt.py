@@ -36,8 +36,8 @@ def receipt_get_point(receipt_data):
     receipt_df['point'] = list_df.loc[most_similar_indices, 'point'].values
     receipt_df['title'] = list_df.loc[most_similar_indices, 'title'].values
 
-    # cosine_similarity의 값이 1.0인 경우만 추출
-    receipt_df = receipt_df[receipt_df['cosine_similarity'] == 1.0]
+    # cosine_similarity의 값이 0.5 이상인 경우만 추출
+    receipt_df = receipt_df[receipt_df['cosine_similarity'] >= 0.5]
 
     # 결과
     receipt_list = []
