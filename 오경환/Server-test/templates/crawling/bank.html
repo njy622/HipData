@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block addtional_head %}
+  <style>
+    h3, th, td {text-align: center; margin: 20px;}
+  </style>
+
+  <meta charset="utf-8">
+  <title>은행 상품 안내</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+{% endblock %}
+{% block content %}
+  <h3>{{place}} 은행 상품 안내</h3>
+  <div class="container mt-3">
+    <div class="row">
+      {% for bank_product in bank_products %}
+      <div class="col-lg-4 mb-2">
+        <div class="card">
+          <img src="{{ bank_product.image_url }}" class="card-img-top" alt="{{ bank_product.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ bank_product.name }}</h5>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#bank_productModal{{ bank_product.id }}">상세 정보 보기</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 모달 창 -->
+      <div class="modal fade" id="bank_productModal{{ bank_product.id }}" tabindex="-1" role="dialog" aria-labelledby="bank_productModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="bank_productModalLabel">{{ bank_product.name }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>{{ bank_product.description }}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  </body>
+  </html>
+{% endblock %}
