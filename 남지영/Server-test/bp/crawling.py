@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 crawl_bp = Blueprint('crawl_bp', __name__)
 
-menu = {'ho':0, 'us':0, 'cr':1, 'ma':0,'cb':0,  'sc':0}
+menu = {'ho':0, 'us':0, 'gr':0, 'cr':1, 'ma':0,'cb':0,  'sc':0}
 
 #################은행 상품 리스트 ########################
 bank_products = [

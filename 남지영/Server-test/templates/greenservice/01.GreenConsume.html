@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}소비패턴에 따른 녹색금융 추천{% endblock %}
+{% block additional_head %}
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<title>Receipt</title>
+<style>
+	.custom-list-group .list-group-item {
+		border: none;
+	}
+
+	.custom-nav {
+		border: none;
+	}
+
+	.small-image {
+		width: 300px;
+		height: auto;
+	}
+
+</style>
+
+{% endblock %}
+{% block subtitle %}{% endblock %}
+{% block content %}
+<!-- Content Section -->
+<div class="container mt-4">
+	<div class="sub-tit-wrap">
+		<h2 class="sub-tit">녹색소비</h2>
+
+		<p class="sub-desc">그린매장에서 친환경 제품 구매하고 <strong>에코머니 포인트로 돌려받아요!</strong></p>
+	</div>
+
+	<!-- green-consumption -->
+	<div class="green-consumption">
+		<!-- contents-area-gray -->
+		<div class="contents-area-gray">
+			<div class="row">
+				<div class="col-md-6">
+					<img class="small-image" src="{{url_for('static',filename='img/ai.png')}}" alt="" class="img-fluid">
+				</div>
+				<div class="col-md-6">
+					<strong>친환경제품이란?</strong>
+					<ul class="list-group custom-list-group">
+						<li class="list-group-item">환경표지, 저탄소 제품 등 법으로 정한 ‘녹색제품’ 또는 환경오염을 줄이고 자원 이용의 효율성 등을 높이기 위한 제품·서비스 중에서 그린카드를 통해 에코머니 포인트를 지급하는 제품을 말합니다.</li>
+						<li class="list-group-item">인증표지가 부착되었더라도 제품의 성격, 인증 유효기간에 따라 에코머니 포인트 적립이 제외될 수 있습니다.</li>
+						<li class="list-group-item">친환경제품을 그린카드로 결제 시 구매금액의 일정 비율(최대 15%)을 적립 받으실 수 있습니다.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- //contents-area-gray -->
+		
+		<!-- green-consumption-step -->
+		<div class="green-consumption-step mt-4">
+			<h3 class="title-type01">친환경제품 구매절차</h3>
+			<ul class="list-group cspt-step-list custom-list-group">
+				<li class="list-group-item">그린매장(에코머니 제휴 유통매장) 방문</li>
+				<li class="list-group-item">친환경제품 구매</li>
+				<li class="list-group-item">그린카드로 결제</li>
+				<li class="list-group-item">결제전표에서 적립된 에코머니 포인트 확인</li>
+				<li class="list-group-item">녹색소비를 통한 에코머니 포인트 적립 완료</li>
+			</ul>
+		</div>
+		<!-- //green-consumption-step -->
+		
+		<!-- green-store -->
+		<div class="green-store mt-4" id="green-store">
+			<h3 class="title-type01">그린매장 안내</h3>
+			<ul class="nav" id="storeTabs">
+				<li class="nav-item">
+					<a class="nav-link active" data-bs-toggle="tab" href="#convenience">편의점</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#shopping">쇼핑</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#mart">마트</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#other">기타</a>
+				</li>
+			</ul>
+			<div class="tab-content" id="storeTabContent">
+				<!-- 편의점 -->
+				<div class="tab-pane fade show active" id="convenience">
+					<ul class="list-group store-info custom-list-group">
+						<li class="list-group-item">
+							<img src="https://www.green-card.co.kr/pc/assets/images/bg/bg-logo-gs25.png" alt="">
+							GS25
+						</li>
+						<li class="list-group-item">
+							<img src="https://www.green-card.co.kr/pc/assets/images/bg/bg-logo-7eleven.png" alt="">
+							세븐일레븐
+						</li>
+						<li class="list-group-item">
+							<img src="https://www.green-card.co.kr/pc/assets/images/bg/bg-logo-cu.png" alt="">
+							씨유
+						</li>
+					</ul>
+				</div>
+				<!-- //편의점 -->
+
+				<!-- 쇼핑 -->
+				<div class="tab-pane fade" id="shopping">
+					<ul class="list-group store-info custom-list-group">
+						<li class="list-group-item">
+							<img src="https://www.green-card.co.kr/pc/assets/images/bg/bg-logo-galleria.png" alt="">
+							갤러리아백화점
+						</li>
+						<li class="list-group-item">
+							<img src="https://www.green-card.co.kr/pc/assets/images/bg/bg-logo-lottedepartment.png" alt="">
+							롯데백화점
+						</li>
+						<!-- Add more shopping stores here -->
+					</ul>
+				</div>
+				<!-- //쇼핑 -->
+
+				<!-- 마트 -->
+				<div class="tab-pane fade" id="mart">
+					<ul class="list-group store-info custom-list-group">
+						<li class="list-group-item">
+							<img src="https://www.green-card.co.kr/pc/assets/images/bg/bg-logo-lottemart.png" alt="">
+							롯데마트
+						</li>
+						<li class="list-group-item">
+							<img src="https://www.green-card.co.kr/pc/assets/images/bg/bg-logo-homeplus.png" alt="">
+							홈플러스
+						</li>
+						<!-- Add more mart stores here -->
+					</ul>
+				</div>
+				<!-- //마트 -->
+
+				<!-- 기타 -->
+				<div class="tab-pane fade" id="other">
+					<ul class="list-group store-info custom-list-group">
+						<li class="list-group-item">
+							<img src="https://www.green-card.co.kr/pc/assets/images/bg/bg-logo-green.png" alt="">
+							초록마을
+						</li>
+						<li class="list-group-item">
+							<img src="https://www.green-card.co.kr/pc/assets/images/bg/bg-logo-orga.png" alt="">
+							올가홀푸드
+						</li>
+						<!-- Add more stores in the "기타" category here -->
+					</ul>
+				</div>
+				<!-- //기타 -->
+			</div>
+
+			<div class="about-info mt-4">
+				<ul class="list-group custom-list-group">
+					<li class="list-group-item">위 유통매장에서 친환경제품 구매 시 에코머니 포인트 적립이 가능합니다.</li>
+					<li class="list-group-item">포인트 제공 구매처(유통매장)는 지속적으로 확대 될 예정입니다.</li>
+					<li class="list-group-item">GS25, 세븐일레븐, CU 편의점의 경우 전국 매장에서 가능합니다. 단, 한국도로공사 휴게소 내에 있는 편의점의 경우 안성(부산 방향) / 기흥 (부산 방향) / 하남드림 / 김천(양방향)만 가능합니다.</li>
+				</ul>
+			</div>
+		</div>
+		<!-- //green-store -->
+
+		<!-- eco-money-save-guide -->
+		<div class="eco-money-save-guide mt-4">
+			<div class="about-info">
+				<h3 class="title-type01">에코머니 적립 안내</h3>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">에코머니 제휴 가맹점에서 일부 제품은 에코머니 포인트 적립이 제외될 수 있습니다.</li>
+					<li class="list-group-item">기타 서비스 이용과 관련한 문의는 에코머니 고객센터(1566-2929)를 이용해 주시기 바랍니다.</li>
+				</ul>
+			</div>
+		</div>
+		<!-- //eco-money-save-guide -->
+	</div>
+</div>
+
+{% endblock %}

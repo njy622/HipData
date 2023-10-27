@@ -11,19 +11,35 @@ import pandas as pd
 
 chatbot_bp = Blueprint('chatbot_bp', __name__)
 
-menu = {'ho':0, 'us':0, 'cr':0, 'ma':0, 'cb':1, 'sc':0}
+menu = {'ho':0, 'us':0, 'gr':0, 'cr':0, 'ma':0,'cb':1,  'sc':0}
 
 
 #############################################녹색금융####################################################################
+
+from flask import Flask, render_template, request, current_app, jsonify
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import json
+import os
+import pandas as pd
+# tesseract
+import util.tesseract_util as tess
+# receipt
+import util.receipt_util as rece
+# item_analysis
+import util.item_analysis as item
+
 @chatbot_bp.before_app_first_request
-def before_app_first_request():
+def before_first_request():
     global model, wdf
     model = SentenceTransformer('jhgan/ko-sroberta-multitask')
     filename = os.path.join(current_app.static_folder, 'core_data_mod.csv')
     wdf = pd.read_csv(filename)
     wdf.embedding = wdf.embedding.apply(json.loads)
 
-@chatbot_bp.route('/counsel', methods=['GET','POST'])
+
+
+@chatbot_bp.route('/counsel', methods=['GET', 'POST'])
 def counsel():
     if request.method == 'GET':
         return render_template('chatbot/counsel.html', menu=menu)
@@ -37,11 +53,54 @@ def counsel():
             'category': answer.구분, 'user': user_input, 'chatbot': answer.챗봇, 'similarity': answer.유사도
         }
         return json.dumps(result)
+
+
+@chatbot_bp.route('/receipt', methods=['GET', 'POST'])
+def receipt():
+    if request.method == 'GET':
+        return render_template('chatbot/counsel.html')
+    else:
+        print('receipt() post')
+        file_image = request.files['image']
+        filename = os.path.join(current_app.static_folder, f'upload/{file_image.filename}')
+        file_image.save(filename)
+        
+
+        receipt_data = tess.get_item_from_img(filename)
+        result = rece.receipt_get_point(receipt_data)
+
+        return str(result)
+
+# 23.10.24
+# 품목명(titleInput)을 입력받아 품목별 포인트를 리턴
+
+
+@chatbot_bp.route('/receipt2', methods=['POST'])
+def receipt2():
+    user_input = request.form['userInput']
+    result = item.get_title_market(user_input)
+    return json.dumps(result)
+
+# 23.10.25
+# 주소(AddrInput)를 입력받아 해당 주소 근처에 있는 매장 리턴
+
+
+@chatbot_bp.route('/receipt3', methods=['POST'])
+def receipt3():
+    addr_input = request.form['addrInput']
+    result = item.get_market_info(addr_input)
+    # Send this json_data as a response to your AJAX request
+    return json.dumps(result)
+
+
+if __name__ == '__main__':
+    chatbot_bp.run(debug=True)
+
     
 
 
     
-
+##########################################################################################################
 
 
 

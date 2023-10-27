@@ -78,7 +78,7 @@ function getProfile() {
 function changeProfile() {
     $('#profileModal').modal('hide');
     let email = $('#hiddenEmail').val();
-    let imageInputVal = $('#modalImage')[0];
+    let imageInputVal = $('#modalImage')[0];  
     let stateMsg = $('#modalStateMsg').val();
     let github = $('#modalGithub').val();
     let insta = $('#modalInsta').val();
@@ -86,7 +86,7 @@ function changeProfile() {
     let hiddenImage = $('#hiddenImage').val();
     let formData = new FormData();
     formData.append('email', email);
-    formData.append('image', imageInputVal.files[0]);
+    formData.append('image', imageInputVal.files[0]);     /* 파일받을 경우 */
     formData.append('stateMsg', stateMsg);
     formData.append('github', github);
     formData.append('insta', insta);
@@ -97,7 +97,7 @@ function changeProfile() {
         url: '/changeProfile',
         data: formData,
         processData: false,
-        contentType: false,
+        contentType: false,            /* False여야함 안되면 일반POST 받은 파일이 타입이 바껴버림*/  
         success: function(result) {     
             let profile = JSON.parse(result);
             let filename = '/static/profile/' + profile[6] + '.png';
@@ -114,3 +114,4 @@ function changeProfile() {
         }
     });
 }
+

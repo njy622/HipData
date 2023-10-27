@@ -14,7 +14,6 @@ from bs4 import BeautifulSoup
 
 
 def get_title_market(title):
-    global market
     # 품목 리스트 데이터프레임 화
     list_df = pd.read_csv('data/eco_product.csv')
 
@@ -52,6 +51,7 @@ def get_title_market(title):
     list_df = list_df[list_df['cosine_similarity'] == 1.0]
 
     # 관련된 매장명
+    global market
     market = list(set(list_df['market'].values))[:3]
     if market == []:
         return ['해당 상품을 취급하는 매장이 없습니다.']
@@ -104,7 +104,7 @@ def get_market_info(addr):
         lng = float(result['documents'][0]['x'])
         lat = float(result['documents'][0]['y'])
     except:
-        return '주소 형식이 올바르지 않습니다.'
+        return ['주소 형식이 올바르지 않습니다.']
 
     # 정보를 담을 리스트
     results = []
@@ -158,7 +158,7 @@ def get_market_info(addr):
                 '주소': m_addr
             }
         except:
-            market_data = '근처에 매장이 없습니다.'
+            market_data = ['근처에 매장이 없습니다.']
 
         # 딕셔너리 형태로 저장한 것을 리스트에 저장 (3가지 마켓을 넣어야 하므로)
         results.append(market_data)

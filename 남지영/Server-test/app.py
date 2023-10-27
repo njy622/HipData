@@ -9,16 +9,9 @@ import util.map_util as mu
 import util.weather_util as wu
 import util.image_util as iu
 import db_sqlite.profile_dao as pdao
-# tesseract
-import util.tesseract_util as tess
-# receipt
-import util.receipt_util as rece
-# item_analysis
-import util.item_analysis as item
-
+from bp.greenservice import green_service_bp
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'static/receipts'
 
 
 app.register_blueprint(crawl_bp, url_prefix='/crawling')    # localhost:5000/crawling/* 는 crawl bp가 처리
@@ -26,6 +19,8 @@ app.register_blueprint(map_bp, url_prefix='/map')
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(chatbot_bp, url_prefix='/chatbot')
 app.register_blueprint(schdedule_bp, url_prefix='/schedule')
+# green_service를 nav_bar에 추가
+app.register_blueprint(green_service_bp, url_prefix='/greenservice')
 
 # for AJAX ###################################################
 
@@ -71,99 +66,15 @@ def change_profile():
         profile.append(mtime)
         profile.append(need_refresh)
         return json.dumps(profile)
-####################################################################################################
+
 
 @app.route('/')
 def home():
-    menu = {'ho':1, 'us':0, 'cr':0, 'ma':0, 'cb':0, 'sc':0}
+    menu = {'ho':0, 'us':0, 'gr':1, 'cr':0, 'ma':0,'cb':0,  'sc':0}
     # flash('Welcome to my Web!!!')
     return render_template('home.html', menu=menu)
 
 if __name__ == '__main__':
     app.run(debug=True)
 
-############################ 영수증 데이터 불러오기 ############################################
 
-
-@chatbot_bp.route('/receipt', methods=['GET', 'POST'])
-def receipt():
-    if request.method == 'GET':
-        return render_template('receipt.html')
-    else:
-        if 'image' not in request.files:
-            return jsonify({'message': '이미지가 없습니다.'}), 400
-
-        file = request.files['image']
-
-        if file.filename == '':
-            return jsonify({'message': '이미지 파일을 선택하세요.'}), 400
-
-        if file:
-            file.save(os.path.join(
-                chatbot_bp.config['UPLOAD_FOLDER'], "receipt01.jpg"))
-
-            receipt_data = tess.get_item_from_img()
-            result = rece.receipt_get_point(receipt_data)
-
-            return str(result)
-
-# 23.10.24
-# 품목명(titleInput)을 입력받아 품목별 포인트를 리턴
-
-
-@chatbot_bp.route('/receipt2', methods=['POST'])
-def receipt2():
-    user_input = request.form['userInput']
-    result = item.get_title_market(user_input)
-    return json.dumps(result)
-
-# 23.10.25
-# 주소(AddrInput)를 입력받아 해당 주소 근처에 있는 매장 리턴
-
-
-@chatbot_bp.route('/receipt3', methods=['POST'])
-def receipt3():
-    addr_input = request.form['addrInput']
-    result = item.get_market_info(addr_input)
-    # Send this json_data as a response to your AJAX request
-    return json.dumps(result)
-
-
-########################################################################################################
-   
-
-
-
-""" ############################ 영수증 데이터 불러오기 ############################################
-
-@app.route('/receipt', methods=['GET', 'POST'])
-def receipt():
-    if request.method == 'GET':
-        return render_template('receipt.html')
-    else:
-        if 'image' not in request.files:
-            return jsonify({'message': '이미지가 없습니다.'}), 400
-
-        file = request.files['image']
-
-        if file.filename == '':
-            return jsonify({'message': '이미지 파일을 선택하세요.'}), 400
-
-        if file:
-            file.save(os.path.join(
-                app.config['UPLOAD_FOLDER'], "receipt01.jpg"))
-
-            receipt_data = tess.get_item_from_img()
-            result = rece.receipt_get_point(receipt_data)
-
-            return str(result)
-
-
-@app.route('/receipt2', methods=['POST'])
-def receipt2():
-    user_input = request.form['userInput']
-    result = item.get_title_market(user_input)
-    return json.dumps(result)
-
-########################################################################################################
- """
