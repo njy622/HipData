@@ -18,7 +18,7 @@
             e.preventDefault();
             let mark = "mark" + Date.now();
             $.ajax({
-                url: "/receipt",
+                url: "/chatbot/receipt",
                 type: "POST",
                 data: new FormData(this),
                 processData: false,

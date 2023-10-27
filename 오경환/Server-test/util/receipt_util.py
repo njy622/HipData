@@ -16,7 +16,7 @@ def receipt_get_point(receipt_data):
     receipt_df.reset_index(inplace=True)
 
     # 비교 데이터프레임 호출
-    list_df = pd.read_csv('data/eco_product.csv')
+    list_df = pd.read_csv('static/data/eco_product.csv')
 
     # TF-IDF 벡터화
     tv = TfidfVectorizer()

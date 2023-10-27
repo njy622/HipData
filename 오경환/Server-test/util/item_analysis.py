@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 def get_title_market(title):
     global market
     # 품목 리스트 데이터프레임 화
-    list_df = pd.read_csv('data/eco_product.csv')
+    list_df = pd.read_csv('static/data/eco_product.csv')
 
     # 찾는 품목이 '무' 또는 '김'처럼 한 글자일 경우 에러
     # TfidfVectorizer의 Default 값으로 한 글자 단어는 제외하게 되어있으므로

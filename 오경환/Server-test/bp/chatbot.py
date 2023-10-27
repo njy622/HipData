@@ -63,10 +63,10 @@ def receipt():
             return jsonify({'message': '이미지 파일을 선택하세요.'}), 400
 
         if file:
-            file.save(os.path.join(
-                chatbot_bp.config['UPLOAD_FOLDER'], "receipt01.jpg"))
+            file_path = os.path.join(current_app.static_folder, f'upload/{file.filename}')
+            file.save(file_path)
 
-            receipt_data = tess.get_item_from_img()
+            receipt_data = tess.get_item_from_img(file.filename)
             result = rece.receipt_get_point(receipt_data)
 
             return str(result)
