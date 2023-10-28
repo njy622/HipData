@@ -4,14 +4,15 @@
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <title>Receipt</title>
-<script type="text/javascript">
+
+<script>
     $(function () {
         $("#container").scrollTop($("#container")[0].scrollHeight);
     });
-
 </script>
+
 <script>
     $(document).ready(function () {
         $("#uploadForm").on("submit", function (e) {
@@ -141,7 +142,6 @@
             $('#userInput').val('');
             let mark = 'mark' + Date.now();
             let today = new Date();
-            console.log(today)
             $.ajax({
                 type: 'POST',
                 url: '/chatbot/counsel',
@@ -197,8 +197,17 @@
                     $("<p></p>")
                         .attr({'class': 'btn btn-outline-white'})
                         .text(" " + dateFormat(today)).appendTo("#" + mark + "9");
+                    $("#container").scrollTop($("#container")[0].scrollHeight);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/chatbot/savedatatodb', // 두 번째 엔드포인트를 지정합니다.
+                        data: {
+                            currentDate: currentDate, // currentDate를 다시 보냅니다.
+                            userQuestion : obj.user,
+                            chatbotAnswer : obj.chatbot
+                        }
+                    });
                 }
-           
             
             });
         }

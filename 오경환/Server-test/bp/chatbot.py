@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, current_app, jsonify
+from flask import Blueprint, render_template, request, current_app, jsonify, session
 import json, os
 import bardapi, openai
 import pandas as pd
@@ -13,6 +13,7 @@ import util.tesseract_util as tess
 import util.receipt_util as rece
 # item_analysis
 import util.item_analysis as item
+import db_sqlite.chat_dao as cdb
 
 
 chatbot_bp = Blueprint('chatbot_bp', __name__)
@@ -45,6 +46,16 @@ def counsel():
         return json.dumps(result)
     
 
+###########################################이력DB저장##########################################
+@chatbot_bp.route('/savedatatodb', methods=['POST'])
+def save_data_to_db():
+    current_date = request.form['currentDate']
+    user_question = request.form['userQuestion']
+    chatbot_answer = request.form['chatbotAnswer']
+    uid = session['uid']
+    params = (uid, user_question, chatbot_answer, current_date)
+    cdb.insert_chat(params)
+    return ' '
 
     
 ############################ 영수증 데이터 불러오기 ############################################

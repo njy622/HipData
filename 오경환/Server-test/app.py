@@ -14,8 +14,8 @@ import db_sqlite.profile_dao as pdao
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/receipts'
-
-app = Flask(__name__)
+app.config['SESSION_COOKIE_PATH'] = '/'
+app.secret_key = 'qwer1234'
 
 app.register_blueprint(crawl_bp, url_prefix='/crawling')    # localhost:5000/crawling/* 는 crawl bp가 처리
 app.register_blueprint(map_bp, url_prefix='/map')

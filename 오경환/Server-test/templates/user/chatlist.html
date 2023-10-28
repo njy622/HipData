@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block subtitle %}{{uid}}님의 Chat 내용{% endblock %}
+{% block content %}
+<div class='container d-flex align-items-start' >
+    <table class="table table-striped">
+        <tr>
+            <th>id</th>
+            <th>질문</th>
+            <th>답변</th>
+            <th>일시</th>
+        </tr>
+        {% for chat in chat_list %}
+            <tr>
+                <td>{{chat[1]}}</td>
+                <td>{{chat[2]}}</td>
+                <td>{{chat[3]}}</td>
+                <td>{{chat[4]}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
