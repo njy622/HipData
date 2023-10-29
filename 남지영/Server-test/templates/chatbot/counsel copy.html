@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% block title %}소비패턴에 따른 녹색금융 추천{% endblock %}
+{% block additional_head %}
+<script>
+    /* 영수증 분석 */
+    function upload() {
+        console.log('upload()');
+            let mark = "mark" + Date.now();
+            let imageInputVal = $('#image')[0]; /* id가 image인 파일 값을 불러옴 */    
+            let formData = new FormData();
+            formData.append('image', imageInputVal.files[0]);
+            $.ajax({
+                url: "/chatbot/receipt",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("<div></div>")
+                        .attr({ class: "d-flex flex-row mt-1", id: mark + "1" })
+                        .appendTo("#container");
+                    $("<div></div>")
+                        .attr({ class: "card w-75", id: mark + "2" })
+                        .appendTo("#" + mark + "1");
+                    $("<div></div>")
+                        .attr({ class: "card-body", id: mark + "3" })
+                        .appendTo("#" + mark + "2");
+                    $("<img></img>")
+                        .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "32" })
+                        .appendTo("#" + mark + "3");
+                    $("<span></span>")
+                        .text(" 업로드 완료!!")
+                        .appendTo("#" + mark + "3");
+                    $("<hr></hr>").appendTo("#" + mark + "3");
+                    $("<div></div>")
+                        .attr({ class: "d-flex flex-row mt-1", id: mark + "1" })
+                        .appendTo("#container");
+                    $("<div></div>")
+                        .attr({ class: "card w-75", id: mark + "2" })
+                        .appendTo("#" + mark + "1");
+                    $("<div></div>")
+                        .attr({ class: "card-body", id: mark + "3" })
+                        .appendTo("#" + mark + "2");
+                    $("<img></img>")
+                        .attr({ src: "{{url_for('static', filename='img/ai.png')}}", height: "32" })   /* 별도로 js파일을 만들면 변경해줘얗마 */
+                        .appendTo("#" + mark + "3");
+                    $("<span></span>")
+                        .html(result)
+                        .appendTo("#" + mark + "3");
+                },
+                error: function (xhr, status, error) {
+                    $("#message").text(error);
+                },
+            });
+    }
+
+    /* 품목 분석 */
+    function receipt() {
+        let userInput = $("#userInput1").val();
+        $("#userInput1").val("");
+        let mark = "mark" + Date.now();
+        $.ajax({
+            type: "POST",
+            url: "/chatbot/receipt2",
+            data: { userInput: userInput },
+            success: function (result) {
+                let combinedString = "";
+                let obj = JSON.parse(result);
+                obj.forEach(function (element) {
+                    combinedString += element + ", ";
+                });
+                combinedString = combinedString.replace(/,\s*$/, "");
+                $("<div></div>")
+                    .attr({ class: "d-flex flex-row mt-1", id: mark + "1" })
+                    .appendTo("#container");
+                $("<div></div>")
+                    .attr({ class: "card w-75", id: mark + "2" })
+                    .appendTo("#" + mark + "1");
+                $("<div></div>")
+                    .attr({ class: "card-body", id: mark + "3" })
+                    .appendTo("#" + mark + "2");
+                $("<img></img>")
+                    .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "32" })
+                    .appendTo("#" + mark + "3");
+                $("<span></span>")
+                    .text(" " + userInput)
+                    .appendTo("#" + mark + "3");
+               /*  $("<hr></hr>").appendTo("#" + mark + "3");   넣은 이유 */
+                $("<div></div>")
+                    .attr({ class: "d-flex flex-row-reverse mt-1", id: mark + "6" })
+                    .appendTo("#container");
+                $("<div></div>")
+                    .attr({ class: "card bg-light text-dark w-75", id: mark + "7" })
+                    .appendTo("#" + mark + "6");
+                $("<div></div>")
+                    .attr({ class: "card-body text-end", id: mark + "8" })
+                    .appendTo("#" + mark + "7");
+                $("<span></span>")
+                    .html(combinedString + "<br><br> 주소를 작성하면 가까운 매장을 안내해 드립니다.")
+                    .appendTo("#" + mark + "8");
+                
+                /* 주소 텍스트 인풋 버튼 */
+                $("<input></input>")
+                    .attr({
+                        type: "text",
+                        name: "addrInput",
+                        id: "addrInput",
+                        class: "form-control",
+                        onkeyup: "if(window.event.keyCode==13) {sendAddr()}",
+                        onfocus:"if(this.value=='(ex) 영등포구 영등포동') { this.value=''; this.style.opacity = 1; }",
+                        onblur:"if(this.value=='') { this.value='(ex) 영등포구 영등포동'; this.style.opacity = 0.7; }",
+                        placeholder:"(ex) 영등포구 영등포동"
+                    })
+                    .appendTo("#" + mark + "8");
+                $("<button></button>")
+                    .attr({ class: "btn btn-success", type: "submit", onclick: "sendAddr()" })
+                    // .attr({ class: "btn btn-primary", type: "submit", onclick: "sendAddr('" + mark + "')" })
+                    .text("전송")
+                    .appendTo("#" + mark + "7");
+            },
+        });
+    }
+    /* 주소 분석 */
+    function sendAddr() {
+        let addrInput = $("#addrInput").val();
+        $("#addrInput").val("");
+        let mark = "mark" + Date.now();
+        $.ajax({
+            type: "POST",
+            url: "/chatbot/receipt3",
+            data: { addrInput: addrInput },
+            success: function (result) {
+                let combinedString = "";
+                let obj = JSON.parse(result);
+                console.log(obj[0]);
+                console.log(obj[1]);
+                console.log(obj[2]);
+                for (let i = 0; i < obj.length; i++) {
+                    combinedString += `거리: ${obj[i]["거리"]}<br>매장명: ${obj[i]["매장명"]}<br>주소: ${obj[i]["주소"]}<br><br>`;
+                }
+                $("<div></div>")
+                    .attr({ class: "d-flex flex-row-reverse mt-1", id: mark + "11" })
+                    .appendTo("#container");
+                $("<div></div>")
+                    .attr({ class: "card bg-light text-dark w-75", id: mark + "12" })
+                    .appendTo("#" + mark + "11");
+                $("<div></div>")
+                    .attr({ class: "card-body text-end", id: mark + "13" })
+                    .appendTo("#" + mark + "12");
+                $("<span></span>")
+                    .html(combinedString)
+                    .appendTo("#" + mark + "13");
+            },
+        });
+    }
+    function send() {
+            
+            let userInput = $("#userInput").val();
+            $("#userInput").val("");
+            let mark = 'mark' + Date.now();
+            
+            $.ajax({
+                type: 'POST',
+                url: '/chatbot/counsel',
+                data: {userInput: userInput},
+                success: function(result) {
+                    let obj = JSON.parse(result);
+					$("<div></div>")
+                        .attr({ class: "d-flex flex-row mt-1", id: mark + "1" })
+                        .appendTo("#container");
+                        $("<div></div>")
+                            .attr({ class: "card w-75", id: mark + "2" })
+                            .appendTo("#" + mark + "1");
+                        $("<div></div>")
+                            .attr({ class: "card-body", id: mark + "3" })
+                            .appendTo("#" + mark + "2");
+                        $("<img></img>")
+                            .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "32" })
+                            .appendTo("#" + mark + "3");
+                        $("<span></span>")
+                            .text(" " + userInput)
+                            .appendTo("#" + mark + "3");
+                        $('<div></div>')
+                            .attr({'class': 'd-flex flex-row-reverse mt-1', id: mark+'6'})
+                            .appendTo('#container');
+                        $('<div></div>')
+                            .attr({'class': 'card bg-success text-white m-3', id: mark+'7'}).appendTo('#'+mark+'6');
+                            $('<div></div>')
+                            .attr({'class': 'card-body text-end ', id: mark+'8'}).appendTo('#'+mark+'7');
+                        $('<span></span>')
+                            .text(obj.chatbot+' ').appendTo('#'+mark+'8');
+                              
+                    }
+           
+            
+            });
+        }
+        
+        
+</script>
+{% endblock %}
+{% block subtitle %}소비패턴에 따른 녹색금융 추천{% endblock %}
+{% block content %}
+<div class="mt-3 mb-3">
+    <a href="/crawling/bank"><button class="btn btn-success">은행상품 안내 바로가기</button></a>
+    <a href="/crawling/finance"><button class="btn btn-success ">투자상품 안내 바로가기</button></a>
+    <a href="/crawling/card"><button class="btn btn-success ">그린카드 안내 바로가기</button></a>
+</div>
+ <div class="d-flex justify-content-center">
+    <div class=" mb-3 outer-container" style="width: 100%;">
+        <div class="card w-75">
+            <span style="color: black; font-size: 20px; text-align: center; text-emphasis-position: left 10px; "><i class="fa-solid fa-receipt ml-100 mr-100"></i>영수증으로 알아보는 친환경상품과 에코포인트 계산해보기</span>
+            <div class="card-body btn-group">
+                <input type="file" id="image" class="form-control">
+                <button class="btn btn-primary" onclick="upload()" style="width: 100px;">업로드</button> 
+            </div>
+            <div id="message"></div>
+        </div>
+        <div class="input-group mt-3 outer-container" style="width: 100%;">
+            <span class="input-group-text"style="width: 200px;"><img src="../static/img/ai.png" height="32" style="margin-right: 10px;"/>친환경상품 알아보기</span>
+            <input type="text" class="form-control" name="userInput" id="userInput1"
+            onkeyup="if(window.event.keyCode==13) {receipt()}" 
+            onfocus="if(this.value=='친환경상품에는 뭐가 있을까요? 상품을 적어보세요~ ex) 고구마, 세제, 화장지') { this.value=''; this.style.opacity = 1; }"
+            onblur="if(this.value=='') { this.value='친환경상품에는 뭐가 있을까요? 상품을 적어보세요~ ex) 고구마, 세제, 화장지'; this.style.opacity = 0.7; }"
+            placeholder="친환경상품에는 뭐가 있을까요? 상품을 적어보세요~ ex) 고구마, 세제, 화장지">
+            <button class="btn btn-success" type="submit" onclick="receipt()">전송</button>
+        </div>
+
+        
+        <div class="d-flex justify-content-center mt-2 ">
+            <div class="input-group outer-container" style="width: 100%;">
+                <span class="input-group-text"style="width: 200px;"><img src="../static/img/ai.png" height="32" style="margin-right: 10px;"/>녹색금융 알아보기</span>
+                <input type="text" class="form-control" name="userInput" id="userInput"
+                        onkeyup="if(window.event.keyCode==13) {send()}" 
+                        onfocus="if(this.value=='안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.') { this.value=''; this.style.opacity = 1; }"
+                        onblur="if(this.value=='') { this.value='안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.'; this.style.opacity = 0.7; }"
+                        placeholder="안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.">
+                <button class="btn btn-success" type="submit" onclick="send()">전송</button>
+            </div>
+    </div>
+    
+</div>
+</div>
+
+
+
+
+
+<div class="d-flex justify-content-left" style="margin-bottom: 60px; margin: top 100px;">
+    <div class="container" id="container" 
+            style="padding-left: 100px; padding-right: 100px; color: #2c3731; width: 1000px; height: 500px; border: 4px solid; border-radius: 30px; overflow: auto">
+        <div class="d-flex flex-row mt-1">
+            
+        </div>
+    <img src="../static/img/girl.png"  style=" 
+    position: absolute; left: 1250px; top: 600px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
+    <img src="../static/img/man.png" style="
+    position: absolute; left: 270px; top: 600px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
+    </div>
+</div>
+{% endblock %}
+

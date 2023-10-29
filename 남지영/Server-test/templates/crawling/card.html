@@ -34,10 +34,14 @@
     </div>
   </div>
   
+
+
 <!-- 카드 목록  -->
-  <div class="container mt-5">
-    <div class="row">
-      {% for product in products %}
+
+<div class="container mt-5" id="one">
+  <div class="row">
+      {% for product in products%}
+    
       <div class="col-lg-4 mb-2">
         <div class="card">
           <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
@@ -48,7 +52,6 @@
           </div>
         </div>
       </div>
-
       <!-- 모달 창 -->
       <div class="modal fade" id="productModal{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -105,9 +108,10 @@
         </div>
       </div>
       {% endfor %}
+   
     </div>
   </div>
-
+  
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
