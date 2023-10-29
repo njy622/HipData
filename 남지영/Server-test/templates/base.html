@@ -2,6 +2,11 @@
 <html lang="ko">
 <head>
     <title>{% block title %}Prototype{% endblock %}</title>
+
+<!-- 메뉴바 스크립트 -->
+
+<!--  -->
+
     <meta charset="utf-8">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -26,11 +31,29 @@
     </style>
     <script src="{{url_for('static', filename='js/ajax.js')}}"></script>
     {% block additional_head %}{% endblock %}
-    
+
+
+    <!-- 오프캔버스 버튼 회전하게 해주는 스타일 -->
+    <style>
+		#canvas {
+			background-color: rgb(209, 193, 162);
+			height: auto;
+			width: 70px;
+			-webkit-transition: width 2s, height 2s, -webkit-transform 5s;
+			transition: width 2s, height 2s, transform 5s;
+		}
+		#canvas:hover {
+			width: 70px;
+			height: auto;
+			-webkit-transform: rotateY(180deg);
+			transform: rotateY(180deg);
+		}
+	</style>
 </head>
+
 <body>
 
-<!--                                                   옆 라인 오픈캔버스                                                     -->
+<!--                                                   옆 라인 오프캔버스                                                     -->
 
 <div class="offcanvas offcanvas-end " style="width: 270px;" id="demo">
     <div class="offcanvas-header">
@@ -84,7 +107,7 @@
     
 
  
-<!--                                                옆라인 오픈캔버스 end                                              -->
+<!--                                                옆라인 오프캔버스 end                                              -->
 
 
 <!--                                           홈페이지 상단 네비게이션  start                                         -->
@@ -144,8 +167,12 @@
                 {% endif %}
             </span>
             <div class="container-fluid ms-3 mt-4">
+                
+<!--                                               오프캔버스 버튼                                                    -->
                 <button class="btn btn-gray" type="button" style="margin-left: 1.5cm;"  data-bs-toggle="offcanvas" data-bs-target="#demo">
-                    <i class="fa-solid fa-bars" style="font-size:xx-large"></i>
+                    <img src="https://www.karldudler.de/wp-content/themes/custom-theme/assets/images/icon-menu.svg" id="canvas" style="width: 70px; background-color: rgba(158, 158, 158, 0.563);">
+
+                
                 </button>
             </div>
         </ul>
