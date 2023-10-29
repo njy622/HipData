@@ -125,7 +125,7 @@
         $("#addrInput").val("");
         let mark = "mark" + Date.now();
         $('<img></img>')
-                .attr({src: "{{url_for('static', filename='img/please-wait.gif')}}", id: 'waitImg', style:'left: 1250px;'})
+                .attr({src: "{{url_for('static', filename='img/please-wait.gif')}}", id: 'waitImg', style:'margin-left:180px'})
                 .prependTo('#container');
         $.ajax({
             type: "POST",
