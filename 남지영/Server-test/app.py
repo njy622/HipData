@@ -1,37 +1,25 @@
 from flask import Flask, render_template, request, flash, session, current_app, jsonify
 from bp.crawling import crawl_bp
-from bp.map import map_bp
 from bp.user import user_bp
 from bp.chatbot import chatbot_bp
-from bp.schedule import schdedule_bp
 import os, json, random
-import util.map_util as mu
 import util.weather_util as wu
 import util.image_util as iu
 import db_sqlite.profile_dao as pdao
 from bp.greenservice import green_service_bp
 
 app = Flask(__name__)
-
+app.config['UPLOAD_FOLDER'] = 'static/receipts'
+app.config['SESSION_COOKIE_PATH'] = '/'
+app.secret_key = 'qwer1234'
 
 app.register_blueprint(crawl_bp, url_prefix='/crawling')    # localhost:5000/crawling/* 는 crawl bp가 처리
-app.register_blueprint(map_bp, url_prefix='/map')
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(chatbot_bp, url_prefix='/chatbot')
-app.register_blueprint(schdedule_bp, url_prefix='/schedule')
 # green_service를 nav_bar에 추가
 app.register_blueprint(green_service_bp, url_prefix='/greenservice')
 
 # for AJAX ###################################################
-
-""" 프로파일 날씨정보 불러오기 """
-@app.route('/weather')
-def weather():
-    # 서울시 영등포구 + '청' -> 도로명 주소 -> 카카오 로컬 -> 좌표 획득
-    addr = request.args.get('addr') 
-    lat, lng = mu.get_coord(app.static_folder, addr + '청')
-    html = wu.get_weather(app.static_folder, lat, lng)
-    return html
 
 
 

@@ -120,13 +120,13 @@
                     <a class="nav-link" href="/user/login">로그인</a>
                 {% endif %}
             </li>
-            <span class="navbar-text me-3">
+            <span class="navbar-text mt-4" style="width: 500px;">
                 {% if session['uid'] %}
                     {{ session['uname'] }}님 환영합니다.
                 {% endif %}
             </span>
             <div class="container-fluid ms-3 mt-4">
-                <button class="btn btn-gray" type="button" style="margin-left: 6cm;"  data-bs-toggle="offcanvas" data-bs-target="#demo">
+                <button class="btn btn-gray" type="button" style="margin-left: 1.5cm;"  data-bs-toggle="offcanvas" data-bs-target="#demo">
                     <i class="fa-solid fa-bars" style="font-size:xx-large"></i>
                 </button>
             </div>
