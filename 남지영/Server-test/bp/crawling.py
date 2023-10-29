@@ -35,7 +35,7 @@ bank_products = [
     {
         "id": 103,
         "name": "아름다운 용기 적금",
-        "description": "2.60%",
+        "description": "2.60%, 없음",
         "image_url": "../static/img/신한은행.png",
         "image_url2": "../static/img/신한적금.jpg"
     },

@@ -30,7 +30,7 @@
 </head>
 <body>
 
-<!-- 옆 라인 오픈캔버스 -->
+<!--                                                   옆 라인 오픈캔버스                                                     -->
 
 <div class="offcanvas offcanvas-end " style="width: 270px;" id="demo">
     <div class="offcanvas-header">
@@ -38,7 +38,23 @@
     </div>
     <a class="navbar-brand mx-5 pb-sm-0" href="#"><img src="{{url_for('static', filename='img/03.logo_black.png')}}" height="70" width="200"></a>
     <div class="offcanvas-body">
+        {% if session['uid'] %}
+            <a class="nav-link" href="/user/logout"> 로그아웃</a>
+            <br>
+        {% else %}
+            <a class="nav-link" href="/user/login">로그인</a>
+            <br>
+        {% endif %}
+        <span class="navbar-text mt-4" style="width: 500px;">
+            {% if session['uid'] %}
+                {{ session['uname'] }}님 환영합니다.
+                <hr>
+            {% endif %}
+        </span>
+        
         <a class="nav-link {% if menu.ho %}active{% endif %}" style="font-size: x-large;" href="{% if menu.ho %}#{% else %}/{% endif %}"><strong>Home</strong></a>
+        <br>
+        <a style="width: 100px;" class="nav-link {% if menu.us %}active{% endif %}" href="{% if menu.us %}#{% else %}/user/chatlist{% endif %}"><strong> Chat 이력</strong></a>
         <br>
         <a style="font-size: medium; color: gray;"><strong> 녹색서비스 소개</strong></a>
         <div class="list-group" style="width: 500px;">
@@ -67,8 +83,10 @@
     
     
 
+ 
+<!--                                                옆라인 오픈캔버스 end                                              -->
 
-    <!--                                           홈페이지 상단 네비게이션  start                                         -->
+
 <!--                                           홈페이지 상단 네비게이션  start                                         -->
 <nav class="navbar navbar-expand-sm bg-white navbar-light fixed-top text-black">
     <div class="container-fluid">

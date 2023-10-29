@@ -3,7 +3,6 @@ from bp.crawling import crawl_bp
 from bp.user import user_bp
 from bp.chatbot import chatbot_bp
 import os, json, random
-import util.weather_util as wu
 import util.image_util as iu
 import db_sqlite.profile_dao as pdao
 from bp.greenservice import green_service_bp
