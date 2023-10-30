@@ -9,7 +9,6 @@
 
     <meta charset="utf-8">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js"></script>
-    <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
@@ -32,82 +31,9 @@
     <script src="{{url_for('static', filename='js/ajax.js')}}"></script>
     {% block additional_head %}{% endblock %}
 
-
-    <!-- 오프캔버스 버튼 회전하게 해주는 스타일 -->
-    <style>
-		#canvas {
-			background-color: rgb(209, 193, 162);
-			height: auto;
-			width: 70px;
-			-webkit-transition: width 2s, height 2s, -webkit-transform 3s;
-			transition: width 2s, height 2s, transform 3s;
-		}
-		#canvas:hover {
-			width: 70px;
-			height: auto;
-			-webkit-transform: rotateY(180deg);
-			transform: rotateY(180deg);
-		}
-	</style>
 </head>
 
 <body>
-
-<!--                                                   옆 라인 오프캔버스                                                     -->
-
-<div class="offcanvas offcanvas-end " style="width: 270px;" id="demo">
-    <div class="offcanvas-header">
-        <button type="button" class="btn-close tex" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <a class="navbar-brand mx-5 pb-sm-0" href="#"><img src="{{url_for('static', filename='img/03.logo_black.png')}}" height="70" width="200"></a>
-    <div class="offcanvas-body">
-        {% if session['uid'] %}
-            <a class="nav-link" href="/user/logout"> 로그아웃</a>
-            <br>
-        {% else %}
-            <a class="nav-link" href="/user/login">로그인</a>
-            <br>
-        {% endif %}
-        <span class="navbar-text mt-4" style="width: 500px;">
-            {% if session['uid'] %}
-                {{ session['uname'] }}님 환영합니다.
-                <hr>
-            {% endif %}
-        </span>
-        
-        <a class="nav-link {% if menu.ho %}active{% endif %}" style="font-size: x-large;" href="{% if menu.ho %}#{% else %}/{% endif %}"><strong>Home</strong></a>
-        <br>
-        <a style="width: 100px;" class="nav-link {% if menu.us %}active{% endif %}" href="{% if menu.us %}#{% else %}/user/chatlist{% endif %}"><strong> Chat 이력</strong></a>
-        <br>
-        <a style="font-size: medium; color: gray;"><strong> 녹색서비스 소개</strong></a>
-        <div class="list-group" style="width: 500px;">
-            <a class="dropdown-item" style="color: rgb(80, 131, 124); margin-left: 15px;" href="/greenservice/greenconsume">녹색소비</a>
-            <a class="dropdown-item" style="color: rgb(80, 131, 124); margin-left: 15px;" href="/greenservice/publictransport">대중교통</a>
-            <a class="dropdown-item" style="color: rgb(80, 131, 124); margin-left: 15px; " href="/greenservice/energysaving">에너지 절약</a>
-            <a class="dropdown-item" style="color: rgb(80, 131, 124); margin-left: 15px;" href="/greenservice/publicbuilding">공공시설</a>
-        </div>
-        <br>
-        <a style="font-size: medium; color: gray;"><strong>녹색금융 소개</strong></a>
-        <div class="list-group">
-            <a class="dropdown-item" style="color: rgb(80, 131, 124); margin-left: 15px;" href="/crawling/bank">은행</a>
-            <a class="dropdown-item" style="color: rgb(80, 131, 124); margin-left: 15px;" href="/crawling/finance">금융사</a>
-            <a class="dropdown-item" style="color: rgb(80, 131, 124); margin-left: 15px;" href="/crawling/card">카드</a>
-        </div>
-        <br>
-        <a style="font-size: medium; color: gray;"><strong>챗봇</strong></a>
-        <div class="list-group">
-            <a class="dropdown-item" style="color: rgb(80, 131, 124); margin-left: 15px;"  href="/chatbot/counsel">녹색금융</a>
-            <a class="dropdown-item" style="color: rgb(80, 131, 124); margin-left: 15px;"  href="/chatbot/bard">구글 바드</a>
-            <hr class="dropdown-divider">
-            <a class="dropdown-item" style="color: rgb(80, 131, 124); margin-left: 15px;"  href="/chatbot/genImg">이미지 생성</a>
-        </div>
-    </div>
-</div>
-    
-    
-
- 
-<!--                                                옆라인 오프캔버스 end                                              -->
 
 
 <!--                                           홈페이지 상단 네비게이션  start                                         -->
