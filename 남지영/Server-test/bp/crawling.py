@@ -207,4 +207,5 @@ products = [
 
 @crawl_bp.route('/card')
 def card():    
-    return render_template('/crawling/card.html', menu=menu, products=products)
+    num = [0, 1, 2, 3, 4, 5, 6]
+    return render_template('/crawling/card.html', menu=menu, products=products, num=num)

@@ -2,7 +2,7 @@
 {% block title %}소비패턴에 따른 녹색금융 추천{% endblock %}
 {% block additional_head %}
 <script>
-
+let lastProcessedDate = null;
     /* // 영수증 분석 (시간 미포함)
     function upload() {
         console.log('upload()');
@@ -119,8 +119,9 @@
         });
     } */
 
+    
     // 주소 분석 
-    // 주소 분석 
+
     function sendAddr() {
         let addrInput = $("#addrInput").val();
         $("#addrInput").val("");
@@ -166,8 +167,9 @@
 
 /* #######################################   시간 추가 ########################################################*/
           // 품목분석
+    
 
-          function receipt() {
+        function receipt() {
         let userInput = $("#userInput1").val();
         $("#userInput1").val("");
         let mark = "mark" + Date.now();
@@ -341,6 +343,8 @@
                     $("<span></span>")
                         .html(result)                   
                         .appendTo("#" + mark + "8");
+                    
+                    
                 },
                 error: function (xhr, status, error) {
                     $("#message").text(error);
@@ -355,7 +359,6 @@
 
    
         // 녹색금융 질의
-    let lastProcessedDate = null;
 
         function send() {
             
@@ -509,11 +512,10 @@
         style="padding-left: 100px; padding-right: 100px; color: #2c3731; width: 1000px; height: 500px; border: 4px solid; border-radius: 30px; overflow: auto">
     <div class="d-flex flex-row mt-1">
 </div>
-    <!-- <img src="../static/img/girl.png"  style=" 
-    position: absolute; left: 1250px; top: 480px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
+    <img src="../static/img/girl.png"  style=" 
+    position: absolute; left: 1300px; top: 630px; z-index: 1; height: auto; width: 200px;" float="rightx;" />
     <img src="../static/img/man.png" style="
-    position: absolute; left: 270px; top: 480px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
-    </div> -->
-</div>
+    position: absolute; left: 300px; top: 630px; z-index: 1; height: auto; width: 200px;" float="rightx;" />
+  
 {% endblock %}
 
