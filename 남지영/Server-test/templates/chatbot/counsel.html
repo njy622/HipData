@@ -120,6 +120,7 @@
     } */
 
     // 주소 분석 
+    // 주소 분석 
     function sendAddr() {
         let addrInput = $("#addrInput").val();
         $("#addrInput").val("");
@@ -135,12 +136,17 @@
                 $('#waitImg').remove();
                 let combinedString = "";
                 let obj = JSON.parse(result);
-                console.log(obj[0]);
-                console.log(obj[1]);
-                console.log(obj[2]);
+                console.log('OBJ0',obj[0]);
+                console.log('OBJ1',obj[1]);
+                console.log('OBJ2',obj[2]);
                 for (let i = 0; i < obj.length; i++) {
-                    combinedString += `거리: ${obj[i]["거리"]}<br>매장명: ${obj[i]["매장명"]}<br>주소: ${obj[i]["주소"]}<br><br>`;
+                    if(typeof obj[i]["거리"] == "undefined" || obj[i]["거리"] == null || obj[i]["거리"] == "")
+                        combinedString += `${obj[i]}<br><br>`;
+                    else
+                        combinedString += `거리: ${obj[i]["거리"]}<br>매장명: ${obj[i]["매장명"]}<br>주소: ${obj[i]["주소"]}<br><br>`;
+	                
                 }
+                console.log('combinedString',combinedString);
                 $("<div></div>")
                     .attr({ class: "d-flex flex-row-reverse mt-1", id: mark + "11" })
                     .prependTo("#container");
@@ -157,6 +163,41 @@
             },
         });
     }
+/* 
+    function sendAddr() {
+                let addrInput = $("#addrInput").val();
+                $("#addrInput").val("");
+                let mark = "mark" + Date.now();
+                $.ajax({
+                    type: "POST",
+                    url: "/receipt3",
+                    data: { addrInput: addrInput },
+                    success: function (result) {
+                        let combinedString = "";
+                        let obj = JSON.parse(result);
+                        for (let i = 0; i < obj.length; i++) {
+                            if ('없음' in obj[i]) {
+                                combinedString += obj[i]
+                            } else {
+                                combinedString += `거리: ${obj[i]["거리"]}<br>매장명: ${obj[i]["매장명"]}<br>주소: ${obj[i]["주소"]}<br><br>`;
+                            }
+                        }
+                        $("<div></div>")
+                            .attr({ class: "d-flex flex-row-reverse mt-1", id: mark + "11" })
+                            .appendTo("#container");
+                        $("<div></div>")
+                            .attr({ class: "card bg-light text-dark w-75", id: mark + "12" })
+                            .appendTo("#" + mark + "11");
+                        $("<div></div>")
+                            .attr({ class: "card-body text-end", id: mark + "13" })
+                            .appendTo("#" + mark + "12");
+                        $("<span></span>")
+                            .html(combinedString)
+                            .appendTo("#" + mark + "13");
+                    },
+                });
+            } */
+
 /* #######################################   시간 추가 ########################################################*/
           // 품목분석
 
@@ -503,11 +544,11 @@
         style="padding-left: 100px; padding-right: 100px; color: #2c3731; width: 1000px; height: 500px; border: 4px solid; border-radius: 30px; overflow: auto">
     <div class="d-flex flex-row mt-1">
 </div>
-    <img src="../static/img/girl.png"  style=" 
+    <!-- <img src="../static/img/girl.png"  style=" 
     position: absolute; left: 1250px; top: 480px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
     <img src="../static/img/man.png" style="
     position: absolute; left: 270px; top: 480px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
-    </div>
+    </div> -->
 </div>
 {% endblock %}
 

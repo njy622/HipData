@@ -180,7 +180,7 @@ def get_market_info(addr):
         results.append(market_data)
 
         for i in range(len(results)):
-            if results[i] == '근처에 매장이 없습니다.':
-                results[i] = f'{market[i]} 없음'
+            if results[i] == ['근처에 매장이 없습니다.']:
+                results[i] = f'{market[i]} 은(는) 근처에 없습니다.'
 
     return results
