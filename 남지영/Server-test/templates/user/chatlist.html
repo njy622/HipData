@@ -1,23 +1,33 @@
 {% extends "base.html" %}
 {% block title %}{% endblock %}
-{% block subtitle %}{{uid}}님의 Chat 내용{% endblock %}
+{% block subtitle %}{% endblock %}
 {% block content %}
-<div class='container d-flex align-items-start' >
-    <table class="table table-striped">
+
+<h3 style="color: MediumSeaGreen;"><strong><i class="fa-solid fa-comments" style="margin-right: 20px;"></i>{{uid}}님의 Chat 내용</strong></h3>
+<hr>
+
+<div class="card btn-group text-center" style="padding-left: 10px; padding-right: 10px; color: MediumSeaGreen; width: 900px; height: 500px; border: 2px solid; border-radius: 30px; ">
+
+<div class='container d-flex align-items-start'>
+    <table class="table table-hover">
         <tr>
-            <th>id</th>
-            <th>질문</th>
-            <th>답변</th>
-            <th>일시</th>
+            <th style="color: MediumSeaGreen;">id</th>
+            <th style="width: 100px; color: MediumSeaGreen;">질문</th>
+            <th style="color: MediumSeaGreen;">답변</th>
+            <th style="color: MediumSeaGreen;">일시</th>
         </tr>
         {% for chat in chat_list %}
             <tr>
-                <td>{{chat[1]}}</td>
-                <td>{{chat[2]}}</td>
-                <td>{{chat[3]}}</td>
-                <td>{{chat[4]}}</td>
+                <td style="color: rgb(43, 92, 66);">{{chat[1]}}</td>
+                <td style="color: rgb(43, 92, 66);">{{chat[2]}}</td>
+                <td style="color: rgb(43, 92, 66);">{{chat[3]}}</td>
+                <td style="color: rgb(43, 92, 66);">{{chat[4]}}</td>
             </tr>
         {% endfor %}
     </table>
 </div>
+</div>
+
+
+
 {% endblock %}
