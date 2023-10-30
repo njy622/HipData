@@ -1,68 +1,216 @@
 {% extends "base.html" %}
 {% block addtional_head %}
-    <style>
-        h3, th, td {text-align: center; margin: 20px;}
-    </style>
+  <style>
+    h3, th, td {text-align: center; margin: 20px;}
+  </style>
 
-    <meta charset="utf-8">
-    <title>금융사 상품 안내</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>증권 상품 안내</title>
+    <!-- 부트스트랩 CSS 링크 추가 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
 {% endblock %}
 {% block content %}
-    <h3>{{place}} 금융사 상품 추천</h3>
-    <div class="container mt-5">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">증권사</th>
-            <th scope="col">제목</th>
-            <th scope="col">코드</th>
-            <th scope="col">위험군</th>
-            <th scope="col">펀드규모</th>
-            <th scope="col">3개월 수익률</th>
-            <th scope="col">링크</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for financial_product in financial_products %}
-          <tr>
-            <td>{{ financial_product['제목'] }}</td>
-            <td>{{ financial_product['코드'] }}</td>
-            <td>{{ financial_product['위험군'] }}</td>
-            <td><img src="{{ financial_product['사진'] }}" alt="{{ financial_product['제목'] }}" style="width: 50px;"></td>
-            <td><button class="btn btn-primary" data-toggle="modal" data-target="#financial_productModal{{ loop.index }}">상세 정보 보기</button></td>
-          </tr>
-    
-          <!-- 모달 창 -->
-          <div class="modal fade" id="financial_productModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="financial_productModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
+    <!-- 증권사 연락처 모달 버튼 -->
+<h3 style="color: green;"><strong>친환경 증권상품 안내 </strong><button class="btn btn-success mt-3;"style="position: absolute; right: 110px;" data-toggle="modal" data-target="#call">증권사 고객센터</button></h3>
+<p style="color: rgb(169, 169, 169);">해당 상품은 2023.10.20일 기준 데이터로 자세한 내용은 각 증권사로 확인바랍니다.</p>
+
+<div class="modal fade" id="call" tabindex="-1" role="dialog" aria-labelledby="bank_productModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bank_productModalLabel"><strong>증권사 고객센터 안내</strong></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img src="/static/img/증권사 연락처.png" style="width: 460px;">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- 증권사 목록 -->
+
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#csvModal" id='NH투자증권' style="width: 550px; line-height: 100px;">
+    <img src="/static/img/NH투자증권.jpg" width="400px" height="100px" style="float:left">
+    NH투자증권
+    </button>
+    <br><br>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#csvModal" id='하나증권' style="width: 550px; line-height: 100px;">
+    <img src="/static/img/하나증권.jpg" width="400px" height="100px" style="float:left" >
+    하나증권
+    </button>
+    <br><br>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#csvModal" id='KB증권' style="width: 550px; line-height: 100px;">
+    <img src="/static/img/KB증권.png" width="400px" height="100px" style="float:left">
+    KB증권
+    </button>
+    <br><br>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#csvModal" id='신한투자증권' style="width: 550px; line-height: 100px;">
+    <img src="/static/img/신한투자증권.jpg" width="400px" height="100px" style="float:left">
+    신한투자증권
+    </button>
+    <br><br>
+
+    <!-- CSV 데이터를 표시할 모달 창 -->
+
+    <div class="modal fade" id="csvModal" tabindex="-1" role="dialog" aria-labelledby="csvModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content modal-xl">             
                 <div class="modal-header">
-                  <h5 class="modal-title" id="financial_productModalLabel">{{ financial_product['제목'] }}</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
+                    <h5 class="modal-title" id="csvModalLabel">증권 상품 안내</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>         
+
                 <div class="modal-body">
-                  <p>{{ financial_product['링크'] }}</p>
+                    <table id="csvTable" class="table">
+                        <!-- CSV 데이터는 여기에 표시될 것입니다. -->
+                        <thead>
+                            <tr>
+                                <th>상품명</a></th>
+                                <th>코드</th>
+                                <th>위험군</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalBody">
+                            <!-- 데이터는 JavaScript를 통해 동적으로 추가됩니다. -->
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                 </div>
-              </div>
             </div>
-          </div>
-          {% endfor %}
-        </tbody>
-      </table>
+        </div>
     </div>
+    </div>
+  </div>
+</div>
+</tbody>
+</table>
+</div>
+
+    <!-- 부트스트랩 JS 및 jQuery, Popper.js 스크립트 추가 -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+    <script>
+
+
+    // 농협증권 버튼 클릭 이벤트를 감지하고 모달에 CSV 데이터를 불러와서 표시하는 함수
+    document.getElementById('NH투자증권').addEventListener('click', async function() {
+    const response = await fetch('../static/data/증권사상품.csv'); // CSV 파일 경로
+    const csvData = await response.text();
+
+
+    // CSV 데이터를 파싱하여 배열로 변환
+    const rows = csvData.split('\n').map(row => row.split(','));
+
+    // 특정 조건에 맞는 데이터 필터링 (예: Product ID가 1인 경우)
+    const filteredRows = rows.filter(row => row[1] === 'NH투자증권'); // 첫 번째 열이 Product ID
+
+
+    // 모달에 테이블로 데이터 출력
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = '';
+
+    // 링크 새창으로 띄우기
+    filteredRows.forEach(row => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `<td><a href=${row[3]} target="_blank">${row[2]}</a></td><td>${row[4]}</td><td>${row[5]}</td>`;
+        modalBody.appendChild(newRow);
+    });
+
+
+
+
+
+    // 모달 표시
+    $('#productModal').modal('show');
+    });
+
+
+    // 하나증권 버튼 클릭 이벤트를 감지하고 모달에 CSV 데이터를 불러와서 표시하는 함수
+    document.getElementById('하나증권').addEventListener('click', async function() {
+    const response = await fetch('../static/data/증권사상품.csv'); // CSV 파일 경로
+    const csvData = await response.text();
     
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    // CSV 데이터를 파싱하여 배열로 변환
+    const rows = csvData.split('\n').map(row => row.split(','));
+
+    // 특정 조건에 맞는 데이터 필터링 (예: Product ID가 1인 경우)
+    const filteredRows = rows.filter(row => row[1] === '하나증권'); // 첫 번째 열이 Product ID
+    // 모달에 테이블로 데이터 출력
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = '';
+
+    filteredRows.forEach(row => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `<td><a href=${row[3]} target="_blank">${row[2]}</a></td><td>${row[4]}</td><td>${row[5]}</td>`;
+        modalBody.appendChild(newRow);
+    });
+    // 모달 표시
+    $('#productModal').modal('show');
+    });
+
+    // KB증권 버튼 클릭 이벤트를 감지하고 모달에 CSV 데이터를 불러와서 표시하는 함수
+     document.getElementById('KB증권').addEventListener('click', async function() {
+    const response = await fetch('../static/data/증권사상품.csv'); // CSV 파일 경로
+    const csvData = await response.text();
     
-    </body>
-    </html>
+    // CSV 데이터를 파싱하여 배열로 변환
+    const rows = csvData.split('\n').map(row => row.split(','));
+
+    // 특정 조건에 맞는 데이터 필터링 (예: Product ID가 1인 경우)
+    const filteredRows = rows.filter(row => row[1] === 'KB증권'); // 첫 번째 열이 Product ID
+    // 모달에 테이블로 데이터 출력
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = '';
+
+    filteredRows.forEach(row => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `<td><a href=${row[3]} target="_blank">${row[2]}</a></td><td>${row[4]}</td><td>${row[5]}</td>`;
+        modalBody.appendChild(newRow);
+    });
+    // 모달 표시
+    $('#productModal').modal('show');
+    });
+
+
+    // 신한투자증권 버튼 클릭 이벤트를 감지하고 모달에 CSV 데이터를 불러와서 표시하는 함수
+    document.getElementById('신한투자증권').addEventListener('click', async function() {
+    const response = await fetch('../static/data/증권사상품.csv'); // CSV 파일 경로
+    const csvData = await response.text();
     
+    // CSV 데이터를 파싱하여 배열로 변환
+    const rows = csvData.split('\n').map(row => row.split(','));
+
+    // 특정 조건에 맞는 데이터 필터링 (예: Product ID가 1인 경우)
+    const filteredRows = rows.filter(row => row[1] === '신한투자증권'); // 첫 번째 열이 Product ID
+    // 모달에 테이블로 데이터 출력
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = '';
+
+    filteredRows.forEach(row => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `<td><a href=${row[3]} target="_blank">${row[2]}</a></td><td>${row[4]}</td><td>${row[5]}</td>`;
+        modalBody.appendChild(newRow);
+    });
+    // 모달 표시
+    $('#productModal').modal('show');
+    });
+
+    </script>
+
+
 {% endblock %}

@@ -10,13 +10,15 @@ import time
 from bs4 import BeautifulSoup
 
 
+
+
+
 '''품목을 취급하는 매장 3곳'''
 
 
 def get_title_market(title):
-    global market
     # 품목 리스트 데이터프레임 화
-    list_df = pd.read_csv('data/eco_product.csv')
+    list_df = pd.read_csv('./static/data/eco_product.csv')
 
     # 찾는 품목이 '무' 또는 '김'처럼 한 글자일 경우 에러
     # TfidfVectorizer의 Default 값으로 한 글자 단어는 제외하게 되어있으므로
@@ -52,6 +54,7 @@ def get_title_market(title):
     list_df = list_df[list_df['cosine_similarity'] == 1.0]
 
     # 관련된 매장명
+    global market
     market = list(set(list_df['market'].values))[:3]
     if market == []:
         return ['해당 상품을 취급하는 매장이 없습니다.']
@@ -94,9 +97,8 @@ def get_market_info(addr):
     addr
     # 고객이 입력한 주소 좌표 구하기
     try:
-        with open('keys/카카오api.txt') as file:
+        with open('static/keys/카카오api.txt') as file:
             kakao_key = file.read()
-
         base_url = 'https://dapi.kakao.com/v2/local/search/address.json'
         header = {'Authorization': f'KakaoAK {kakao_key}'}
         url = f'{base_url}?query={quote(addr)}'
@@ -104,15 +106,29 @@ def get_market_info(addr):
         lng = float(result['documents'][0]['x'])
         lat = float(result['documents'][0]['y'])
     except:
-        return '주소 형식이 올바르지 않습니다.'
+        return ['주소 형식이 올바르지 않습니다.']
 
     # 정보를 담을 리스트
     results = []
+
+
 
     for mart_name in market_list:
 
         # 네이버 플레이스 셀레니움으로 들어가기
         n_place_url = f'https://m.place.naver.com/place/list?x={lng}&y={lat}&query={mart_name} {addr}'
+
+
+     # 옵션으로 웹안띄우게 하기 과제
+        op = webdriver.ChromeOptions()
+        op.add_argument('--headless')
+        op.add_argument('window-size=1920x1080')
+        op.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0;Win64; x64) AppleWebkit/537.36(KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36')
+        driver = webdriver.Chrome(options=op)
+        driver.get(n_place_url)
+        
+
+
         driver = webdriver.Chrome()
         driver.get(n_place_url)
 
@@ -158,13 +174,13 @@ def get_market_info(addr):
                 '주소': m_addr
             }
         except:
-            market_data = '근처에 매장이 없습니다.'
+            market_data = ['근처에 매장이 없습니다.']
 
         # 딕셔너리 형태로 저장한 것을 리스트에 저장 (3가지 마켓을 넣어야 하므로)
         results.append(market_data)
 
         for i in range(len(results)):
-            if results[i] == '근처에 매장이 없습니다.':
-                results[i] = f'{market[i]} 없음'
+            if results[i] == ['근처에 매장이 없습니다.']:
+                results[i] = f'{market[i]} 은(는) 근처에 없습니다.'
 
     return results

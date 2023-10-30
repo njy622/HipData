@@ -1,37 +1,24 @@
 from flask import Flask, render_template, request, flash, session, current_app, jsonify
 from bp.crawling import crawl_bp
-from bp.map import map_bp
 from bp.user import user_bp
 from bp.chatbot import chatbot_bp
-from bp.schedule import schdedule_bp
 import os, json, random
-import util.map_util as mu
-import util.weather_util as wu
 import util.image_util as iu
 import db_sqlite.profile_dao as pdao
-
+from bp.greenservice import green_service_bp
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/receipts'
-
-app = Flask(__name__)
+app.config['SESSION_COOKIE_PATH'] = '/'
+app.secret_key = 'qwer1234'
 
 app.register_blueprint(crawl_bp, url_prefix='/crawling')    # localhost:5000/crawling/* 는 crawl bp가 처리
-app.register_blueprint(map_bp, url_prefix='/map')
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(chatbot_bp, url_prefix='/chatbot')
-app.register_blueprint(schdedule_bp, url_prefix='/schedule')
+# green_service를 nav_bar에 추가
+app.register_blueprint(green_service_bp, url_prefix='/greenservice')
 
 # for AJAX ###################################################
-
-""" 프로파일 날씨정보 불러오기 """
-@app.route('/weather')
-def weather():
-    # 서울시 영등포구 + '청' -> 도로명 주소 -> 카카오 로컬 -> 좌표 획득
-    addr = request.args.get('addr') 
-    lat, lng = mu.get_coord(app.static_folder, addr + '청')
-    html = wu.get_weather(app.static_folder, lat, lng)
-    return html
 
 
 
@@ -66,11 +53,11 @@ def change_profile():
         profile.append(mtime)
         profile.append(need_refresh)
         return json.dumps(profile)
-####################################################################################################
+
 
 @app.route('/')
 def home():
-    menu = {'ho':1, 'us':0, 'cr':0, 'ma':0, 'cb':0, 'sc':0}
+    menu = {'ho':1, 'us':0, 'gr':0, 'cr':0, 'ma':0,'cb':0,  'sc':0}
     # flash('Welcome to my Web!!!')
     return render_template('home.html', menu=menu)
 
@@ -78,38 +65,3 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
-
-
-""" ############################ 영수증 데이터 불러오기 ############################################
-
-@app.route('/receipt', methods=['GET', 'POST'])
-def receipt():
-    if request.method == 'GET':
-        return render_template('receipt.html')
-    else:
-        if 'image' not in request.files:
-            return jsonify({'message': '이미지가 없습니다.'}), 400
-
-        file = request.files['image']
-
-        if file.filename == '':
-            return jsonify({'message': '이미지 파일을 선택하세요.'}), 400
-
-        if file:
-            file.save(os.path.join(
-                app.config['UPLOAD_FOLDER'], "receipt01.jpg"))
-
-            receipt_data = tess.get_item_from_img()
-            result = rece.receipt_get_point(receipt_data)
-
-            return str(result)
-
-
-@app.route('/receipt2', methods=['POST'])
-def receipt2():
-    user_input = request.form['userInput']
-    result = item.get_title_market(user_input)
-    return json.dumps(result)
-
-########################################################################################################
- """

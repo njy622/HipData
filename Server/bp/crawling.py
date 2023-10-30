@@ -18,7 +18,7 @@ def index():
 
 @crawl_bp.route('/finance')
 def finance():
-    df = pd.read_csv('../data/증권사상품.csv')      # 검토필요
+    df = pd.read_csv('../data/증권사상품.csv')      
     df.drop(columns='Unnamed: 0', inplace=True)    
     return render_template('/crawling/finance.html', menu=menu, tables=[df.to_html(classes='data')], titles=df.columns.values)
 

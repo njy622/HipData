@@ -3,6 +3,7 @@ from flask import redirect, flash
 import hashlib, base64, json, os, random
 import db_sqlite.user_dao as udao
 import db_sqlite.profile_dao as pdao
+import db_sqlite.chat_dao as cdao
 
 user_bp = Blueprint('user_bp', __name__)
 
@@ -84,6 +85,19 @@ def list():
         return redirect('/user/login')
     user_list = udao.get_user_list()
     return render_template('user/list.html', user_list=user_list, menu=menu)
+
+@user_bp.route('/chatlist')
+def chatlist():
+    try:
+        _ = session['uid']
+    except:
+        flash('로그인을 먼저 하세요.')
+        return redirect('/user/login')
+    uid = session['uid']
+    chat_list = cdao.get_chat_history(uid)
+    return render_template('user/chatlist.html', chat_list=chat_list, menu=menu, uid=uid)
+
+
 
 @user_bp.route('/update', methods=['GET','POST'])
 def update():
