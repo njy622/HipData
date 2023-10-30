@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block addtional_head %}
+  <style>
+    h3, th, td {text-align: center; margin: 20px;}
+  </style>
+
+  <meta charset="utf-8">
+  <title>은행 상품 안내</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+{% endblock %}
+{% block content %}
+<!-- 은행사 연락처 모달 및 버튼--> 
+<h3 style="color: green;"><strong>친환경 은행상품 안내 </strong><button class="btn btn-success mt-3;"style="position: absolute; right: 110px;" data-toggle="modal" data-target="#call">은행사 고객센터</button></h3>
+<p style="color: rgb(169, 169, 169);">해당 상품은 2023.10.20일 기준 데이터로 자세한 내용은 각 은행사로 확인바랍니다.</p>
+    
+<div class="modal fade" id="call" tabindex="-1" role="dialog" aria-labelledby="bank_productModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="bank_productModalLabel"><strong>은행사 고객센터 안내</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img src="/static/img/은행사 연락처.png" style="width: 460px;">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 은행사 목록 -->
+  <div class="container mt-3">
+    <div class="row">
+      {% for bank_product in bank_products %}
+      <div class="col-lg-4 mb-2">
+        <div class="card">
+          <img src="{{ bank_product.image_url }}" class="card-img-top" style="height: 250px;" alt="{{ bank_product.name }}">
+          <div class="card-body" style="height: 110px;">
+            <h5 class="card-title" style="text-align: left; font-size: 20px; color: blueviolet;"><strong>{{ bank_product.name }}</strong></h5>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#bank_productModal{{ bank_product.id }}">상세 정보 보기</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 모달 창 -->
+      <div class="modal fade" id="bank_productModal{{ bank_product.id }}" tabindex="-1" role="dialog" aria-labelledby="bank_productModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="bank_productModalLabel"><strong>{{ bank_product.name }}</strong></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <img src="{{ bank_product.image_url2 }}" style="width: 400px;">  <!-- 각 은행상품 이미지 -->
+
+              {% for i in bank_product.description.split(',') %}
+              {% if i == bank_product.description.split(',')[0] %}
+              <p style="text-align: left; font-size: 20px; color: blueviolet;"> <i class="fa-solid fa-sack-xmark"></i> <strong>기본 금리 : {{ i }}</strong></p>   <!-- 은행상품 상세 설명 -->
+              <p> <i class="fa-solid fa-circle-info"></i> 우대 금리 : </p>
+              {% else %}
+              <p>{{ i }}</p>   <!-- 은행상품 상세 설명 -->
+              {% endif %}
+              {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  </body>
+  </html>
+{% endblock %}

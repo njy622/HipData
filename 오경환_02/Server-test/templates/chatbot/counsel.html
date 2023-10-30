@@ -1,0 +1,581 @@
+{% extends "base.html" %}
+{% block title %}소비패턴에 따른 녹색금융 추천{% endblock %}
+{% block additional_head %}
+<script>
+
+    /* // 영수증 분석 (시간 미포함)
+    function upload() {
+        console.log('upload()');
+            let mark = "mark" + Date.now();
+            let imageInputVal = $('#image')[0]; //id가 image인 파일 값을 불러옴 
+            formData.append('image', imageInputVal.files[0]);
+            $("#container").scrollTop($("#container")[0].scrollHeight);
+            $.ajax({
+                url: "/chatbot/receipt",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("<div></div>")
+                        .attr({ class: "d-flex flex-row mt-1", id: mark + "1" })
+                        .prependTo("#container");
+                    $("<div></div>")
+                        .attr({ class: "card w-100", id: mark + "2" })
+                        .appendTo("#" + mark + "1");
+                    $("<div></div>")
+                        .attr({ class: "card-body", id: mark + "3" })
+                        .appendTo("#" + mark + "2");
+                    $("<img></img>")
+                        .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "50"  })
+                        .appendTo("#" + mark + "3");
+                    $("<span></span>")
+                        .text(" 업로드한 영수증의 상품과 포인트는?")
+                        .appendTo("#" + mark + "3");
+                    $("<hr></hr>").appendTo("#" + mark + "3");
+                   
+                    $("<img></img>")
+                        .attr({ src: "{{url_for('static', filename='img/ai.png')}}", height: "50" })   // 별도로 js파일을 만들면 변경해줘얗마 
+                        .appendTo("#" + mark + "3");
+                    $("<span></span>")
+                        .html(result)                   //
+                        .appendTo("#" + mark + "3");
+                    
+                },
+                error: function (xhr, status, error) {
+                    $("#message").text(error);
+                },
+            });
+    }
+ */
+  /* -- // 품목 분석 (시간 미포함)
+    function receipt() {
+        let userInput = $("#userInput1").val();
+        $("#userInput1").val("");
+        let mark = "mark" + Date.now();
+        $("#container").scrollTop($("#container")[0].scrollHeight);
+        $.ajax({
+            type: "POST",
+            url: "/chatbot/receipt2",
+            data: { userInput: userInput },
+            success: function (result) {
+                let combinedString = "";
+                let obj = JSON.parse(result);
+                obj.forEach(function (element) {
+                    combinedString += element + ", ";
+                });
+                combinedString = combinedString.replace(/,\s*$/, "");
+                $("<div></div>")
+                    .attr({ class: "d-flex flex-row mt-1", id: mark + "1" })
+                    .prependTo("#container");
+                $("<div></div>")
+                    .attr({ class: "card w-75", id: mark + "2" })
+                    .appendTo("#" + mark + "1");
+                $("<div></div>")
+                    .attr({ class: "card-body", id: mark + "3" })
+                    .appendTo("#" + mark + "2");
+                $("<img></img>")
+                    .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "32" })
+                    .appendTo("#" + mark + "3");
+                $("<span></span>")
+                    .text(" " + userInput)
+                    .appendTo("#" + mark + "3");
+               //  $("<hr></hr>").appendTo("#" + mark + "3");   넣은 이유 
+                $("<div></div>")
+                    .attr({ class: "d-flex flex-row-reverse mt-1", id: mark + "6" })
+                    .prependTo("#container");
+                $("<div></div>")
+                    .attr({ class: "card bg-light text-dark w-75", id: mark + "7" })
+                    .appendTo("#" + mark + "6");
+                $("<div></div>")
+                    .attr({ class: "card-body text-end", id: mark + "8" })
+                    .appendTo("#" + mark + "7");
+
+                $("<span></span>")
+                    .attr({class: "text-center"})
+                    .html(" <h5><strong>친환경 상품매장 안내</strong></h5><hr>"+combinedString + " <br><br>주소를 작성하면 가까운 매장을 안내해 드립니다.")
+                    .appendTo("#" + mark + "8");
+                
+
+                // 주소 텍스트 인풋 버튼 
+                $("<input></input>")
+                    .attr({
+                        type: "text",
+                        name: "addrInput",
+                        id: "addrInput",
+                        class: "form-control",
+                        onkeyup: "if(window.event.keyCode==13) {sendAddr()}",
+                        onfocus:"if(this.value=='(ex) 영등포구 영등포동') { this.value=''; this.style.opacity = 1; }",
+                        onblur:"if(this.value=='') { this.value='(ex) 서울시 영등포구 영등포동'; this.style.opacity = 0.7; }",
+                        placeholder:"(ex) 영등포구 영등포동"
+                    })
+                    .appendTo("#" + mark + "8");
+                $("<button></button>")
+                    .attr({ class: "btn btn-success", type: "submit", onclick: "sendAddr()" })
+                    // .attr({ class: "btn btn-primary", type: "submit", onclick: "sendAddr('" + mark + "')" })
+                    .text("전송")
+                    .appendTo("#" + mark + "7");
+            },
+        });
+    } */
+
+    // 날짜 초기화 
+    let lastProcessedDate = null;
+
+    // 주소 분석 
+    // 주소 분석 
+    function sendAddr() {
+        let addrInput = $("#addrInput").val();
+        $("#addrInput").val("");
+        let mark = "mark" + Date.now();
+        $('<img></img>')
+                .attr({src: "{{url_for('static', filename='img/please-wait.gif')}}", id: 'waitImg', style:'margin-left:180px'})
+                .prependTo('#container');
+        $.ajax({
+            type: "POST",
+            url: "/chatbot/receipt3",
+            data: { addrInput: addrInput },
+            success: function (result) {
+                $('#waitImg').remove();
+                let combinedString = "";
+                let obj = JSON.parse(result);
+                console.log('OBJ0',obj[0]);
+                console.log('OBJ1',obj[1]);
+                console.log('OBJ2',obj[2]);
+                const currentDate = new Date();
+                const currentDateString = currentDate.toDateString();
+                let today = new Date();
+
+                if (currentDateString !== lastProcessedDate) {
+                    $('<div></div>')
+                        .attr({'class': 'date text-center mt-2', id: mark+'0'})
+                        .prependTo('#container');
+                    $("<p></p>")
+                        .attr({'class': 'btn btn-outline-success'})
+                        .text(" " + dateFormatDate(today)).appendTo("#" + mark + "0");
+                    lastProcessedDate = currentDateString;
+                }
+
+                for (let i = 0; i < obj.length; i++) {
+                    if(typeof obj[i]["거리"] == "undefined" || obj[i]["거리"] == null || obj[i]["거리"] == "")
+                        combinedString += `${obj[i]}<br><br>`;
+                    else
+                        combinedString += `거리: ${obj[i]["거리"]}<br>매장명: ${obj[i]["매장명"]}<br>주소: ${obj[i]["주소"]}<br><br>`;
+	                
+                }
+                console.log('combinedString',combinedString);
+                $('<div></div>')
+                        .attr({'class': 'date text-end mt-2', id: mark+'0'})
+                        .prependTo('#container');
+                $("<p></p>")
+                        .attr({'class': 'text-end'})
+                        .text(" " + dateFormat(today)).appendTo("#" + mark + "0");
+                $("<div></div>")
+                    .attr({ class: "d-flex flex-row-reverse mt-1", id: mark + "11" })
+                    .prependTo("#container");
+                $("<div></div>")
+                    .attr({ class: "card bg-light text-dark w-75", id: mark + "12" })
+                    .appendTo("#" + mark + "11");
+                $("<div></div>")
+                    .attr({ class: "card-body text-end", id: mark + "13" })
+                    .appendTo("#" + mark + "12");
+                $("<span></span>")
+                    .html(combinedString)
+                    .appendTo("#" + mark + "13");
+                    $.ajax({
+                            type: 'POST',
+                            url: '/chatbot/savedatatodb', // 두 번째 엔드포인트를 지정합니다.
+                            data: {
+                                currentDate: fullDate(currentDate), // currentDate를 다시 보냅니다.
+                                userQuestion : addrInput,
+                                chatbotAnswer : combinedString
+                            }
+                        });
+                
+            },
+        });
+    }
+
+/* #######################################   시간 추가 ########################################################*/
+          // 품목분석
+
+        function receipt() {
+        let userInput = $("#userInput1").val();
+        $("#userInput1").val("");
+        let mark = "mark" + Date.now();
+        let today = new Date();
+        $.ajax({
+            type: "POST",
+            url: "/chatbot/receipt2",
+            data: { userInput: userInput },
+            success: function(result) {
+                    let combinedString = "";
+                    let obj = JSON.parse(result);
+                    obj.forEach(function (element) {
+                        combinedString += element + ", ";
+                    });
+
+                     // Get the current date
+                    const currentDate = new Date();
+                    const currentDateString = currentDate.toDateString();
+                    if (currentDateString !== lastProcessedDate) {
+                    $('<div></div>')
+                        .attr({'class': 'date text-center mt-2', id: mark+'0'})
+                        .prependTo('#container');
+                    $("<p></p>")
+                        .attr({'class': 'btn btn-outline-success'})
+                        .text(" " + dateFormatDate(today)).appendTo("#" + mark + "0");
+                    lastProcessedDate = currentDateString;
+                    }
+
+                    $('<div></div>')
+                        .attr({'class': 'date text-start mt-2', id: mark+'0'})
+                        .prependTo('#container');
+                    $("<p></p>")
+                        .attr({'class': 'text-start'})
+                        .text(" " + dateFormat(today)).appendTo("#" + mark + "0");
+                    $("<div></div>")
+                        .attr({ class: "d-flex flex-row mt-1", id: mark + "2" })
+                        .prependTo("#container");
+                    $("<div></div>")
+                        .attr({ class: "card w-75", id: mark + "3" })
+                        .appendTo("#" + mark + "2");
+                    $("<div></div>")
+                        .attr({ class: "card-body", id: mark + "4" })
+                        .appendTo("#" + mark + "3");
+                    $("<img></img>")
+                        .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "32", class:'m-3'})
+                        .appendTo("#" + mark + "4");
+                    $("<span></span>")
+                        .text(" " + userInput)
+                        .appendTo("#" + mark + "4");
+                /*  $("<hr></hr>").appendTo("#" + mark + "3");   넣은 이유 */
+                    $('<div></div>')
+                        .attr({'class': 'date text-end mt-2', id: mark+'5'})
+                        .prependTo('#container');
+                    $("<p></p>")
+                        .attr({'class': 'text-end'})
+                        .text(" " + dateFormat(today)).appendTo("#" + mark + "5");
+                    $("<div></div>")
+                        .attr({ class: "d-flex flex-row-reverse mt-1", id: mark + "6" })
+                        .prependTo("#container");
+                    $("<div></div>")
+                        .attr({ class: "card bg-light text-dark w-75", id: mark + "7" })
+                        .appendTo("#" + mark + "6");
+                    $("<div></div>")
+                        .attr({ class: "card-body text-end", id: mark + "8" })
+                        .appendTo("#" + mark + "7");
+
+                    $("<span></span>")
+                        .attr({class: "text-center"})
+                        .html(" <h5><strong>친환경 상품obj매장 안내</strong></h5><hr>"+combinedString + " <br><br>주소를 작성하면 가까운 매장을 안내해 드립니다.")
+                        .appendTo("#" + mark + "8");
+                    
+
+                    /* 주소 텍스트 인풋 버튼 */
+                    $("<input></input>")
+                        .attr({
+                            type: "text",
+                            name: "addrInput",
+                            id: "addrInput",
+                            class: "form-control",
+                            onkeyup: "if(window.event.keyCode==13) {sendAddr()}",
+                            onfocus:"if(this.value=='(ex) 서울시 영등포구 영등포동') { this.value=''; this.style.opacity = 1; }",
+                            onblur:"if(this.value=='') { this.value='(ex) 서울시 영등포구 영등포동'; this.style.opacity = 0.7; }",
+                            placeholder:"(ex) 서울시 영등포구 영등포동"
+                        })
+                        .appendTo("#" + mark + "8");
+                    $("<button></button>")
+                        .attr({ class: "btn btn-success", type: "submit", onclick: "sendAddr()" })
+                        // .attr({ class: "btn btn-primary", type: "submit", onclick: "sendAddr('" + mark + "')" })
+                        .text("전송")
+                        .appendTo("#" + mark + "7");
+                    
+                        $.ajax({
+                            type: 'POST',
+                            url: '/chatbot/savedatatodb', // 두 번째 엔드포인트를 지정합니다.
+                            data: {
+                                currentDate: fullDate(currentDate), // currentDate를 다시 보냅니다.
+                                userQuestion : userInput,
+                                chatbotAnswer : `친환경 상품매장 안내 ${combinedString} 주소를 작성하면 가까운 매장을 안내해 드립니다`
+                            }
+                        });
+                },
+            });
+        }
+
+//############################################################
+
+  // 영수증 분석 
+    function upload() {
+        console.log('upload()');
+            let mark = "mark" + Date.now();
+            let imageInputVal = $('#image')[0]; /* id가 image인 파일 값을 불러옴 */    
+            let formData = new FormData();
+            let today = new Date();
+            formData.append('image', imageInputVal.files[0]);
+            console.log(imageInputVal.files[0].name)
+            $.ajax({
+                url: "/chatbot/receipt",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+
+                    // Get the current date
+                    const currentDate = new Date();
+                    const currentDateString = currentDate.toDateString();
+
+                    if (currentDateString !== lastProcessedDate) {
+                    $('<div></div>')
+                        .attr({'class': 'date text-center mt-2', id: mark+'0'})
+                        .prependTo('#container');
+                    $("<p></p>")
+                        .attr({'class': 'btn btn-outline-success'})
+                        .text(" " + dateFormatDate(today)).appendTo("#" + mark + "0");
+                    lastProcessedDate = currentDateString;
+                    }
+
+                    $('<div></div>')
+                        .attr({'class': 'date text-end mt-2', id: mark+'1'}) //대화 날짜 표기 창
+                        .prependTo('#container');
+                    $("<p></p>")
+                        .attr({'class': 'text-start'})
+                        .text(" " + dateFormat(today)).prependTo("#" + mark + "1");  //대화 날짜 표기
+					 $("<div></div>")
+                        .attr({ class: "card w-100 text-start", id: mark + "2" })
+                        .prependTo("#container");
+                    $("<div></div>")
+                        .attr({ class: "card-body text-start", id: mark + "3" })
+                        .appendTo("#" + mark + "2");
+                    $("<img></img>")
+                        .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "50", class: 'text-start m-3' })
+                        .appendTo("#" + mark + "3");
+                    $("<span></span>")
+                        .attr({class: 'text-start'})
+                        .text(" 업로드한 영수증에서 친환경 상품과 받을 수 있었던 에코포인트가 얼마야?")
+                        .appendTo("#" + mark + "3");
+
+
+                    // 챗봇 인풋 대화창
+                    $('<div></div>')
+                        .attr({'class': 'date text-start mt-2', id: mark+'5'}) //대화 날짜 표기 창
+                        .prependTo('#container');
+                    $("<p></p>")
+                        .attr({'class': 'text-end'})
+                        .text(" " + dateFormat(today)).appendTo("#" + mark + "5");  //대화 날짜 표기
+                    $('<div></div>')
+                        .attr({'class': 'd-flex flex-row-reverse mt-1', id: mark+'6'})
+                        .prependTo('#container');
+                    $('<div></div>')
+                        .attr({'class': 'card bg-success text-white m-3', id: mark+'7'}).appendTo('#'+mark+'6');
+                    $('<div></div>')
+                        .attr({'class': 'card-body text-end ', id: mark+'8'}).appendTo('#'+mark+'7');
+                    $("<span></span>")
+                        .html(result)                   
+                        .appendTo("#" + mark + "8");
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '/chatbot/savedatatodb', // 두 번째 엔드포인트를 지정합니다.
+                            data: {
+                                currentDate: fullDate(currentDate), // currentDate를 다시 보냅니다.
+                                userQuestion : `./static/data/${imageInputVal.files[0].name}`,
+                                chatbotAnswer : result.replace('<br>', '\n').replace('<h5>','').replace('</h5>', '').replace('<hr>', '').replace('<br>', '\n')
+                            }
+                        });
+
+                },
+                error: function (xhr, status, error) {
+                    $("#message").text(error);
+                },
+                
+                });
+            };
+                
+          
+
+/* ###################################################################################################################### */
+
+   
+        // 녹색금융 질의
+
+
+        function send() {
+            
+            let userInput = $('#userInput').val();
+            $('#userInput').val('');
+            let mark = 'mark' + Date.now();
+            let today = new Date();
+            $.ajax({
+                type: 'POST',
+                url: '/chatbot/counsel',
+                data: {userInput: userInput},
+                success: function(result) {
+                    let obj = JSON.parse(result);
+
+                    // Get the current date
+                    const currentDate = new Date();
+                    const currentDateString = currentDate.toDateString();
+
+                    if (currentDateString !== lastProcessedDate) {
+                    $('<div></div>')
+                        .attr({'class': 'date text-center mt-2', id: mark+'0'})
+                        .prependTo('#container');
+                    $("<p></p>")
+                        .attr({'class': 'btn btn-outline-success'})
+                        .text(" " + dateFormatDate(today)).appendTo("#" + mark + "0");
+                    lastProcessedDate = currentDateString;
+                    }
+
+                    // 유저 인풋 대화창
+                    $('<div></div>')
+                        .attr({'class': 'date text-end mt-2', id: mark+'5'}) //대화 날짜 표기 창
+                        .prependTo('#container');
+                    $("<p></p>")
+                        .attr({'class': 'text-start'})
+                        .text(" " + dateFormat(today)).appendTo("#" + mark + "5");  //대화 날짜 표기
+					$('<div></div>')
+                        .attr({'class': 'd-flex flex-row mt-1', id: mark+'2'})
+                        .prependTo('#container');
+                    $('<div></div>')
+                        .attr({'class': 'card w-100  text-dark', id: mark+'3'}).appendTo('#'+mark+'2');
+                    $('<div></div>')
+                        .attr({'class': 'card-body w-50', id: mark+'4'}).appendTo('#'+mark+'3');
+                    $('<img></img>')
+                        .attr({src: "{{url_for('static', filename='img/person.png')}}", height: '32', class:'m-3'}).appendTo('#'+mark+'4');    
+                    $('<span></span>')
+                        .text(' '+obj.user).appendTo('#'+mark+'4');
+
+                    // 챗봇 인풋 대화창
+                    $('<div></div>')
+                        .attr({'class': 'date text-start mt-2', id: mark+'1'}) //대화 날짜 표기 창
+                        .prependTo('#container');
+                    $("<p></p>")
+                        .attr({'class': 'text-end'})
+                        .text(" " + dateFormat(today)).appendTo("#" + mark + "1");  //대화 날짜 표기
+                    $('<div></div>')
+                        .attr({'class': 'd-flex flex-row-reverse mt-1', id: mark+'6'})
+                        .prependTo('#container');
+                    $('<div></div>')
+                        .attr({'class': 'card bg-success text-white m-3', id: mark+'7'}).appendTo('#'+mark+'6');
+                    $('<div></div>')
+                        .attr({'class': 'card-body text-end ', id: mark+'8'}).appendTo('#'+mark+'7');
+                    $('<span></span>')
+                        .text(obj.chatbot + ' ').appendTo('#'+mark+'8');
+                    
+                    $.ajax({
+                        type: 'POST',
+                        url: '/chatbot/savedatatodb', // 두 번째 엔드포인트를 지정합니다.
+                        data: {
+                            currentDate: fullDate(currentDate), // currentDate를 다시 보냅니다.
+                            userQuestion : obj.user,
+                            chatbotAnswer : obj.chatbot
+                        }
+                    });
+                }
+            
+            });
+        }
+
+        function dateFormatDate(date) {
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
+
+            month = month >= 10 ? month : '0' + month;
+            day = day >= 10 ? day : '0' + day;
+            let week = WEEKDAY[date.getDay()];
+
+            return date.getFullYear() + '년 ' + month + '월 ' + day + '일 ' + week + '요일';
+        }
+
+        function dateFormat(date) {
+            let hour = date.getHours();
+            let minute = date.getMinutes();
+ 
+            let amPm = hour >= 13 ? '오후' : '오전';
+            hour = hour >= 13 ? hour - 12 : hour;
+            minute = minute >= 10 ? minute : '0' + minute;
+
+            return amPm + ' ' + hour + '시 ' + minute + '분';
+        }
+
+        function fullDate(date) {
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            let hour = date.getHours();
+            let minute = date.getMinutes();
+            const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
+            let week = WEEKDAY[date.getDay()];
+
+            month = month >= 10 ? month : '0' + month;
+            day = day >= 10 ? day : '0' + day;
+            minute = minute >= 10 ? minute : '0' + minute;
+
+            return year + '-' + month + '-' + day + '\n' + hour + ':' + minute + ' ' + week + '요일'
+
+        }
+        
+</script>
+{% endblock %}
+{% block subtitle %}소비패턴에 따른 녹색금융 추천
+
+<a href="/crawling/bank"><button class="ms-4 btn btn-outline-success">은행상품 안내 바로가기</button></a>
+<a href="/crawling/finance"><button class="btn btn-outline-success ">투자상품 안내 바로가기</button></a>
+<a href="/crawling/card"><button class="btn btn-outline-success ">그린카드 안내 바로가기</button></a>
+<hr>
+{% endblock %}
+{% block content %}
+<div class="outer-container" style="width: 100%; column-count: 2;">
+    <div class="card btn-group" style="width: 480px;">
+        <span style="color: black; font-size: 20px;"><i class="fa-solid fa-receipt" style="margin-left: 20px; margin-right: 10px;"></i>영수증으로 알아보는 에코포인트 계산기</span>
+        <div class="card-body btn-group" ">
+            <input type="file" id="image" class="form-control">
+            <button class="btn btn-success" onclick="upload()" style="width: 100px;" >업로드</button> 
+        </div>
+        <div id="message"></div>
+    </div>
+    <div class="outer-container" style="width: 100%; "></div>
+        <div class="card btn-group" style="width: 480x;">
+            <span style="color: black; font-size: 20px;"><i class="fa-solid fa-leaf"  style="margin-left: 20px; margin-right: 10px;"></i>친환경 상품인지 알아보기</span>
+            <div class="card-body btn-group">
+                <input type="text" class="form-control" name="userInput" id="userInput1"
+                onkeyup="if(window.event.keyCode==13) {receipt()}" 
+                onfocus="if(this.value=='품목을 적어주세요 (ex) 고구마, 세제, 화장지') { this.value=''; this.style.opacity = 1; }"
+                onblur="if(this.value=='') { this.value='품목을 적어주세요 (ex) 고구마, 세제, 화장지'; this.style.opacity = 0.7; }"
+                placeholder="품목을 적어주세요 (ex) 고구마, 세제, 화장지">
+                <button class="btn btn-success" onclick="receipt()" style="width: 100px;">전송</button>
+            </div>
+        </div>
+    </div>
+
+<div class="input-group outer-container mt-3 mb-2" style="width: 100%;">
+    <span class="input-group-text"style="width: 200px;"><img src="../static/img/ai.png" height="32" style="margin-right: 10px;"/>녹색금융 알아보기</span>
+    <input type="text" class="form-control" name="userInput" id="userInput"
+            onkeyup="if(window.event.keyCode==13) {send()}" 
+            onfocus="if(this.value=='안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.') { this.value=''; this.style.opacity = 1; }"
+            onblur="if(this.value=='') { this.value='안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.'; this.style.opacity = 0.7; }"
+            placeholder="안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.">
+    <button class="btn btn-success" type="submit" onclick="send()">전송</button>
+</div>
+
+
+
+
+
+<div class="d-flex justify-content-left" style="margin-bottom: 60px; margin: top 100px;">
+    <div class="container" id="container" 
+        style="padding-left: 100px; padding-right: 100px; color: #2c3731; width: 1000px; height: 500px; border: 4px solid; border-radius: 30px; overflow: auto">
+    <div class="d-flex flex-row mt-1">
+</div>
+    <!-- <img src="../static/img/girl.png"  style=" 
+    position: absolute; left: 1250px; top: 480px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
+    <img src="../static/img/man.png" style="
+    position: absolute; left: 270px; top: 480px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
+    </div> -->
+</div>
+{% endblock %}
+

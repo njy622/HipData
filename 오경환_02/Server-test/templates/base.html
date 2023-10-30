@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>{% block title %}Prototype{% endblock %}</title>
+
+<!-- 메뉴바 스크립트 -->
+
+<!--  -->
+
+    <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="{{url_for('static', filename='favicon.ico')}}"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Sunflower:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/fdb840a8cc.js" crossorigin="anonymous"></script>
+    <style>
+        * { font-family: 'Noto Sans KR', sans-serif; }
+        a { text-decoration: none; }
+        .navbar {font-size:large}
+        header { height:150px;}
+        content { height:calc(100vh - 500px)}
+        footer { height: 100px;}
+        .nav-link {color: gray;}
+    </style>
+    <script src="{{url_for('static', filename='js/ajax.js')}}"></script>
+    {% block additional_head %}{% endblock %}
+
+</head>
+
+<body>
+
+
+<!--                                           홈페이지 상단 네비게이션  start                                         -->
+<nav class="navbar navbar-expand-sm bg-white navbar-light fixed-top text-black">
+    <div class="container-fluid">
+        <ul class="navbar-nav">
+            <a class="navbar-brand mx-5 pb-sm-0" href="#"><img src="{{url_for('static', filename='img/03.logo_black.png')}}" height="70" width="200"></a>
+            <li class="nav-item ms-5 mt-4">
+                <a class="nav-link {% if menu.ho %}active{% endif %}" href="{% if menu.ho %}#{% else %}/{% endif %}">Home</a>
+            </li>
+            <li class="nav-item ms-3 mt-4">
+                <a style="width: 100px;" class="nav-link {% if menu.us %}active{% endif %}" href="{% if menu.us %}#{% else %}/user/chatlist{% endif %}">Chat 이력</a>
+            </li>
+            </li>
+            <li class="nav-item dropdown ms-3 mt-4">
+                <a class="nav-link dropdown-toggle {% if menu.gr %}active{% endif %}"  href="#" data-bs-toggle="dropdown" data-bs-offset="0,-100">
+                    녹색서비스 소개
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/greenservice/greenconsume">녹색소비</a></li>
+                    <li><a class="dropdown-item" href="/greenservice/publictransport">대중교통</a></li>
+                    <li><a class="dropdown-item" href="/greenservice/energysaving">에너지 절약</a></li>
+                    <li><a class="dropdown-item" href="/greenservice/publicbuilding">공공시설</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown ms-3 mt-4">
+                <a class="nav-link dropdown-toggle {% if menu.cr %}active{% endif %}" href="#" data-bs-toggle="dropdown">
+                    녹색금융 추천
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/crawling/bank">은행</a></li>
+                    <li><a class="dropdown-item" href="/crawling/finance">금융사</a></li>
+                    <li><a class="dropdown-item" href="/crawling/card">카드</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown ms-3 mt-4">
+                <a class="nav-link dropdown-toggle {% if menu.cb %}active{% endif %}" href="#" data-bs-toggle="dropdown">
+                    챗봇
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/chatbot/counsel">녹색금융</a></li>
+                    <li><a class="dropdown-item" href="/chatbot/bard">구글 바드</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/chatbot/genImg">이미지 생성</a></li>
+                </ul>
+            </li>
+            <li class="nav-item ms-3 mt-4"  style="width: 400px;">
+                {% if session['uid'] %}
+                    <a class="nav-link" href="/user/logout"> 로그아웃</a>
+                {% else %}
+                    <a class="nav-link" href="/user/login">로그인</a>
+                {% endif %}
+            </li>
+            <span class="navbar-text mt-4" style="width: 500px;">
+                {% if session['uid'] %}
+                    {{ session['uname'] }}님 환영합니다.
+                {% endif %}
+            </span>
+            <div class="container-fluid ms-3 mt-4">
+                
+<!--                                               오프캔버스 버튼                                                    -->
+                <button class="btn btn-gray" type="button" style="margin-left: 1.5cm;"  data-bs-toggle="offcanvas" data-bs-target="#demo">
+                    <img src="https://www.karldudler.de/wp-content/themes/custom-theme/assets/images/icon-menu.svg" id="canvas" style="width: 70px; background-color: rgba(158, 158, 158, 0.563);">
+
+                
+                </button>
+            </div>
+        </ul>
+        </div>
+    </nav>
+<!--                                           홈페이지 상단 네비게이션 end                                          -->
+
+<!--                                           홈페이지 좌측 프로파일 start                                          -->
+    <div class="container" style="margin-top:100px">
+        <div class="row">
+            <div class="col-3 d-flex align-items-start justify-content-start">
+                <ul class="nav flex-column nav-pills">
+                    <br><br>
+                    <span style="font-size: larger;">Contact</span>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"><i class="fa-brands fa-github fa-2xl"></i>&nbsp;&nbsp;github</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="https://github.com/njy622 " target="_blank">남지영</a>
+                            <a class="dropdown-item" href="https://github.com/forever-young86" target="_blank">신영화</a>
+                            <a class="dropdown-item" href="https://github.com/JM-world" target="_blank">정종문</a>
+                            <a class="dropdown-item" href="https://github.com/haeeema" target="_blank">박하민</a>
+                            <a class="dropdown-item" href="https://github.com/lione78" target="_blank">오경환</a>
+                        </div>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"><i class="fa-brands fa-facebook fa-2xl"></i>&nbsp;&nbsp;facebook</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">남지영</a>
+                            <a class="dropdown-item" href="#">신영화</a>
+                            <a class="dropdown-item" href="#">정종문</a>
+                            <a class="dropdown-item" href="#">박하민</a>
+                            <a class="dropdown-item" href="#">오경환</a>
+                        </div>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"><i class="fa-brands fa-instagram fa-2xl"></i>&nbsp;&nbsp;instagram</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">남지영</a>
+                            <a class="dropdown-item" href="#">신영화</a>
+                            <a class="dropdown-item" href="#">정종문</a>
+                            <a class="dropdown-item" href="#">박하민</a>
+                            <a class="dropdown-item" href="#">오경환</a>
+                        </div>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"><i class="fa-regular fa-envelope fa-2xl"></i>&nbsp;&nbsp;e-mail</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">남지영</a>
+                            <a class="dropdown-item" href="#">신영화</a>
+                            <a class="dropdown-item" href="#">정종문</a>
+                            <a class="dropdown-item" href="#">박하민</a>
+                            <a class="dropdown-item" href="#">오경환</a>
+                        </div>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"></a>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"></a>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <span style="font-size: larger;">Language</span>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-brands fa-python fa-2xl"></i>&nbsp;&nbsp;python</a>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-brands fa-java fa-2xl"></i>&nbsp;&nbsp;java</a>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-brands fa-html5 fa-2xl"></i>&nbsp;&nbsp;html</a>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-brands fa-css3-alt fa-2xl"></i>&nbsp;&nbsp;css</a>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-brands fa-js fa-2xl"></i>&nbsp;&nbsp;JS</a>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                </ul>
+            </div>
+            <div class="col-9 mt-3">
+                <h3><strong>{% block subtitle %}{% endblock %}</strong></h3>
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+<!--                                           홈페이지 좌측 프로파일 end                                          -->
+
+
+
+
+    {% block additional_body %}{% endblock %}
+</body>
+<footer>
+    <nav class="navbar bg-light fixed-bottom">
+        <div class="justify-content-start">
+            <span class="navbar-text text-start" style="margin-left: 20px;">
+                Copyright &copy; 2023 Hip Data  Green product Corp. All rights reserved.
+            </span>
+        </div>
+    </nav>
+</footer>
+</html>
