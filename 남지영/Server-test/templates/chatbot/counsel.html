@@ -163,40 +163,6 @@
             },
         });
     }
-/* 
-    function sendAddr() {
-                let addrInput = $("#addrInput").val();
-                $("#addrInput").val("");
-                let mark = "mark" + Date.now();
-                $.ajax({
-                    type: "POST",
-                    url: "/receipt3",
-                    data: { addrInput: addrInput },
-                    success: function (result) {
-                        let combinedString = "";
-                        let obj = JSON.parse(result);
-                        for (let i = 0; i < obj.length; i++) {
-                            if ('없음' in obj[i]) {
-                                combinedString += obj[i]
-                            } else {
-                                combinedString += `거리: ${obj[i]["거리"]}<br>매장명: ${obj[i]["매장명"]}<br>주소: ${obj[i]["주소"]}<br><br>`;
-                            }
-                        }
-                        $("<div></div>")
-                            .attr({ class: "d-flex flex-row-reverse mt-1", id: mark + "11" })
-                            .appendTo("#container");
-                        $("<div></div>")
-                            .attr({ class: "card bg-light text-dark w-75", id: mark + "12" })
-                            .appendTo("#" + mark + "11");
-                        $("<div></div>")
-                            .attr({ class: "card-body text-end", id: mark + "13" })
-                            .appendTo("#" + mark + "12");
-                        $("<span></span>")
-                            .html(combinedString)
-                            .appendTo("#" + mark + "13");
-                    },
-                });
-            } */
 
 /* #######################################   시간 추가 ########################################################*/
           // 품목분석
@@ -490,7 +456,6 @@
         }
  
 
-    </script> 
         
 </script>
 {% endblock %}
