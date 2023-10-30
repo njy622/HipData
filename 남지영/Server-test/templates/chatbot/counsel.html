@@ -273,7 +273,6 @@
             let formData = new FormData();
             let today = new Date();
             formData.append('image', imageInputVal.files[0]);
-            $("#container").scrollTop($("#container")[0].scrollHeight);
             $.ajax({
                 url: "/chatbot/receipt",
                 type: "POST",
@@ -295,24 +294,6 @@
                             .text(" " + dateFormatDate(today)).appendTo("#" + mark + "0");
                         lastProcessedDate = currentDateString;
                     }
-
-                  /*   $("<div></div>")
-                        .attr({ class: "d-flex flex-row mt-1", id: mark + "1" })
-                        .prependTo("#container");
-                    $("<div></div>")
-                        .attr({ class: "card w-100", id: mark + "2" })
-                        .appendTo("#" + mark + "1");
-                    $("<div></div>")
-                        .attr({ class: "card-body", id: mark + "3" })
-                        .appendTo("#" + mark + "2");
-                    $("<img></img>")
-                        .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "50"  })
-                        .appendTo("#" + mark + "3");
-                    $("<span></span>")
-                        .text(" 업로드한 영수증의 상품과 포인트는?")
-                        .appendTo("#" + mark + "3");
-                    $("<hr></hr>").appendTo("#" + mark + "3");
-                    */
 
 
                     $('<div></div>')
