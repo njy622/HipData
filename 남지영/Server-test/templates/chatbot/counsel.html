@@ -462,25 +462,35 @@ let lastProcessedDate = null;
         
 </script>
 {% endblock %}
-{% block subtitle %}소비패턴에 따른 녹색금융 추천
 
-<a href="/crawling/bank"><button class="ms-4 btn btn-outline-success">은행상품 안내 바로가기</button></a>
-<a href="/crawling/finance"><button class="btn btn-outline-success ">투자상품 안내 바로가기</button></a>
-<a href="/crawling/card"><button class="btn btn-outline-success ">그린카드 안내 바로가기</button></a>
-<hr>
-{% endblock %}
 {% block content %}
-<div class="outer-container" style="width: 100%; column-count: 2;">
-    <div class="card btn-group" style="width: 480px;">
-        <span style="color: black; font-size: 20px;"><i class="fa-solid fa-receipt" style="margin-left: 20px; margin-right: 10px;"></i>영수증으로 알아보는 에코포인트 계산기</span>
-        <div class="card-body btn-group" ">
-            <input type="file" id="image" class="form-control">
-            <button class="btn btn-success" onclick="upload()" style="width: 100px;" >업로드</button> 
-        </div>
-        <div id="message"></div>
+
+<div class="row">
+    <div class="col-6">  <h3>소비패턴에 따른 녹색금융 추천</h3> </div>
+    <div class="col-2">
+        <a href="/crawling/bank"><button class="btn btn-outline-success" style="width:max-content;">은행상품 안내</button></a>
     </div>
-    <div class="outer-container" style="width: 100%; "></div>
-        <div class="card btn-group" style="width: 480x;">
+    <div class="col-2">
+        <a href="/crawling/finance"><button class="btn btn-outline-success "style="width:max-content;">투자상품 안내</button></a>
+    </div>
+    <div class="col-2">
+        <a href="/crawling/card"><button class="btn btn-outline-success "style="width:max-content;">그린카드 안내</button></a>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-6">
+        <div class="card btn-group" style="width: 400px;">
+            <span style="color: black; font-size: 20px;"><i class="fa-solid fa-receipt" style="margin-left: 20px; margin-right: 10px;"></i>영수증으로 알아보는 에코포인트 계산기</span>
+            <div class="card-body btn-group" ">
+                <input type="file" id="image" class="form-control">
+                <button class="btn btn-success" onclick="upload()" style="width: 100px;" >업로드</button> 
+            </div>
+            <div id="message"></div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card btn-group" style="width: 400x;">
             <span style="color: black; font-size: 20px;"><i class="fa-solid fa-leaf"  style="margin-left: 20px; margin-right: 10px;"></i>친환경 상품인지 알아보기</span>
             <div class="card-body btn-group">
                 <input type="text" class="form-control" name="userInput" id="userInput1"
@@ -492,6 +502,9 @@ let lastProcessedDate = null;
             </div>
         </div>
     </div>
+</div>
+
+    
 
 <div class="input-group outer-container mt-3 mb-2" style="width: 100%;">
     <span class="input-group-text"style="width: 200px;"><img src="../static/img/ai.png" height="32" style="margin-right: 10px;"/>녹색금융 알아보기</span>
@@ -512,10 +525,20 @@ let lastProcessedDate = null;
         style="padding-left: 100px; padding-right: 100px; color: #2c3731; width: 1000px; height: 500px; border: 4px solid; border-radius: 30px; overflow: auto">
     <div class="d-flex flex-row mt-1">
 </div>
-    <img src="../static/img/girl.png"  style=" 
-    position: absolute; left: 1300px; top: 630px; z-index: 1; height: auto; width: 200px;" float="rightx;" />
+
+<!--                                 학원 모니터 사이즈에 맞춘 캐릭터 위치                        -->
+<img src="../static/img/girl.png"  style=" 
+position: absolute; left: 1100px; top: 650px; z-index: 1; height: auto; width: 200px;" float="rightx;" />
+<img src="../static/img/man.png" style="
+position: absolute; right: 800px; top: 650px; z-index: 1; height: auto; width: 200px;" float="rightx;" />
+
+
+
+<!--                                 노트북 모니터 사이즈에 맞춘 캐릭터 위치                        -->
+ <!--    <img src="../static/img/girl.png"  style=" 
+    position: absolute; left: 750px; top: 500px; z-index: 1; height: auto; width: 200px;" float="rightx;" />
     <img src="../static/img/man.png" style="
-    position: absolute; left: 300px; top: 630px; z-index: 1; height: auto; width: 200px;" float="rightx;" />
-  
+    position: absolute; right: 750px; top: 500px; z-index: 1; height: auto; width: 200px;" float="rightx;" />
+   -->
 {% endblock %}
 
