@@ -6,7 +6,6 @@
   let lastProcessedDate = null;
 
 // 주소 분석 
-// 주소 분석 
 function sendAddr() {
     let addrInput = $("#addrInput").val();
     $("#addrInput").val("");
@@ -34,6 +33,7 @@ function sendAddr() {
                     .attr({'class': 'date text-center mt-2', id: mark+'0'})
                     .prependTo('#container');
                 $("<p></p>")
+                    .id('addrcusor')
                     .attr({'class': 'btn btn-outline-success'})
                     .text(" " + dateFormatDate(today)).appendTo("#" + mark + "0");
                 lastProcessedDate = currentDateString;
@@ -168,6 +168,7 @@ function sendAddr() {
                         placeholder:"(ex) 서울시 영등포구 영등포동"
                     })
                     .appendTo("#" + mark + "8");
+                $("#addrInput").focus();
                 $("<button></button>")
                     .attr({ class: "btn btn-success", type: "submit", onclick: "sendAddr()" })
                     // .attr({ class: "btn btn-primary", type: "submit", onclick: "sendAddr('" + mark + "')" })
@@ -401,6 +402,8 @@ function upload() {
         return year + '-' + month + '-' + day + '\n' + hour + ':' + minute + ' ' + week + '요일'
 
     }
+
+
 </script>
 {% endblock %}
 
