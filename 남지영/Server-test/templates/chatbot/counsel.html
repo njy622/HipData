@@ -168,7 +168,7 @@ function sendAddr() {
                         placeholder:"(ex) 서울시 영등포구 영등포동"
                     })
                     .appendTo("#" + mark + "8");
-                $("#addrInput").focus();
+                $("#addrInput").focus(); /* 해당 위치로 마우스 커서 이동 */
                 $("<button></button>")
                     .attr({ class: "btn btn-success", type: "submit", onclick: "sendAddr()" })
                     // .attr({ class: "btn btn-primary", type: "submit", onclick: "sendAddr('" + mark + "')" })
