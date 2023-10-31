@@ -2,122 +2,37 @@
 {% block title %}소비패턴에 따른 녹색금융 추천{% endblock %}
 {% block additional_head %}
 <script>
+        $(document).ready(function() {
+        let page = 0;
 
-    /* // 영수증 분석 (시간 미포함)
-    function upload() {
-        console.log('upload()');
-            let mark = "mark" + Date.now();
-            let imageInputVal = $('#image')[0]; //id가 image인 파일 값을 불러옴 
-            formData.append('image', imageInputVal.files[0]);
-            $("#container").scrollTop($("#container")[0].scrollHeight);
+        function loadNextMessages() {
             $.ajax({
-                url: "/chatbot/receipt",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (result) {
-                    $("<div></div>")
-                        .attr({ class: "d-flex flex-row mt-1", id: mark + "1" })
-                        .prependTo("#container");
-                    $("<div></div>")
-                        .attr({ class: "card w-100", id: mark + "2" })
-                        .appendTo("#" + mark + "1");
-                    $("<div></div>")
-                        .attr({ class: "card-body", id: mark + "3" })
-                        .appendTo("#" + mark + "2");
-                    $("<img></img>")
-                        .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "50"  })
-                        .appendTo("#" + mark + "3");
-                    $("<span></span>")
-                        .text(" 업로드한 영수증의 상품과 포인트는?")
-                        .appendTo("#" + mark + "3");
-                    $("<hr></hr>").appendTo("#" + mark + "3");
-                   
-                    $("<img></img>")
-                        .attr({ src: "{{url_for('static', filename='img/ai.png')}}", height: "50" })   // 별도로 js파일을 만들면 변경해줘얗마 
-                        .appendTo("#" + mark + "3");
-                    $("<span></span>")
-                        .html(result)                   //
-                        .appendTo("#" + mark + "3");
-                    
-                },
-                error: function (xhr, status, error) {
-                    $("#message").text(error);
-                },
+                type: 'POST',
+                url: '/chatbot/load_messages',
+                data: { page: page },
+                success: function(response) {
+                    const messages = response.messages;
+                    console.log(messages)
+                    if (messages.length > 0) {
+                        for (let i = 0; i < messages.length; i++) {
+                            // Append messages to the container
+                            $(messages[i]).appendTo('#container');
+                        }
+                        page++;
+                    $("#container").scrollTop($("#container")[0].scrollHeight);
+                    }
+                }
             });
-    }
- */
-  /* -- // 품목 분석 (시간 미포함)
-    function receipt() {
-        let userInput = $("#userInput1").val();
-        $("#userInput1").val("");
-        let mark = "mark" + Date.now();
-        $("#container").scrollTop($("#container")[0].scrollHeight);
-        $.ajax({
-            type: "POST",
-            url: "/chatbot/receipt2",
-            data: { userInput: userInput },
-            success: function (result) {
-                let combinedString = "";
-                let obj = JSON.parse(result);
-                obj.forEach(function (element) {
-                    combinedString += element + ", ";
-                });
-                combinedString = combinedString.replace(/,\s*$/, "");
-                $("<div></div>")
-                    .attr({ class: "d-flex flex-row mt-1", id: mark + "1" })
-                    .prependTo("#container");
-                $("<div></div>")
-                    .attr({ class: "card w-75", id: mark + "2" })
-                    .appendTo("#" + mark + "1");
-                $("<div></div>")
-                    .attr({ class: "card-body", id: mark + "3" })
-                    .appendTo("#" + mark + "2");
-                $("<img></img>")
-                    .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "32" })
-                    .appendTo("#" + mark + "3");
-                $("<span></span>")
-                    .text(" " + userInput)
-                    .appendTo("#" + mark + "3");
-               //  $("<hr></hr>").appendTo("#" + mark + "3");   넣은 이유 
-                $("<div></div>")
-                    .attr({ class: "d-flex flex-row-reverse mt-1", id: mark + "6" })
-                    .prependTo("#container");
-                $("<div></div>")
-                    .attr({ class: "card bg-light text-dark w-75", id: mark + "7" })
-                    .appendTo("#" + mark + "6");
-                $("<div></div>")
-                    .attr({ class: "card-body text-end", id: mark + "8" })
-                    .appendTo("#" + mark + "7");
+        }
 
-                $("<span></span>")
-                    .attr({class: "text-center"})
-                    .html(" <h5><strong>친환경 상품매장 안내</strong></h5><hr>"+combinedString + " <br><br>주소를 작성하면 가까운 매장을 안내해 드립니다.")
-                    .appendTo("#" + mark + "8");
-                
+            // Initial loading of messages
+            loadNextMessages();
 
-                // 주소 텍스트 인풋 버튼 
-                $("<input></input>")
-                    .attr({
-                        type: "text",
-                        name: "addrInput",
-                        id: "addrInput",
-                        class: "form-control",
-                        onkeyup: "if(window.event.keyCode==13) {sendAddr()}",
-                        onfocus:"if(this.value=='(ex) 영등포구 영등포동') { this.value=''; this.style.opacity = 1; }",
-                        onblur:"if(this.value=='') { this.value='(ex) 서울시 영등포구 영등포동'; this.style.opacity = 0.7; }",
-                        placeholder:"(ex) 영등포구 영등포동"
-                    })
-                    .appendTo("#" + mark + "8");
-                $("<button></button>")
-                    .attr({ class: "btn btn-success", type: "submit", onclick: "sendAddr()" })
-                    // .attr({ class: "btn btn-primary", type: "submit", onclick: "sendAddr('" + mark + "')" })
-                    .text("전송")
-                    .appendTo("#" + mark + "7");
-            },
+            // Load next messages when the button is clicked
+            $('#nextButton').click(function() {
+                loadNextMessages();
+            });
         });
-    } */
 
     // 날짜 초기화 
     let lastProcessedDate = null;
@@ -182,13 +97,28 @@
                 $("<span></span>")
                     .html(combinedString)
                     .appendTo("#" + mark + "13");
+                
+                    const chatbotInputHtml = `
+                        <div class="d-flex flex-row-reverse mt-1" id="${mark}11">
+                            <div class="card bg-light text-dark w-75" id="${mark}12">
+                                <div class="card-body text-end" id="${mark}13">
+                                    <span>${combinedString}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="date text-end mt-2" id="${mark}0">
+                            <p class="text-end"> ${dateFormat(today)}</p>
+                        </div>
+                    `;
+                
                     $.ajax({
                             type: 'POST',
                             url: '/chatbot/savedatatodb', // 두 번째 엔드포인트를 지정합니다.
                             data: {
                                 currentDate: fullDate(currentDate), // currentDate를 다시 보냅니다.
                                 userQuestion : addrInput,
-                                chatbotAnswer : combinedString
+                                chatbotAnswer : combinedString,
+                                originData : chatbotInputHtml
                             }
                         });
                 
@@ -291,13 +221,54 @@
                         .text("전송")
                         .appendTo("#" + mark + "7");
                     
+                        // User input section
+                        const userInputHtml = `
+                            <div class="d-flex flex-row mt-1" id="${mark}2">
+                                <div class="card w-75" id="${mark}3">
+                                    <div class="card-body" id="${mark}4">
+                                        <img src="{{url_for('static', filename='img/person.png')}}" height="32" class="m-3">
+                                        <span class="text-start"> ${userInput}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="date text-start mt-2" id="${mark}0">
+                                <p class="text-start"> ${dateFormat(today)}</p>
+                            </div>
+                        `;
+
+                        // Chatbot input section
+                        const chatbotInputHtml = `
+                            <div class="d-flex flex-row-reverse mt-1" id="${mark}6">
+                                <div class="card bg-success text-dark w-75" id="${mark}7">
+                                    <div class="card-body text-end" id="${mark}8">
+                                        <span class="text-center">
+                                            <h5><strong>친환경 상품obj매장 안내</strong></h5>
+                                            <hr>${combinedString} <br><br>주소를 작성하면 가까운 매장을 안내해 드립니다.
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="date text-end mt-2" id="${mark}5">
+                                <p class="text-end"> ${dateFormat(today)}</p>
+                            </div>
+                        `;
+
+                        // 위에 같은 날짜가 있으면 저장되고 아니면 저장안됨.
+                        const userSectionHtml = currentDateString !== lastProcessedDate ? `
+                            <div class="date text-center mt-2" id="${mark}0">
+                                <p class="btn btn-outline-success"> ${dateFormatDate(today)}</p>
+                            </div>` : '';
+                                        
+                        const originData = chatbotInputHtml + userInputHtml + userSectionHtml;
+
                         $.ajax({
                             type: 'POST',
                             url: '/chatbot/savedatatodb', // 두 번째 엔드포인트를 지정합니다.
                             data: {
                                 currentDate: fullDate(currentDate), // currentDate를 다시 보냅니다.
                                 userQuestion : userInput,
-                                chatbotAnswer : `친환경 상품매장 안내 ${combinedString} 주소를 작성하면 가까운 매장을 안내해 드립니다`
+                                chatbotAnswer : `친환경 상품매장 안내 ${combinedString} 주소를 작성하면 가까운 매장을 안내해 드립니다`,
+                                originData : originData,
                             }
                         });
                 },
@@ -343,7 +314,7 @@
                     $("<p></p>")
                         .attr({'class': 'text-start'})
                         .text(" " + dateFormat(today)).prependTo("#" + mark + "1");  //대화 날짜 표기
-					 $("<div></div>")
+					$("<div></div>")
                         .attr({ class: "card w-100 text-start", id: mark + "2" })
                         .prependTo("#container");
                     $("<div></div>")
@@ -376,13 +347,49 @@
                         .html(result)                   
                         .appendTo("#" + mark + "8");
 
+                    // User input section
+                    const userInputHtml = `
+                        <div class="card w-100 text-start" id="${mark}2">
+                            <div class="card-body text-start" id="${mark}3">
+                                <img src="{{url_for('static', filename='img/person.png')}}" height="50" class="text-start m-3">
+                                <span class="text-start"> 업로드한 영수증에서 친환경 상품과 받을 수 있었던 에코포인트가 얼마야?</span>
+                            </div>
+                        </div>
+                        <div class="date text-end mt-2" id="${mark}1"> 
+                            <p class="text-start"> ${dateFormat(today)}</p>
+                        </div>
+                    `;
+
+                    // Chatbot input section
+                    const chatbotInputHtml = `
+                        <div class="d-flex flex-row-reverse mt-1" id="${mark}6">
+                            <div class="card bg-success text-white m-3" id="${mark}7">
+                                <div class="card-body text-end" id="${mark}8">
+                                    <span>${result}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="date text-start mt-2" id="${mark}5"> 
+                            <p class="text-end"> ${dateFormat(today)}</p>
+                        </div>
+                    `;
+
+                    // 위에 같은 날짜가 있으면 저장되고 아니면 저장안됨.
+                    const userSectionHtml = currentDateString !== lastProcessedDate ? `
+                        <div class="date text-center mt-2" id="${mark}0">
+                            <p class="btn btn-outline-success"> ${dateFormatDate(today)}</p>
+                        </div>` : '';
+                                    
+                    const originData = chatbotInputHtml + userInputHtml + userSectionHtml;
+
                         $.ajax({
                             type: 'POST',
                             url: '/chatbot/savedatatodb', // 두 번째 엔드포인트를 지정합니다.
                             data: {
                                 currentDate: fullDate(currentDate), // currentDate를 다시 보냅니다.
                                 userQuestion : `./static/data/${imageInputVal.files[0].name}`,
-                                chatbotAnswer : result.replace('<br>', '\n').replace('<h5>','').replace('</h5>', '').replace('<hr>', '').replace('<br>', '\n')
+                                chatbotAnswer : result.replace('<br>', '\n').replace('<h5>','').replace('</h5>', '').replace('<hr>', '').replace('<br>', '\n'),
+                                originData : originData,
                             }
                         });
 
@@ -464,14 +471,49 @@
                         .attr({'class': 'card-body text-end ', id: mark+'8'}).appendTo('#'+mark+'7');
                     $('<span></span>')
                         .text(obj.chatbot + ' ').appendTo('#'+mark+'8');
-                    
+
+                    // 유저 입력 html형식으로 저장
+                    const userInputHtml = `
+                        <div class="d-flex flex-row mt-1" id="${mark}2">
+                            <div class="card w-100 text-dark" id="${mark}3">
+                                <div class="card-body w-50" id="${mark}4">
+                                    <img src="/static/img/person.png" height="32" class="m-3">
+                                    <span> ${obj.user}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="date text-end mt-2" id="${mark}5">
+                            <p class="text-start"> ${dateFormat(today)}</p>
+                        </div>`;
+
+                    // 챗봇 입력 html형식으로 저장
+                    const chatbotInputHtml = `
+                        <div class="d-flex flex-row-reverse mt-1" id="${mark}6">
+                            <div class="card bg-success text-white m-3" id="${mark}7">
+                                <div class="card-body text-end" id="${mark}8">
+                                    <span> ${obj.chatbot} </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="date text-start mt-2" id="${mark}1">
+                            <p class="text-end"> ${dateFormat(today)}</p>
+                        </div>`;
+
+                    // 위에 같은 날짜가 있으면 저장되고 아니면 저장안됨.
+                    const userSectionHtml = currentDateString !== lastProcessedDate ? `
+                        <div class="date text-center mt-2" id="${mark}0">
+                            <p class="btn btn-outline-success"> ${dateFormatDate(today)}</p>
+                        </div>` : '';
+                                    
+                    const originData =  chatbotInputHtml + userInputHtml + userSectionHtml;
                     $.ajax({
                         type: 'POST',
                         url: '/chatbot/savedatatodb', // 두 번째 엔드포인트를 지정합니다.
                         data: {
                             currentDate: fullDate(currentDate), // currentDate를 다시 보냅니다.
                             userQuestion : obj.user,
-                            chatbotAnswer : obj.chatbot
+                            chatbotAnswer : obj.chatbot,
+                            originData : originData,
                         }
                     });
                 }
@@ -518,7 +560,7 @@
             return year + '-' + month + '-' + day + '\n' + hour + ':' + minute + ' ' + week + '요일'
 
         }
-        
+
 </script>
 {% endblock %}
 {% block subtitle %}소비패턴에 따른 녹색금융 추천
@@ -552,30 +594,27 @@
         </div>
     </div>
 
-<div class="input-group outer-container mt-3 mb-2" style="width: 100%;">
-    <span class="input-group-text"style="width: 200px;"><img src="../static/img/ai.png" height="32" style="margin-right: 10px;"/>녹색금융 알아보기</span>
-    <input type="text" class="form-control" name="userInput" id="userInput"
-            onkeyup="if(window.event.keyCode==13) {send()}" 
-            onfocus="if(this.value=='안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.') { this.value=''; this.style.opacity = 1; }"
-            onblur="if(this.value=='') { this.value='안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.'; this.style.opacity = 0.7; }"
-            placeholder="안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.">
-    <button class="btn btn-success" type="submit" onclick="send()">전송</button>
-</div>
+    <div class="input-group outer-container mt-3 mb-2" style="width: 100%;">
+        <span class="input-group-text"style="width: 200px;"><img src="../static/img/ai.png" height="32" style="margin-right: 10px;"/>녹색금융 알아보기</span>
+        <input type="text" class="form-control" name="userInput" id="userInput"
+                onkeyup="if(window.event.keyCode==13) {send()}" 
+                onfocus="if(this.value=='안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.') { this.value=''; this.style.opacity = 1; }"
+                onblur="if(this.value=='') { this.value='안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.'; this.style.opacity = 0.7; }"
+                placeholder="안녕하세요~ 녹색금융 챗봇 그린이 입니다. 원하는 질문을 적어보세요.">
+        <button class="btn btn-success" type="submit" onclick="send()">전송</button>
+        <button id="nextButton" class="btn btn-primary">다음 5개</button>
+    </div>
 
-
-
-
-
-<div class="d-flex justify-content-left" style="margin-bottom: 60px; margin: top 100px;">
-    <div class="container" id="container" 
-        style="padding-left: 100px; padding-right: 100px; color: #2c3731; width: 1000px; height: 500px; border: 4px solid; border-radius: 30px; overflow: auto">
-    <div class="d-flex flex-row mt-1">
-</div>
-    <!-- <img src="../static/img/girl.png"  style=" 
-    position: absolute; left: 1250px; top: 480px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
-    <img src="../static/img/man.png" style="
-    position: absolute; left: 270px; top: 480px; z-index: 1; height: auto; width: 300px;" float="rightx;" />
-    </div> -->
-</div>
+    <div class="d-flex justify-content-left" style="margin-bottom: 60px; margin: top 100px;">
+        <div class="container" id="container" 
+            style="padding-left: 100px; padding-right: 100px; color: #2c3731; width: 1000px; height: 500px; border: 4px solid; border-radius: 30px; overflow: auto">
+            <div class="d-flex flex-row mt-1">
+            </div>
+        </div>
+    <script>
+        // const chatHistory = {{chat_history|tojson|safe}};
+        // console.log(chatHistory);
+        // $('#container').html(chatHistory);
+    </script>
 {% endblock %}
 

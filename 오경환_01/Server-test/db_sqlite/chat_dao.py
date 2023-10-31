@@ -40,7 +40,7 @@ def insert_chat(params):
     conn = sqlite3.connect('./db_sqlite/project.db')
     cur = conn.cursor()
 
-    sql = 'insert into chat(uid, u_question, c_answer, c_date) values(?, ?, ?, ?)'
+    sql = 'insert into chat(uid, u_question, c_answer, c_date, origin_data) values(?, ?, ?, ?, ?)'
     cur.execute(sql, params)
     conn.commit()
 
