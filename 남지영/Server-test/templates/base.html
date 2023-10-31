@@ -3,15 +3,18 @@
 <head>
     <title>{% block title %}Green finance{% endblock %}</title>
 
-
-
+    <script type="module" src="new_tab_page.js"></script>
+    <link rel="stylesheet" href="chrome://resources/css/text_defaults_md.css">
+    <link rel="stylesheet" href="chrome://theme/colors.css?sets=ui,chrome">
+    <link rel="stylesheet" href="shared_vars.css">
+    <script type="module" src="./lazy_load.js"></script>
+    
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="shortcut icon" type="image/x-icon" href="/static/img/ai.png">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">  <!--반응형 웹 -->
+    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="{{url_for('static', filename='favicon.ico')}}"> 
@@ -50,13 +53,99 @@
 			transform: rotateY(180deg);
 		}
 	</style>
+<style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    .row::after {
+      content: "";
+      clear: both;
+      display: block;
+    }
+    
+    [class*="col-"] {
+      float: left;
+      padding: 15px;
+    }
+    
+    html {
+      font-family: "Lucida Sans", sans-serif;
+    }
+    
+    .header {
+      background-color: white;
+      color: #ffffff;
+      padding: 15px;
+    }
+    
+    .menu ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .menu li {
+      padding: 8px;
+      margin-bottom: 7px;
+      background-color: white;
+      color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    
+    .menu li:hover {
+      background-color: white;
+    }
+    
+    .aside {
+      background-color: white;
+      padding: 15px;
+      color: #ffffff;
+      text-align: center;
+      font-size: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    
+    .footer {
+      background-color: white;
+      color: #ffffff;
+      text-align: center;
+      font-size: 12px;
+      padding: 15px;
+    }
+    
+    /* For desktop: */
+    .col-1 {width: 8.33%;}
+    .col-2 {width: 16.66%;}
+    .col-3 {width: 25%;}
+    .col-4 {width: 33.33%;}
+    .col-5 {width: 41.66%;}
+    .col-6 {width: 50%;}
+    .col-7 {width: 58.33%;}
+    .col-8 {width: 66.66%;}
+    .col-9 {width: 75%;}
+    .col-10 {width: 83.33%;}
+    .col-11 {width: 91.66%;}
+    .col-12 {width: 100%;}
+    
+    @media only screen and (max-width: 1200px) {
+      /* For mobile phones: */
+      [class*="col-"] {
+        width: 100%;
+      }
+    }
+    </style>
+
 </head>
 
 <body>
 
+    
+ 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--                                                   옆 라인 오프캔버스                                                     -->
 
-<div class="offcanvas offcanvas-end " style="width: 270px;" id="canvasdemo">
+<div class="offcanvas offcanvas-end " style="width: 270px; " id="canvasdemo">
     <div class="offcanvas-header">
         <button type="button" class="btn-close tex" data-bs-dismiss="offcanvas"></button>
     </div>

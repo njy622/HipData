@@ -108,12 +108,13 @@ if __name__ == '__main__':
 @chatbot_bp.route('/savedatatodb', methods=['POST'])
 def save_data_to_db():
     current_date = request.form['currentDate']
+    print(current_date)
     user_question = request.form['userQuestion']
     chatbot_answer = request.form['chatbotAnswer']
+    chatbot_answer = request.form['chatbotAnswer'].replace('<br>', '\n')
     uid = session['uid']
     params = (uid, user_question, chatbot_answer, current_date)
     cdb.insert_chat(params)
-    return ' '
     
 
 
