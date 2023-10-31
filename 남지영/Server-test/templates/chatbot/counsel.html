@@ -406,22 +406,18 @@ function upload() {
 
 {% block content %}
 
-<div class="row" style="margin: -10px;">
-    <div class="col-6">  <h3>소비패턴에 따른 녹색금융 추천</h3> </div>
-    <div class="col-2">
+<div class="row" style="margin: -10px; margin-top: -40px; width: 900px;">
+    <div class="col-6">  <h3 style="color: MediumSeaGreen;"><i class="fa-solid fa-headset" style="margin-right: 10px;"></i><strong>소비패턴에 따른 녹색금융 추천</strong></h3> </div>
+    <div class="col-6">
         <a href="/crawling/bank"><button class="btn btn-outline-success" style="width:max-content;">은행상품 안내</button></a>
-    </div>
-    <div class="col-2">
         <a href="/crawling/finance"><button class="btn btn-outline-success "style="width:max-content;">투자상품 안내</button></a>
-    </div>
-    <div class="col-2">
         <a href="/crawling/card"><button class="btn btn-outline-success "style="width:max-content;">그린카드 안내</button></a>
     </div>
 </div>
-<hr style="margin-top: -10px;">
+<hr style="margin-top: -10px; width: 900px;">
 <div class="row" style="margin-top: -10px; margin-bottom: -10px;">
     <div class="col-6">
-        <div class="card btn-group" style="width: 400px;">
+        <div class="card btn-group" style="width: auto;">
             <span style="color: black; font-size: 20px;"><i class="fa-solid fa-receipt" style="margin-left: 20px; margin-right: 10px;"></i>영수증으로 알아보는 에코포인트 계산기</span>
             <div class="card-body btn-group" ">
                 <input type="file" id="image" class="form-control">
@@ -431,7 +427,7 @@ function upload() {
         </div>
     </div>
     <div class="col-6">
-        <div class="card btn-group" style="width: 400x;">
+        <div class="card btn-group" style="width: auto;">
             <span style="color: black; font-size: 20px;"><i class="fa-solid fa-leaf"  style="margin-left: 20px; margin-right: 10px;"></i>친환경 상품인지 알아보기</span>
             <div class="card-body btn-group">
                 <input type="text" class="form-control" name="userInput" id="userInput1"
