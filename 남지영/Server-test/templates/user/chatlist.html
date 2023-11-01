@@ -52,8 +52,16 @@
             </tr>
             {% for chat in chat_list %}
                 <tr>
-                    <td style="color: rgb(43, 92, 66);">{{chat[2]}}</td>
-                    <td style="color: rgb(43, 92, 66);">{{chat[3]}}</td>
+                <td style="color: rgb(43, 92, 66);">
+                    {% if 'jpg' in chat[2].split('/')[-1]%}
+                        <img src="../static/upload/{{chat[2].split('/')[-1]}}" style="width: 100px;">{{chat[2].split('/')[-1]}}
+                    {% elif 'png' in chat[2].split('/')[-1] %}
+                        <img src="../static/upload/{{chat[2].split('/')[-1]}}" style="width: 100px;">{{chat[2].split('/')[-1]}}
+                    {% else %}
+                        {{chat[2]}}
+                    {% endif %}
+                        </td>
+                                    <td style="color: rgb(43, 92, 66);">{{chat[3]}}</td>
                     <td style="color: rgb(43, 92, 66);">{{chat[4]}}</td>
                 </tr>
             {% endfor %}

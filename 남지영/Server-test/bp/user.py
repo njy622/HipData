@@ -125,6 +125,9 @@ def chatlist():
     # 페이지 번호 목록 생성 (10페이지씩 묶음)
     pages = [i for i in range(start_page, num_pages + 1 if (num_pages - start_page) < 10 else start_page + 10)]
 
+
+   
+
     return render_template('user/chatlist.html', chat_list=current_page_data, menu=menu, uid=uid, pages=pages, page=page, num_pages=num_pages, field=field, query=query)
 
 

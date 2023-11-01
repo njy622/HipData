@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <html lang="ko">
 <head>
     <title>{% block title %}Green finance{% endblock %}</title>
@@ -46,89 +46,8 @@
 			transform: rotateY(180deg);
 		}
 	</style>
-<style>
-    * {
-      box-sizing: border-box;
-    }
-    
-    .row::after {
-      content: "";
-      clear: both;
-      display: block;
-    }
-    
-    [class*="col-"] {
-      float: left;
-      padding: 15px;
-    }
-    
-    html {
-      font-family: "Lucida Sans", sans-serif;
-    }
-    
-    .header {
-      background-color: white;
-      color: #ffffff;
-      padding: 15px;
-    }
-    
-    .menu ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-    
-    .menu li {
-      padding: 8px;
-      margin-bottom: 7px;
-      background-color: white;
-      color: #ffffff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    }
-    
-    .menu li:hover {
-      background-color: white;
-    }
-    
-    .aside {
-      background-color: white;
-      padding: 15px;
-      color: #ffffff;
-      text-align: center;
-      font-size: 14px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    }
-    
-    .footer {
-      background-color: white;
-      color: #ffffff;
-      text-align: center;
-      font-size: 12px;
-      padding: 15px;
-    }
-    
-    /* For desktop: */
-    .col-1 {width: 8.33%;}
-    .col-2 {width: 16.66%;}
-    .col-3 {width: 25%;}
-    .col-4 {width: 33.33%;}
-    .col-5 {width: 41.66%;}
-    .col-6 {width: 50%;}
-    .col-7 {width: 58.33%;}
-    .col-8 {width: 66.66%;}
-    .col-9 {width: 75%;}
-    .col-10 {width: 83.33%;}
-    .col-11 {width: 91.66%;}
-    .col-12 {width: 100%;}
-    
-    @media only screen and (max-width: 1200px) {
-      /* For mobile phones: */
-      [class*="col-"] {
-        width: 100%;
-      }
-    }
-    </style>
 
+   
 </head>
 
 <body>
@@ -343,6 +262,10 @@
                         <a class="nav-link" href="#"><i class="fa-brands fa-js fa-2xl"></i>&nbsp;&nbsp;JS</a>
                     </li>
                     <div class="dropdown-divider"></div>
+                    <li>
+                        <br><br><br><br>
+                        <a  data-bs-toggle="tooltip" title="무엇이든 물어보세요!" href="/chatbot/counsel"><img src="/static/img/aichat.png"style="width: 100px;"></a>
+                    </li>
                 </ul>
             </div>
             <div class="col-9 mt-3">
@@ -359,9 +282,6 @@
     {% block additional_body %}{% endblock %}
 </body>
 <footer>
-<div style="position: relative;">
-    <a href="/chatbot/counsel"><img src="/static/img/aichat.png"style=" margin-left: 1000px; width: 100px; margin-bottom: 100px;"></a>
-</div>
     <nav class="navbar bg-light fixed-bottom">
         <div class="justify-content-start">
             <span class="navbar-text text-start" style="margin-left: 20px;">

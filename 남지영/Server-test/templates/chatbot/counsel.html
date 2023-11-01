@@ -201,7 +201,7 @@ function sendAddr() {
                     .appendTo("#" + mark + "7");
 
                 $("<span></span>")
-                    .attr({class: "text-center color-white"})
+                    .attr({class: "text-center", style:"color-white"})
                     .html(" <h5><strong>친환경 상품obj매장 안내</strong></h5><hr>"+combinedString + " <br><br>주소를 작성하면 가까운 매장을 안내해 드립니다.")
                     .appendTo("#" + mark + "8");
                 
@@ -248,7 +248,7 @@ function sendAddr() {
                             <div class="d-flex flex-row-reverse mt-1" id="${mark}6">
                                 <div class="card bg-success text-dark w-75" id="${mark}7">
                                     <div class="card-body text-end" id="${mark}8">
-                                        <span class="text-center">
+                                        <span class="text-center"">
                                             <h5><strong>친환경 상품obj매장 안내</strong></h5>
                                             <hr>${combinedString} <br><br>주소를 작성하면 가까운 매장을 안내해 드립니다.
                                         </span>
@@ -572,7 +572,7 @@ function upload() {
 
 {% block content %}
 
-<div class="row" style="margin: -10px; margin-top: -40px; width: 900px;">
+<div class="row" style="width: auto;">
     <div class="col-6">  <h3 style="color: MediumSeaGreen;"><i class="fa-solid fa-headset" style="margin-right: 10px;"></i><strong>소비패턴에 따른 녹색금융 추천</strong></h3> </div>
     <div class="col-6">
         <a href="/crawling/bank"><button class="btn btn-outline-success" style="width:max-content;">은행상품 안내</button></a>
@@ -580,7 +580,7 @@ function upload() {
         <a href="/crawling/card"><button class="btn btn-outline-success "style="width:max-content;">그린카드 안내</button></a>
     </div>
 </div>
-<hr style="margin-top: -10px; width: 900px;">
+<hr style="width: auto;">
 <div class="row" style="margin-top: -10px; margin-bottom: -10px;">
     <div class="col-6">
         <div class="card btn-group" style="width: auto;">
