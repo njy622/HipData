@@ -1,12 +1,9 @@
-from flask import Blueprint, render_template, request, current_app, jsonify,  session
+from flask import Blueprint, render_template, request, current_app, jsonify, session
 import json, os
 import bardapi, openai
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
-import pandas as pd
 import util.item_analysis as item
 import db_sqlite.chat_dao as cdb
 
@@ -17,12 +14,6 @@ menu = {'ho':0, 'us':0, 'gr':0, 'cr':0, 'ma':0,'cb':1,  'sc':0}
 
 #############################################녹색금융####################################################################
 
-from flask import Flask, render_template, request, current_app, jsonify
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
-import json
-import os
-import pandas as pd
 # tesseract
 import util.tesseract_util as tess
 # receipt
@@ -30,7 +21,7 @@ import util.receipt_util as rece
 # item_analysis
 import util.item_analysis as item
 
-@chatbot_bp.before_app_request
+@chatbot_bp.before_app_first_request
 def before_first_request():
     global model, wdf
     model = SentenceTransformer('jhgan/ko-sroberta-multitask')
@@ -39,11 +30,16 @@ def before_first_request():
     wdf.embedding = wdf.embedding.apply(json.loads)
 
 
+items_per_page = 5
 
 @chatbot_bp.route('/counsel', methods=['GET', 'POST'])
 def counsel():
     if request.method == 'GET':
-        return render_template('chatbot/counsel.html', menu=menu)
+        uid = session['uid']
+        chat_history_ = cdb.get_chat_history_reverse(uid)
+        chat_history = [ item[-1] for item in chat_history_[0:5] ]
+        print(chat_history)
+        return render_template('chatbot/counsel.html', menu=menu, chat_history=chat_history)
     else:
         user_input = request.form['userInput']
         embedding = model.encode(user_input)
@@ -54,6 +50,17 @@ def counsel():
             'category': answer.구분, 'user': user_input, 'chatbot': answer.챗봇, 'similarity': answer.유사도
         }
         return json.dumps(result)
+
+@chatbot_bp.route('/load_messages', methods=['POST'])
+def load_messages():
+    uid = session['uid']
+    chat_history_ = cdb.get_chat_history_reverse(uid)
+    page = int(request.form.get('page', 0))
+    messages_per_page = 5
+    start = page * messages_per_page
+    end = (page + 1) * messages_per_page
+    messages = [ item[-1] for item in chat_history_[start:end] ]
+    return jsonify(messages=messages)
 
 # 영수증 이미지 입력받아  포인트를 친환경 상품명과 리턴
 
@@ -110,11 +117,12 @@ def save_data_to_db():
     current_date = request.form['currentDate']
     print(current_date)
     user_question = request.form['userQuestion']
-    chatbot_answer = request.form['chatbotAnswer']
     chatbot_answer = request.form['chatbotAnswer'].replace('<br>', '\n')
+    origin_data = request.form['originData']
     uid = session['uid']
-    params = (uid, user_question, chatbot_answer, current_date)
+    params = (uid, user_question, chatbot_answer, current_date, origin_data)
     cdb.insert_chat(params)
+    return ' '
     
 
 
