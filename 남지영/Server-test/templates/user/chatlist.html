@@ -7,6 +7,22 @@
         console.log("search()", field, query);
         location.href = '/user/chatlist?field=' + field + '&query=' + query;
     }    	
+
+
+
+
+
+/* onmouseover */
+function bigImg(x) {
+  x.style.height = "300px";
+  x.style.width = "300px";
+}
+
+function normalImg(x) {
+  x.style.height = "50px";
+  x.style.width = "50px";
+}
+
 </script>
 {% endblock %}
 {% block subtitle %}
@@ -54,9 +70,9 @@
                 <tr>
                 <td style="color: rgb(43, 92, 66);">
                     {% if 'jpg' in chat[2].split('/')[-1]%}         <!-- 이미지파일 일때 이미지로 불러오고 -->
-                        <img src="../static/upload/{{chat[2].split('/')[-1]}}" style="width: 100px;">{{chat[2].split('/')[-1]}}
+                        <img onmouseover="bigImg(this)" onmouseout="normalImg(this)" border="0"  src="../static/upload/{{chat[2].split('/')[-1]}}" style="width: 100px;">{{chat[2].split('/')[-1]}}
                     {% elif 'png' in chat[2].split('/')[-1] %}
-                        <img src="../static/upload/{{chat[2].split('/')[-1]}}" style="width: 100px;">{{chat[2].split('/')[-1]}}
+                        <img  onmouseover="bigImg(this)" onmouseout="normalImg(this)" border="0" src="../static/upload/{{chat[2].split('/')[-1]}}" style="width: 100px;">{{chat[2].split('/')[-1]}}
                     {% else %}
                         {{chat[2]}}                 <!-- 텍스트 일때 텍스트로 출력 -->
                     {% endif %}
