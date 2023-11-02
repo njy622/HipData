@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, current_app, jsonify, session
+from flask import Blueprint, render_template, request, current_app, jsonify, session, flash, redirect
 import json, os
 import bardapi, openai
 import pandas as pd
@@ -44,7 +44,11 @@ items_per_page = 5
 @chatbot_bp.route('/counsel', methods=['GET', 'POST'])
 def counsel():
     if request.method == 'GET':
-        uid = session['uid']
+        try:
+            uid = session['uid']
+        except:
+            flash('로그인 해주세요')
+            return redirect('/user/login')
         chat_history_ = cdb.get_chat_history_reverse(uid)
         chat_history = [ item[-1] for item in chat_history_[0:5] ]
         print(chat_history)
