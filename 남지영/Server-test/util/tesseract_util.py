@@ -8,6 +8,7 @@ def get_item_from_img(filename):
     image = cv2.imread(f'./static/upload/{filename}')
     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     receipt_data = pytesseract.image_to_string(rgb_image, lang='kor')
+    print(receipt_data)
     return receipt_data
 
 

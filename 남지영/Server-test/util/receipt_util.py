@@ -10,14 +10,13 @@ def receipt_get_point(receipt_data):
     # 영수증 전처리
     receipt = receipt_data.split('\n')
     receipt_df = pd.DataFrame(receipt, columns=['title'])
-    receipt_df['title'] = receipt_df['title'].apply(lambda x: re.sub('[^가-힣]', '', x))
+    receipt_df['title'] = receipt_df['title'].apply(lambda x: re.sub('[^가-힣 ]', '', x))
     receipt_df = receipt_df[receipt_df.title != '']
     receipt_df.set_index('title', inplace=True)
     receipt_df.reset_index(inplace=True)
 
     # 비교 데이터프레임 호출
     list_df = pd.read_csv('./static/data/eco_product.csv')
-
     # TF-IDF 벡터화
     tv = TfidfVectorizer()
     receipt_tv = tv.fit_transform(receipt_df['title'])
@@ -36,8 +35,8 @@ def receipt_get_point(receipt_data):
     receipt_df['point'] = list_df.loc[most_similar_indices, 'point'].values
     receipt_df['title'] = list_df.loc[most_similar_indices, 'title'].values
 
-    # cosine_similarity의 값이 1.0인 경우만 추출
-    receipt_df = receipt_df[receipt_df['cosine_similarity'] == 1.0]
+    # cosine_similarity의 값이 0.5이거나 이상인 경우만 추출
+    receipt_df = receipt_df[receipt_df['cosine_similarity'] >= 0.5]
 
     # 결과
     receipt_list = []
