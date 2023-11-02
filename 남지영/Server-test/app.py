@@ -22,7 +22,6 @@ app.register_blueprint(green_service_bp, url_prefix='/greenservice')
 
 
 
-
 """ 프로파일 정보 """
 @app.route('/changeProfile', methods=['GET','POST'])
 def change_profile():
@@ -64,4 +63,3 @@ def home():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
-    # app.run(debug=True) 

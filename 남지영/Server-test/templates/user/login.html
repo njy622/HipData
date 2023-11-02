@@ -16,27 +16,24 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm bg-white navbar-dark fixed-top">
-        <div class="container-fluid">
-            <a href="/"><img src="{{ url_for('static', filename='img/03.logo_black.png') }}" style="height:60px;" class="rounded-3 mx-2"></a>
-            <div class="p-2 bg-white justify-content-center rounded">
-                <img src="/static/img/03.home_green.jpg" style="width: 1500px; height: 200px;">
-            </div>
-        </div>
-    </nav>
     <div class="container" style="margin-top: 300px;">
         <div class="row">
             <div class="col-4"></div>
             <div class="col-4">
-                <h3>
-                    <strong>로그인</strong>
-                    <span style="font-size: 0.6em;">
-                        <a href="/user/register" class="ms-5"><i class="fas fa-user-plus"></i> 회원가입</a>
-                    </span>
-                </h3>
+                <div class="d-flex align-content-center justify-content-center mb-3">
+                    <a href="/"><img src="{{ url_for('static', filename='img/03.logo_black.png') }}" style="height:60px;" class="rounded-3 mx-2"></a>
+                </div>
                 <hr>
                 <form action="/user/login" method="post">
-                    <table class="table table-borderless">
+                    <table class="table table-borderless d-flex justify-content-between align-bottom">
+                        <tr>
+                            <td>
+                                <h3><strong>로그인</strong></h3>
+                            </td>
+                            <td style="text-align: right;">
+                                <h5><a href="/user/register"><i class="fas fa-user-plus"></i> 회원가입</a></h5>
+                            </td>
+                        </tr>
                         <tr>
                             <td><label for="uid" class="col-form-label">아이디</label></td>
                             <td><input type="text" name="uid" id="uid" class="form-control" placeholder="아이디"></td>
@@ -57,7 +54,7 @@
             <div class="col-4"></div>
         </div>
     </div>
-  
+
 </body>
 <footer>
     <nav class="navbar bg-light fixed-bottom">

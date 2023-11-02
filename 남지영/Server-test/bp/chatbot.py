@@ -1,9 +1,12 @@
-from flask import Blueprint, render_template, request, current_app, jsonify, session
+from flask import Blueprint, render_template, request, current_app, jsonify, session, flash, redirect
 import json, os
 import bardapi, openai
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import pandas as pd
 import util.item_analysis as item
 import db_sqlite.chat_dao as cdb
 
@@ -14,6 +17,12 @@ menu = {'ho':0, 'us':0, 'gr':0, 'cr':0, 'ma':0,'cb':1,  'sc':0}
 
 #############################################녹색금융####################################################################
 
+from flask import Flask, render_template, request, current_app, jsonify
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import json
+import os
+import pandas as pd
 # tesseract
 import util.tesseract_util as tess
 # receipt
@@ -21,8 +30,8 @@ import util.receipt_util as rece
 # item_analysis
 import util.item_analysis as item
 
-@chatbot_bp.before_app_request
-def before_request():
+@chatbot_bp.before_app_first_request
+def before_first_request():
     global model, wdf
     model = SentenceTransformer('jhgan/ko-sroberta-multitask')
     filename = os.path.join(current_app.static_folder, 'core_data_mod.csv')
@@ -35,7 +44,11 @@ items_per_page = 5
 @chatbot_bp.route('/counsel', methods=['GET', 'POST'])
 def counsel():
     if request.method == 'GET':
-        uid = session['uid']
+        try:
+            uid = session['uid']
+        except:
+            flash('로그인 해주세요')
+            return redirect('/user/login')
         chat_history_ = cdb.get_chat_history_reverse(uid)
         chat_history = [ item[-1] for item in chat_history_[0:5] ]
         print(chat_history)
