@@ -169,7 +169,8 @@ function sendAddr() {
                     .attr({'class': 'text-start'})
                     .text(" " + dateFormat(today)).appendTo("#" + mark + "0");
                 $("<div></div>")
-                    .attr({ class: "d-flex flex-row mt-1", id: mark + "2" })
+                    .attr({ class: "d-flex flex-row mt-1",
+                            style: "height:auto", id: mark + "2" })
                     .prependTo("#container");
                 $("<div></div>")
                     .attr({ class: "card w-75", id: mark + "3" })
@@ -178,7 +179,7 @@ function sendAddr() {
                     .attr({ class: "card-body", id: mark + "4" })
                     .appendTo("#" + mark + "3");
                 $("<img></img>")
-                    .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "32", class:'m-3'})
+                    .attr({ src: "{{url_for('static', filename='img/person.png')}}", height: "32"})
                     .appendTo("#" + mark + "4");
                 $("<span></span>")
                     .text(" " + userInput)
@@ -246,7 +247,7 @@ function sendAddr() {
                         // Chatbot input section
                         const chatbotInputHtml = `
                             <div class="d-flex flex-row-reverse mt-1" id="${mark}6">
-                                <div class="card bg-success text-dark w-75" id="${mark}7">
+                                <div class="card bg-white text-dark w-75" id="${mark}7">
                                     <div class="card-body text-end" id="${mark}8">
                                         <span class="text-center">
                                             <h5><strong>친환경 상품obj매장 안내</strong></h5>
@@ -347,7 +348,7 @@ function upload() {
                     .attr({'class': 'd-flex flex-row-reverse mt-1', id: mark+'6'})
                     .prependTo('#container');
                 $('<div></div>')
-                    .attr({'class': 'card bg-success text-white m-3', id: mark+'7'}).appendTo('#'+mark+'6');
+                    .attr({'class': 'card bg-success text-white', id: mark+'7'}).appendTo('#'+mark+'6');
                 $('<div></div>')
                     .attr({'class': 'card-body text-end ', id: mark+'8'}).appendTo('#'+mark+'7');
                 $("<span></span>")
@@ -370,7 +371,7 @@ function upload() {
                     // Chatbot input section
                     const chatbotInputHtml = `
                         <div class="d-flex flex-row-reverse mt-1" id="${mark}6">
-                            <div class="card bg-success text-white m-3" id="${mark}7">
+                            <div class="card bg-success text-white" id="${mark}7">
                                 <div class="card-body text-end" id="${mark}8">
                                     <span>${result}</span>
                                 </div>
@@ -451,7 +452,7 @@ function upload() {
                     .attr({'class': 'text-start'})
                     .text(" " + dateFormat(today)).appendTo("#" + mark + "5");  //대화 날짜 표기
                 $('<div></div>')
-                    .attr({'class': 'd-flex flex-row mt-1', id: mark+'2'})
+                    .attr({'class': 'd-flex flex-row', id: mark+'2'})
                     .prependTo('#container');
                 $('<div></div>')
                     .attr({'class': 'card w-100  text-dark', id: mark+'3'}).appendTo('#'+mark+'2');
@@ -473,7 +474,7 @@ function upload() {
                     .attr({'class': 'd-flex flex-row-reverse mt-1', id: mark+'6'})
                     .prependTo('#container');
                 $('<div></div>')
-                    .attr({'class': 'card bg-success text-white m-3', id: mark+'7'}).appendTo('#'+mark+'6');
+                    .attr({'class': 'card bg-success text-white', id: mark+'7'}).appendTo('#'+mark+'6');
                 $('<div></div>')
                     .attr({'class': 'card-body text-end ', id: mark+'8'}).appendTo('#'+mark+'7');
                 $('<span></span>')
@@ -484,7 +485,7 @@ function upload() {
                         <div class="d-flex flex-row mt-1" id="${mark}2">
                             <div class="card w-100 text-dark" id="${mark}3">
                                 <div class="card-body w-50" id="${mark}4">
-                                    <img src="/static/img/person.png" height="32" class="m-3">
+                                    <img src="/static/img/person.png" height="32">
                                     <span> ${obj.user}</span>
                                 </div>
                             </div>
