@@ -57,13 +57,7 @@
             <div class="col-4"></div>
         </div>
     </div>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <script>
-                alert("{{ messages[-1] }}")
-            </script>
-        {% endif %}
-    {% endwith %}
+  
 </body>
 <footer>
     <nav class="navbar bg-light fixed-bottom">
