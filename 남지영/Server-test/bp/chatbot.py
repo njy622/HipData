@@ -21,8 +21,8 @@ import util.receipt_util as rece
 # item_analysis
 import util.item_analysis as item
 
-@chatbot_bp.before_app_first_request
-def before_first_request():
+@chatbot_bp.before_app_request
+def before_request():
     global model, wdf
     model = SentenceTransformer('jhgan/ko-sroberta-multitask')
     filename = os.path.join(current_app.static_folder, 'core_data_mod.csv')
