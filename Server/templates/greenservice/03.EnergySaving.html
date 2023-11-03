@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+{% block title %}소비패턴에 따른 녹색금융 추천{% endblock %}
+{% block additional_head %}
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+{% endblock %}
+{% block subtitle %}{% endblock %}
+{% block content %}
+<body>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col">
+                <div class="sub-tit-wrap">
+                    <h2 class="sub-tit">에너지절약</h2>
+                    <p class="sub-desc">생활 에너지 절약하고 <strong>에코머니 포인트로 돌려받아요!</strong></p>
+                </div>
+
+                <!-- energy-concervation -->
+                <div class="energy-concervation">
+
+                    <!-- sub-sponsored-by -->
+                    <div class="sub-sponsored-by contents-area-gray">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="img-box">
+                                    <img src="{{url_for('static',filename='img/02.energysaving.jpg')}}" alt="" width="500">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="title-type01"><strong class="highlight">전기, 상수도, 도시가스 </strong>절약하면<br> 인센티브를 지급받을 수 있어요!</p>
+                                <p>탄소포인트제/에코마일리지는 기후위기 대응을 위하여 온실가스를 줄일 수 있도록 가정, 상업, 아파트 단지 등에서 전기, 상수도, 도시가스의 사용량을 절감하고 감축률에 따라 환경부 및 지자체에서 인센티브를 제공하는 국민 참여형 온실가스 감축 실천 프로그램입니다.</p>
+                                <p><strong>그린카드 발급 후 탄소포인트제/에코마일리지에 가입하시면</strong> 에너지 절약 인센티브를 에코머니 포인트로 받을 수 있습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //sub-sponsored-by -->
+
+                    <h3 class="title-type01">탄소포인트제(전국) | 제도 소개</h3>
+
+                    <div class="tab-menu-contents">
+                        <!-- 탄소포인트제(전국) -->
+                        <div class="active">
+
+                            <ul class="sub-list">
+                                <li>
+                                    <h5 class="sub-heading">개요</h5>
+                                    <ul>
+                                        <li>환경부에서 운영하는 전국민대상 온실가스 감축 시민 참여 프로그램</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h5 class="sub-heading">가입대상</h5>
+                                    <ul>
+                                        <li>전 국민(서울시민 제외)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h5 class="sub-heading">인센티브 지급</h5>
+                                    <ul>
+                                        <li>가정 내 사용하는 에너지 항목(전기, 상수도, 도시가스)을 과거 1 ~ 2년간 월별 평균 사용량과 현재 사용량을 비교하여 절감비율에 따라 에코머니 포인트 지급(연간 최대 10만점)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h5 class="sub-heading">가입방법</h5>
+                                    <ul>
+                                        <li>
+                                            <strong>오프라인</strong>
+                                            <ul>
+                                                <li>탄소포인트제 참여 신청서 작성 후 지방자치단체(전국 시청, 구청 주민센터)에 제출</li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <strong>온라인</strong>
+                                            <ul>
+                                                <li>한국환경공단 탄소포인트제 홈페이지에서 가입
+                                                    <a class="btn-mini type2" href="https://cpoint.or.kr" target="_blank">홈페이지 바로가기</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h5 class="sub-heading">지급기준</h5>
+                                    <ul>
+                                        <li>온실가스 감축률에 따라 탄소포인트 부여 (개인/연 2회)</li>
+                                        <li>1 탄소포인트 = 최대 2원</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h5 class="sub-heading">감축 인센티브</h5>
+                                    <ul>
+                                        <li>감축률 5% 이상인 참여자에게 지급</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <div class="info-table">
+                                <table class="table">
+                                    <caption>감축 인센티브 표</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">감축률</th>
+                                            <th scope="col">전기</th>
+                                            <th scope="col">상수도</th>
+                                            <th scope="col">도시가스</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>5% 이상 ~ 10% 미만</td>
+                                            <td>5,000 P</td>
+                                            <td>750 P</td>
+                                            <td>3,000 P</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10% 이상 ~ 15% 미만</td>
+                                            <td>10,000 P</td>
+                                            <td>1,500 P</td>
+                                            <td>6,000 P</td>
+                                        </tr>
+                                        <tr>
+                                            <td>15% 이상</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <ul class="sub-list">
+                                <li>
+                                    <h5 class="sub-heading">유지 인센티브</h5>
+                                    <ul>
+                                        <li>2회 이상 연속으로 5% 이상 감축하여 인센티브를 받은 참여자가 이어서 0% 초과 ~ 5% 미만의 감축률을 유지할 경우 지급</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <div class="info-table">
+                                <table class="table">
+                                    <caption>유지 인센티브 표</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">감축률</th>
+                                            <th scope="col">전기</th>
+                                            <th scope="col">상수도</th>
+                                            <th scope="col">도시가스</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0% 초과 ~ 5% 미만</td>
+                                            <td>3,000 P</td>
+                                            <td>450 P</td>
+                                            <td>1,800 P</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- //탄소포인트제(전국) -->
+
+                        <!-- 에코마일리지(서울) -->
+                        <div>
+                            <h3 class="title-type01">에코마일리지(서울) | 제도 소개</h3>
+                            <ul class="sub-list">
+                                <li>
+                                    <h5 class="sub-heading">개요</h5>
+                                    <ul>
+                                        <li>서울시에서 운영하는 온실가스 감축 시민 참여 프로그램</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h5 class="sub-heading">가입대상</h5>
+                                    <ul>
+                                        <li>서울시민</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h5 class="sub-heading">인센티브 지급</h5>
+                                    <ul>
+                                        <li>기준 사용량(최근 2년) 대비 6개월 간 월평균 에너지 항목(전기, 수도, 가스(지역난방 포함) 중 2개 항목 이상의 온실가스를 5% 이상 감축할 경우, 절감비율에 따라 에코머니 포인트 지급(연간 최대 10만점)</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h5 class="sub-heading">가입방법</h5>
+                                    <ul>
+                                        <li>
+                                            <strong>오프라인</strong>
+                                            <ul>
+                                                <li>‘에코마일리지 가입 신청서’ 작성 후 거주 지방자치단체(서울시내 시청, 구청, 주민센터)에 제출</li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <strong>온라인</strong>
+                                            <ul>
+                                                <li>서울시 에코마일리지 홈페이지에서 가입
+                                                    <a class="btn-mini type2" href="https://ecomileage.seoul.go.kr/" target="_blank">홈페이지 바로가기</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h5 class="sub-heading">지급기준</h5>
+                                    <ul>
+                                        <li>지급기준 표</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <div class="info-table">
+                                <table class="table">
+                                    <caption>지급기준 표</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">감축률</th>
+                                            <th scope="col">포인트</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>5% 이상 ~ 10% 미만</td>
+                                            <td>10,000 P</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10% 이상 ~ 15% 미만</td>
+                                            <td>30,000 P</td>
+                                        </tr>
+                                        <tr>
+                                            <td>15% 이상</td>
+                                            <td>50,000 P</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                         <!-- //에코마일리지(서울) -->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="about-info">
+                            <h3 class="title-type01">가입 및 제도안내</h3>
+                            <ul class="txt-list circle">
+                                <li class="txt-list-item"><strong>에너지사용량이 집계되지 않는 일부 지역의 경우, 서비스 이용에 제약이 발생할 수 있습니다.</strong></li>
+                                <li class="txt-list-item"><strong>그린카드 발급 후, 탄소포인트(에코마일리지) 프로그램 회원가입 및 에너지 수집 정보를 입력하셔야 포인트를 적립 받으실 수 있습니다.</strong></li>
+                                <li class="txt-list-item">거주 지역(주민등록상)에 따라 하나의 제도만 가입 가능하며, 가입 방법 및 인센티브 지급 기준 등 자세한 내용은 지역별로 다를 수 있으므로, 해당 홈페이지를 참고해 주시기 바랍니다.</li>
+                                <li class="txt-list-item">고객님의 주민등록상 주소지가 변경된 경우, 해당 탄소포인트제 홈페이지에서도 반드시 수정해주시기 바랍니다. 해당 홈페이지에서 수정하지 않으신 경우 에너지절감 인센티브가 지급되지 않을 수 있습니다.</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-noti-box">
+                            <ul class="sub-list">
+                                <li>
+                                    <h5 class="sub-heading">에너지 사용량 관련문의</h5>
+                                    <ul>
+                                        <li>에코마일리지 (서울시) - 다산콜센터 120</li>
+                                        <li>탄소포인트제 (서울시를 제외한 전국) - 한국환경공단 032-590-3420~6</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

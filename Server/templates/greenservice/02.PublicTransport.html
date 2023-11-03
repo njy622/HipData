@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}소비패턴에 따른 녹색금융 추천{% endblock %}
+{% block additional_head %}
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+{% endblock %}
+{% block subtitle %}{% endblock %}
+{% block content %}
+<body>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col">
+                <div class="sub-tit-wrap">
+                    <h2 class="sub-tit">대중교통</h2>
+                    <p class="sub-desc">대중교통 이용하고 <strong>에코머니 포인트로 돌려받아요!</strong></p>
+                </div>
+
+                <!-- public-transit -->
+                <div class="public-transit">
+                    <div class="sub-sponsored-by bg-light p-4">
+                        <div class="img-box">
+                            <img src="{{url_for('static', filename='img/01.greentransport.jpg')}}" alt="" width="500">
+                        </div>
+                        <div class="txt-box">
+                            <p>그린카드로 <strong class="highlight">대중교통 이용 시</strong> 월 최대 1만 포인트 적립</p>
+                        </div>
+                    </div>
+
+                    <h3 class="title-type01 mt-4">버스, 지하철 10~20% 에코머니 포인트 적립</h3>
+                    <div class="info-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">전월실적</th>
+                                    <th scope="col">적립률</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>20만원 이상 ~ 100만원 미만</td>
+                                    <td>10%</td>
+                                </tr>
+                                <tr>
+                                    <td>100만원 이상</td>
+                                    <td>20%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <dl class="sub-dl mt-4">
+                        <dt class="sub-dt">서비스 제공처</dt>
+                        <dd class="sub-dd bullet-type01">전국 지하철 및 버스 (후불교통카드 사용처)</dd>
+                    </dl>
+
+                    <dl class="sub-dl">
+                        <dt class="sub-dt">서비스 이용안내</dt>
+                        <dd class="sub-dd bullet-type01">버스+지하철 월 이용금액 1만원 이상 시 제공, 이용대금 명세서 상 교통요금 승인일 기준으로 전월실적 산정</dd>
+                    </dl>
+
+                    <h3 class="title-type01 mt-4">KTX, 고속버스 5% 에코머니 포인트 적립</h3>
+                    <div class="info-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">전월실적</th>
+                                    <th scope="col">적립률</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>20만원 이상</td>
+                                    <td>5%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <dl class="sub-dl mt-4">
+                        <dt class="sub-dt">서비스 제공처</dt>
+                        <dd class="sub-dd bullet-type01">철도 및 고속버스터미널 등록 가맹점</dd>
+                    </dl>
+
+                    <dl class="sub-dl">
+                        <dt class="sub-dt">서비스 이용안내</dt>
+                        <dd class="sub-dd bullet-type01">일 1회, 월 2회</dd>
+                    </dl>
+
+                    <h3 class="title-type01 mt-4">대중교통(버스, 지하철, KTX, 고속버스) 통합한도</h3>
+                    <div class="info-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">전월실적</th>
+                                    <th scope="col">에코머니 포인트 적립</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>20만원 이상 ~ 100만원 미만</td>
+                                    <td>5,000 P</td>
+                                </tr>
+                                <tr>
+                                    <td>100만원 이상</td>
+                                    <td>10,000 P</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="info-noti-box mt-4">
+                        <b>*BC 그린카드 기준으로, 카드사(은행) 마다 서비스 내용은 일부 상이할 수 있습니다.</b>
+                    </div>
+                </div>
+                <!-- //public-transit -->
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

@@ -3,6 +3,8 @@ from flask import redirect, flash
 import hashlib, base64, json, os, random
 import db_sqlite.user_dao as udao
 import db_sqlite.profile_dao as pdao
+import db_sqlite.chat_dao as cdao
+import math
 
 user_bp = Blueprint('user_bp', __name__)
 
@@ -84,6 +86,51 @@ def list():
         return redirect('/user/login')
     user_list = udao.get_user_list()
     return render_template('user/list.html', user_list=user_list, menu=menu)
+
+items_per_page = 5
+
+@user_bp.route('/chatlist')
+def chatlist():
+    try:
+        _ = session['uid']
+    except:
+        flash('로그인을 먼저 하세요.')
+        return redirect('/user/login')
+    uid = session['uid']
+    field_ = request.args.get('field')
+    query_ = request.args.get('query')
+    if field_ and query_:
+        field = field_
+        query = query_
+    else:
+        field = 'u_question'
+        query = '%'
+
+    # all_chat_list = cdao.get_chat_history(uid)
+    # all_chat_list_reverse = cdao.get_chat_history_reverse(uid) # 최신 내용 가져오기
+    query_list_reverse = cdao.get_query_list_reverse(uid, field, query) # 검색 + 전체 내용 가져오기
+    page = int(request.args.get('page', 1))
+
+    # 현재 페이지에 표시할 데이터 범위 계산
+    start = (page - 1) * items_per_page
+    end = start + items_per_page
+
+    # 현재 페이지의 데이터 가져오기
+    current_page_data = query_list_reverse[start:end]
+
+    # 총 페이지 수 계산
+    num_pages = len(query_list_reverse) // items_per_page + (len(query_list_reverse) % items_per_page > 0)
+    start_page = ((page - 1) // 10) * 10 + 1
+
+    # 페이지 번호 목록 생성 (10페이지씩 묶음)
+    pages = [i for i in range(start_page, num_pages + 1 if (num_pages - start_page) < 10 else start_page + 10)]
+
+
+   
+
+    return render_template('user/chatlist.html', chat_list=current_page_data, menu=menu, uid=uid, pages=pages, page=page, num_pages=num_pages, field=field, query=query)
+
+
 
 @user_bp.route('/update', methods=['GET','POST'])
 def update():

@@ -11,6 +11,8 @@ function changeWeather() {
         }
     });
 }
+
+
 /*  영수증 업로드 */
 function processReceipt() {
     const input = document.getElementById('receiptInput');
@@ -51,32 +53,7 @@ function processReceipt() {
     reader.readAsDataURL(file);
   }
 
-  /* 영수증 결과 보내기 */
-  function sendOCRResults(text) {
-    // Define the URL where you want to send the data
-    const url = 'https://example.com/endpoint'; // Replace with your actual endpoint
-  
-    // Prepare the data to be sent
-    const data = {
-      text: text
-    };
-  
-    // Send a POST request with the data
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Data sent successfully:', data);
-    })
-    .catch(error => {
-      console.error('Error sending data:', error);
-    });
-  }
+
 
 
 function getProfile() {
@@ -101,7 +78,7 @@ function getProfile() {
 function changeProfile() {
     $('#profileModal').modal('hide');
     let email = $('#hiddenEmail').val();
-    let imageInputVal = $('#modalImage')[0];
+    let imageInputVal = $('#modalImage')[0];  
     let stateMsg = $('#modalStateMsg').val();
     let github = $('#modalGithub').val();
     let insta = $('#modalInsta').val();
@@ -109,7 +86,7 @@ function changeProfile() {
     let hiddenImage = $('#hiddenImage').val();
     let formData = new FormData();
     formData.append('email', email);
-    formData.append('image', imageInputVal.files[0]);
+    formData.append('image', imageInputVal.files[0]);     /* 파일받을 경우 */
     formData.append('stateMsg', stateMsg);
     formData.append('github', github);
     formData.append('insta', insta);
@@ -120,7 +97,7 @@ function changeProfile() {
         url: '/changeProfile',
         data: formData,
         processData: false,
-        contentType: false,
+        contentType: false,            /* False여야함 안되면 일반POST 받은 파일이 타입이 바껴버림*/  
         success: function(result) {     
             let profile = JSON.parse(result);
             let filename = '/static/profile/' + profile[6] + '.png';
@@ -137,3 +114,4 @@ function changeProfile() {
         }
     });
 }
+
